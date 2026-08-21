@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { SECTIONS } from "@/data/links";
-import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
+import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, FOUNDER_YEARS, FOUNDER_NAME,
+         HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
 import Quiz from "@/components/Quiz";
 
 /* ================= LOGO ================= */
@@ -97,7 +98,11 @@ export default function App() {
           Tutto quello che serve sapere <em className="not-italic text-[#135E73]">prima di venire</em> a Cefalonia.
         </h1>
         <p className="mt-6 text-[#4A6B75] text-lg max-w-2xl">
-          Siamo {GROUP_MEMBERS} persone che l&apos;isola la conoscono, ci vivono o ci tornano ogni anno.
+          Il gruppo è nato dalle fotografie di {FOUNDER_NAME || "chi"} torna su quest&apos;isola
+          da {FOUNDER_YEARS} anni. Intorno a quelle si sono raccolte {GROUP_MEMBERS} persone:
+          qualcuna ci vive, molte ci tornano ogni estate, altre devono ancora venirci la prima volta.
+        </p>
+        <p className="mt-4 text-[#4A6B75] text-lg max-w-2xl">
           Questa pagina raccoglie quello che ci chiedete più spesso: come arrivare, cosa sapere
           sulle tartarughe, i numeri utili.
         </p>
@@ -234,8 +239,8 @@ export default function App() {
             <div className="flex-1 text-center md:text-left">
               <h3 className="display text-2xl">Il gruppo è fatto di fotografie</h3>
               <p className="text-sm text-[#D8ECEC] mt-1">
-                Spiagge, calette, luci del mattino. Nessun testo, nessun annuncio: solo Cefalonia
-                come la vedono {GROUP_MEMBERS} persone che la amano.
+                Spiagge, calette, luci del mattino, pubblicate da chi l&apos;isola la frequenta
+                da {FOUNDER_YEARS} anni. Nessun testo, nessun annuncio: solo Cefalonia.
               </p>
             </div>
             <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"

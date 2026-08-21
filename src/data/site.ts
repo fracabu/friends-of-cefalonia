@@ -3,6 +3,12 @@ export const FACEBOOK_URL = "https://www.facebook.com/share/g/1T2jFjmEmb/";
 export const CAPRA_IONIA_URL = "https://fracabu.github.io/capra-ionia/";
 export const GROUP_MEMBERS = "33.000";
 
+/** Da quanti anni il fondatore frequenta l'isola: è da lì che nasce il gruppo. */
+export const FOUNDER_YEARS = "trentacinque";
+
+/** Nome del fondatore, se vuole comparire. Vuoto = si parla di lui senza nominarlo. */
+export const FOUNDER_NAME = "";
+
 /**
  * Fotografia di apertura. Metti il file in `public/foto/` e scrivi qui il
  * percorso, per esempio "foto/hero.jpg". Finché è vuoto la pagina mostra un
