@@ -12,8 +12,8 @@ export const CAPRA_IONIA_URL = "https://fracabu.github.io/capra-ionia/";
  * porta GROUP_MEMBERS a "33.000" e GROUP_MEMBERS_PREFIX a "oltre" — resterà
  * vera anche quando sarete quarantamila.
  */
-export const GROUP_MEMBERS = "33.345";
-export const GROUP_MEMBERS_PREFIX = "";
+export const GROUP_MEMBERS = "33.000";
+export const GROUP_MEMBERS_PREFIX = "oltre";
 
 /** Da quanti anni il fondatore frequenta l'isola: è da lì che nasce il gruppo. */
 export const FOUNDER_YEARS = "trentacinque";
