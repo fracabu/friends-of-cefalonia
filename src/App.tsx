@@ -55,7 +55,16 @@ export default function App() {
         <p className="mt-6 text-[#4A6B75] text-lg max-w-2xl">
           Siamo {GROUP_MEMBERS} persone che l&apos;isola la conoscono, ci vivono o ci tornano ogni anno.
           Questa pagina raccoglie quello che ci chiedete più spesso: come arrivare, cosa sapere
-          sulle tartarughe, i numeri utili. Niente pubblicità, niente affiliazioni.
+          sulle tartarughe, i numeri utili.
+        </p>
+        <p className="mt-3 text-sm text-[#93A9B0] max-w-2xl">
+          È curata da chi sta dietro a{" "}
+          <a href={CAPRA_IONIA_URL} target="_blank" rel="noreferrer"
+            className="text-[#135E73] underline underline-offset-2 hover:text-[#0F3440]">
+            Capra Ionia
+          </a>
+          , il portale sui terreni edificabili a Cefalonia. Nessun link qui sotto è sponsorizzato:
+          non prendiamo commissioni da traghetti, alloggi o servizi.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="#risorse"
@@ -108,6 +117,33 @@ export default function App() {
         </div>
       </section>
 
+      {/* ===== PONTE: DALLA VACANZA ALL'IDEA DI RESTARE ===== */}
+      <section className="max-w-4xl mx-auto px-5 pb-4">
+        <Reveal>
+          <div className="rounded-3xl border-2 border-[#D9A441]/40 bg-[#FDF8EE] p-8 md:p-10">
+            <p className="mono text-xs tracking-[.3em] text-[#B8892C] uppercase">Succede spesso</p>
+            <h3 className="display text-2xl md:text-3xl mt-2 text-[#0F3440]">
+              Vieni una settimana, e cominci a guardare i cartelli «πωλείται»
+            </h3>
+            <p className="text-[#4A6B75] mt-3 max-w-2xl">
+              Capita a molti nel gruppo: si torna una seconda volta, poi una terza, e a un certo
+              punto ci si chiede quanto costerebbe un pezzo di terra qui. La risposta, spesso, è
+              meno di quanto si immagini — a Cefalonia ci sono terreni edificabili sotto i
+              50.000 €. Il difficile non è il prezzo: è la burocrazia greca.
+            </p>
+            <p className="text-[#4A6B75] mt-3 max-w-2xl">
+              Per quello abbiamo fatto <b>Capra Ionia</b>: annunci ordinati per €/m², una mappa
+              dell&apos;isola, e sette guide gratuite che spiegano in italiano codice fiscale,
+              permesso edilizio, costi e tasse.
+            </p>
+            <a href={CAPRA_IONIA_URL} target="_blank" rel="noreferrer"
+              className="inline-flex items-center h-12 px-7 mt-6 rounded-full bg-[#0F3440] text-white hover:bg-[#14495a] transition-colors">
+              Guarda i terreni a Cefalonia →
+            </a>
+          </div>
+        </Reveal>
+      </section>
+
       {/* ===== QUIZ ===== */}
       <section id="quiz" className="bg-[#0F3440] py-16">
         <div className="max-w-xl mx-auto px-5">
@@ -144,18 +180,25 @@ export default function App() {
       {/* ===== CAPRA IONIA ===== */}
       <section className="max-w-4xl mx-auto px-5 pb-16">
         <Reveal>
-          <div className="rounded-3xl border border-[#E4EDEC] bg-white p-8">
-            <p className="mono text-xs tracking-[.3em] text-[#93A9B0] uppercase">Dai un&apos;occhiata anche a</p>
-            <h3 className="display text-2xl mt-2">Stai pensando di comprare un terreno?</h3>
-            <p className="text-[#4A6B75] text-sm mt-2 max-w-xl">
-              Capra Ionia è il nostro portale sui terreni edificabili a Cefalonia: annunci ordinati
-              per €/m², una mappa, e sette guide gratuite sulla burocrazia greca tradotte in italiano
-              — codice fiscale, permesso edilizio, costi e tasse.
+          <div className="rounded-3xl bg-[#0F3440] text-white p-8 md:p-10">
+            <p className="mono text-xs tracking-[.3em] text-[#D9A441] uppercase">Il nostro portale</p>
+            <h3 className="display text-2xl md:text-3xl mt-2">Terreni edificabili a Cefalonia</h3>
+            <p className="text-[#A9CDCF] mt-3 max-w-2xl">
+              Selezioniamo terreni fra i 23.000 e i 45.000 €, li ordiniamo per prezzo al metro
+              quadro — il modo più onesto di confrontarli — e diciamo apertamente quali scartare
+              e perché. Le guide sulla burocrazia sono gratuite e non chiedono nulla in cambio
+              se non un indirizzo email.
             </p>
-            <a href={CAPRA_IONIA_URL} target="_blank" rel="noreferrer"
-              className="inline-flex items-center mt-5 mono text-sm text-[#135E73] hover:text-[#0F3440]">
-              Vai a Capra Ionia →
-            </a>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a href={CAPRA_IONIA_URL} target="_blank" rel="noreferrer"
+                className="inline-flex items-center h-12 px-7 rounded-full bg-white text-[#0F3440] hover:bg-[#EFF5F4] font-semibold transition-colors">
+                Vai a Capra Ionia →
+              </a>
+              <a href={`${CAPRA_IONIA_URL}#/guide`} target="_blank" rel="noreferrer"
+                className="inline-flex items-center h-12 px-7 rounded-full border border-[#2E93A6] text-[#A9CDCF] hover:text-white hover:border-white transition-colors">
+                Le guide gratuite
+              </a>
+            </div>
           </div>
         </Reveal>
       </section>
@@ -167,9 +210,11 @@ export default function App() {
             <span className="display text-lg text-white tracking-wide">FRIENDS OF CEFALONIA</span>
           </div>
           <p className="text-xs mt-4 leading-relaxed max-w-2xl">
-            Pagina informativa curata dalla community. I link portano a siti di terzi, di cui non
-            controlliamo i contenuti; orari, tratte e tariffe vanno sempre verificati alla fonte.
-            Non riceviamo commissioni da nessuno dei servizi elencati.
+            Pagina informativa curata dal team di Capra Ionia, portale di intermediazione
+            immobiliare a Cefalonia, insieme al gruppo Facebook. I link portano a siti di terzi,
+            di cui non controlliamo i contenuti; orari, tratte e tariffe vanno sempre verificati
+            alla fonte. Nessuno dei servizi elencati ci paga: non ci sono link affiliati né
+            sponsorizzazioni.
           </p>
         </div>
       </footer>
