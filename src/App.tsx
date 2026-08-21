@@ -1,17 +1,38 @@
 import { useEffect, useRef } from "react";
 import { SECTIONS } from "@/data/links";
-import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS } from "@/data/site";
+import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
 import Quiz from "@/components/Quiz";
 
 /* ================= LOGO ================= */
+/* Caretta caretta stilizzata: le tartarughe del porto di Argostoli sono il
+   simbolo dell'isola per chi ci viene, e la ragione per cui esiste la
+   sezione più importante di questa pagina. Tracciata a mano, non ripresa
+   da nessuna fonte. */
 function Mark({ size = 40, stroke = "#0F3440" }: { size?: number; stroke?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
-      <circle cx="32" cy="32" r="27" stroke={stroke} strokeWidth="2.4" />
-      <path d="M14 38 C21 30, 27 42, 34 34 C40 27, 45 37, 51 31"
-        stroke={stroke} strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M24 22 L32 14 L40 22" stroke="#D9A441" strokeWidth="2.4"
-        strokeLinecap="round" strokeLinejoin="round" />
+      {/* Carapace */}
+      <ellipse cx="32" cy="34" rx="16" ry="14" stroke={stroke} strokeWidth="2.6" />
+      {/* Scudi del carapace */}
+      <path d="M32 20.5 V47.5 M18.5 29 H45.5 M20 40 H44"
+        stroke={stroke} strokeWidth="1.6" strokeLinecap="round" opacity=".55" />
+      {/* Testa: tonda, con l'occhio — è ciò che la rende leggibile a 32 px */}
+      <path d="M32 21 C27.5 19, 26 14, 28.5 11 C31.5 8, 35.5 9, 36.5 12.5 C37.5 16, 35.5 19.5, 32 21 Z"
+        stroke={stroke} strokeWidth="2.6" strokeLinejoin="round" />
+      <circle cx="34" cy="13.5" r="1.5" fill={stroke} />
+      {/* Pinne anteriori, quelle che danno il movimento */}
+      <path d="M18 27 C12 21, 7 21, 5 25 C7 29, 13 30, 18 29"
+        stroke={stroke} strokeWidth="2.6" strokeLinejoin="round" />
+      <path d="M46 27 C52 21, 57 21, 59 25 C57 29, 51 30, 46 29"
+        stroke={stroke} strokeWidth="2.6" strokeLinejoin="round" />
+      {/* Pinne posteriori */}
+      <path d="M21 44 C17 48, 15 52, 17 55 C21 54, 24 50, 25 46"
+        stroke={stroke} strokeWidth="2.6" strokeLinejoin="round" />
+      <path d="M43 44 C47 48, 49 52, 47 55 C43 54, 40 50, 39 46"
+        stroke={stroke} strokeWidth="2.6" strokeLinejoin="round" />
+      {/* L'onda sotto, nel giallo del marchio */}
+      <path d="M12 59 C18 56, 22 62, 28 59 C34 56, 38 62, 44 59 C48 57, 50 58, 52 59"
+        stroke="#D9A441" strokeWidth="2.4" strokeLinecap="round" />
     </svg>
   );
 }
@@ -98,6 +119,30 @@ export default function App() {
             className="rounded-full h-12 px-7 flex items-center border border-[#CADEDD] text-[#135E73] hover:border-[#2E93A6] transition-colors">
             Quanto conosci l&apos;isola?
           </a>
+        </div>
+
+        {/* Fotografia di apertura: se non c'è, un riquadro dichiaratamente
+            grafico invece di un'immagine finta o di uno spazio vuoto. */}
+        <div className="mt-10">
+          {HERO_PHOTO ? (
+            <figure>
+              <img src={HERO_PHOTO} alt="Cefalonia"
+                className="w-full h-[280px] sm:h-[420px] object-cover rounded-3xl" />
+              {HERO_PHOTO_CREDIT && (
+                <figcaption className="mono text-[10px] text-[#93A9B0] mt-2 text-right">
+                  Foto: {HERO_PHOTO_CREDIT}
+                </figcaption>
+              )}
+            </figure>
+          ) : (
+            <div className="w-full h-[220px] sm:h-[320px] rounded-3xl bg-gradient-to-br from-[#135E73] via-[#2E93A6] to-[#7FC3C9]
+                            flex flex-col items-center justify-center gap-3 text-white">
+              <Mark size={72} stroke="#FFFFFF" />
+              <span className="mono text-[10px] tracking-[.25em] uppercase opacity-70">
+                Qui va una foto dell&apos;isola
+              </span>
+            </div>
+          )}
         </div>
       </section>
 
@@ -187,9 +232,10 @@ export default function App() {
           <div className="rounded-3xl bg-gradient-to-r from-[#135E73] to-[#2E93A6] text-white p-8 md:p-10 flex flex-col md:flex-row items-center gap-6">
             <Mark size={64} stroke="#FFFFFF" />
             <div className="flex-1 text-center md:text-left">
-              <h3 className="display text-2xl">Il gruppo è il posto dove si risponde</h3>
+              <h3 className="display text-2xl">Il gruppo è fatto di fotografie</h3>
               <p className="text-sm text-[#D8ECEC] mt-1">
-                Domande sull&apos;isola, consigli, chi cerca un passaggio dal porto. {GROUP_MEMBERS} persone.
+                Spiagge, calette, luci del mattino. Nessun testo, nessun annuncio: solo Cefalonia
+                come la vedono {GROUP_MEMBERS} persone che la amano.
               </p>
             </div>
             <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"
