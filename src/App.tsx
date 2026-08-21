@@ -149,9 +149,22 @@ function HeroVisual() {
   if (HERO_PHOTO && !mancante) {
     return (
       <figure>
-        <img src={HERO_PHOTO} alt="Cefalonia" loading="eager"
-          onError={() => setMancante(true)}
-          className="w-full h-[240px] sm:h-[340px] lg:h-[460px] object-cover rounded-3xl" />
+        <div className="relative">
+          <img src={HERO_PHOTO} alt="Cefalonia" loading="eager"
+            onError={() => setMancante(true)}
+            className="w-full h-[240px] sm:h-[340px] lg:h-[460px] object-cover rounded-3xl" />
+          {/* Il marchio firma la fotografia dall'angolo in basso. La velatura
+              sotto di esso lo tiene leggibile anche su una foto chiara: il
+              bianco da solo sparirebbe su un cielo o su una spiaggia. */}
+          <div aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 sm:h-24 rounded-b-3xl
+                       bg-gradient-to-t from-black/35 to-transparent" />
+          <div aria-hidden="true"
+            className="pointer-events-none absolute left-4 bottom-4 sm:left-5 sm:bottom-5
+                       drop-shadow-[0_1px_3px_rgba(0,0,0,.45)]">
+            <Mark size={36} stroke="#FFFFFF" />
+          </div>
+        </div>
         {HERO_PHOTO_CREDIT && (
           <figcaption className="mono text-[10px] text-[#93A9B0] mt-2 text-right">
             Foto: {HERO_PHOTO_CREDIT}
