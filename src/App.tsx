@@ -203,15 +203,24 @@ export default function App() {
 
       {/* ===== APERTURA ===== */}
       <section className="max-w-6xl mx-auto px-5 pt-12 sm:pt-16 pb-12">
-        {/* Su schermo largo testo e fotografia stanno affiancati; sotto il
-            punto di rottura la fotografia scende sotto il testo. */}
-        <div className="grid lg:grid-cols-[1.05fr_.95fr] gap-8 lg:gap-12 items-center">
-          <div>
+        {/* Su schermo largo la fotografia sta a destra del testo, alta quanto
+            tutta la colonna. Sotto il punto di rottura non scende in fondo,
+            dove nessuno arriverebbe scorrendo: si infila fra il titolo e il
+            testo, cioè resta dentro l'apertura. */}
+        <div className="grid gap-7 lg:grid-cols-[1.05fr_.95fr] lg:gap-x-12 lg:gap-y-6 lg:items-center">
+          <div className="lg:col-start-1 lg:row-start-1">
             <p className="mono text-xs tracking-[.3em] text-[#2E93A6] uppercase">Isole Ionie · Grecia</p>
             <h1 className="display text-[clamp(34px,4.4vw,56px)] leading-[1.06] mt-3">
               Tutto quello che serve sapere <em className="not-italic text-[#135E73]">prima di venire</em> a Cefalonia.
             </h1>
-            <p className="mt-6 text-[#4A6B75] text-base sm:text-lg">
+          </div>
+
+          <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
+            <HeroVisual />
+          </div>
+
+          <div className="lg:col-start-1 lg:row-start-2">
+            <p className="text-[#4A6B75] text-base sm:text-lg">
               Il gruppo è nato dalle fotografie di {FOUNDER_NAME || "chi"} torna su quest&apos;isola
               da {FOUNDER_YEARS} anni. Intorno a quelle si sono raccolte{" "}
               {GROUP_MEMBERS_PREFIX && GROUP_MEMBERS_PREFIX + " "}{GROUP_MEMBERS} persone:
@@ -236,10 +245,6 @@ export default function App() {
                 Quanto conosci l&apos;isola?
               </a>
             </div>
-          </div>
-
-          <div className="lg:order-last">
-            <HeroVisual />
           </div>
         </div>
       </section>
