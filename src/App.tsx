@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { SECTIONS } from "@/data/links";
-import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, FOUNDER_YEARS, FOUNDER_NAME,
+import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, GROUP_MEMBERS_PREFIX, FOUNDER_YEARS, FOUNDER_NAME,
          HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
 import Quiz from "@/components/Quiz";
 
@@ -74,7 +74,7 @@ export default function App() {
             FRIENDS OF CEFALONIA
           </span>
           <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"
-            aria-label={`Vai al gruppo Facebook, ${GROUP_MEMBERS} iscritti`}
+            aria-label={`Vai al gruppo Facebook, ${GROUP_MEMBERS_PREFIX} {GROUP_MEMBERS} iscritti`}
             className="ml-auto shrink-0 group flex items-center gap-2 sm:gap-2.5 rounded-full pl-2.5 pr-3.5 sm:pl-3 sm:pr-4 py-2
                        bg-[#1877F2] text-white shadow-sm
                        hover:bg-[#1668d6] hover:shadow-md hover:-translate-y-px
@@ -84,7 +84,7 @@ export default function App() {
               <span className="block text-sm font-semibold">Il gruppo</span>
               {/* Il numero sta qui e non nel testo: è la ragione per cui si clicca. */}
               <span className="hidden sm:block mono text-[10px] text-white/75 tracking-wide">
-                {GROUP_MEMBERS} iscritti
+                {GROUP_MEMBERS_PREFIX && GROUP_MEMBERS_PREFIX + " "}{GROUP_MEMBERS} iscritti
               </span>
             </span>
           </a>
@@ -99,7 +99,7 @@ export default function App() {
         </h1>
         <p className="mt-6 text-[#4A6B75] text-lg max-w-2xl">
           Il gruppo è nato dalle fotografie di {FOUNDER_NAME || "chi"} torna su quest&apos;isola
-          da {FOUNDER_YEARS} anni. Intorno a quelle si sono raccolte {GROUP_MEMBERS} persone:
+          da {FOUNDER_YEARS} anni. Intorno a quelle si sono raccolte {GROUP_MEMBERS_PREFIX && GROUP_MEMBERS_PREFIX + " "}{GROUP_MEMBERS} persone:
           qualcuna ci vive, molte ci tornano ogni estate, altre devono ancora venirci la prima volta.
         </p>
         <p className="mt-4 text-[#4A6B75] text-lg max-w-2xl">
@@ -107,13 +107,9 @@ export default function App() {
           sulle tartarughe, i numeri utili.
         </p>
         <p className="mt-3 text-sm text-[#93A9B0] max-w-2xl">
-          È curata da chi sta dietro a{" "}
-          <a href={CAPRA_IONIA_URL} target="_blank" rel="noreferrer"
-            className="text-[#135E73] underline underline-offset-2 hover:text-[#0F3440]">
-            Capra Ionia
-          </a>
-          , il portale sui terreni edificabili a Cefalonia. Nessun link qui sotto è sponsorizzato:
-          non prendiamo commissioni da traghetti, alloggi o servizi.
+          La curano gli amministratori del gruppo Facebook ufficiale
+          <span className="whitespace-nowrap"> Friends of Cefalonia</span>. Nessun link qui sotto è
+          sponsorizzato: non prendiamo commissioni da traghetti, alloggi o servizi.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a href="#risorse"
@@ -285,8 +281,8 @@ export default function App() {
             <span className="display text-lg text-white tracking-wide">FRIENDS OF CEFALONIA</span>
           </div>
           <p className="text-xs mt-4 leading-relaxed max-w-2xl">
-            Pagina informativa curata dal team di Capra Ionia, portale di intermediazione
-            immobiliare a Cefalonia, insieme al gruppo Facebook. I link portano a siti di terzi,
+            Pagina informativa curata dagli amministratori del gruppo Facebook Friends of
+            Cefalonia. I link portano a siti di terzi,
             di cui non controlliamo i contenuti; orari, tratte e tariffe vanno sempre verificati
             alla fonte. Nessuno dei servizi elencati ci paga: non ci sono link affiliati né
             sponsorizzazioni.
