@@ -78,10 +78,20 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 bg-[#FDFDFB]/90 backdrop-blur border-b border-[#E4EDEC]">
       <div className="max-w-4xl mx-auto px-4 sm:px-5 h-16 flex items-center gap-2 sm:gap-3">
-        <a href="#top" className="flex items-center gap-2 sm:gap-3 min-w-0" aria-label="Torna in cima">
+        <a href="#top" className="flex items-center gap-2 sm:gap-3 shrink-0" aria-label="Torna in cima">
           <Mark size={32} />
-          <span className="display text-[15px] sm:text-lg tracking-wide truncate">
-            FRIENDS OF CEFALONIA
+          {/* Il nome sta su due righe: su una sola, sotto i 430 px, finiva nei
+              puntini di sospensione. Le due righe usano i due caratteri già in
+              pagina — il mono delle didascalie sopra, il serif dei titoli
+              sotto — così il marchio si legge come una cosa composta e non
+              come una riga tagliata. */}
+          <span className="leading-none">
+            <span className="mono block text-[9px] sm:text-[10px] tracking-[.28em] text-[#4A6B75]">
+              FRIENDS OF
+            </span>
+            <span className="display block text-[16px] sm:text-xl tracking-[.06em] mt-1">
+              CEFALONIA
+            </span>
           </span>
         </a>
 
@@ -97,7 +107,7 @@ function SiteHeader() {
 
         <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"
           aria-label={`Vai al gruppo Facebook, ${GROUP_MEMBERS_PREFIX} ${GROUP_MEMBERS} iscritti`}
-          className="ml-auto shrink-0 group flex items-center gap-2 sm:gap-2.5 rounded-full pl-2.5 pr-3.5 sm:pl-3 sm:pr-4 py-2
+          className="ml-auto shrink-0 group flex items-center gap-2 sm:gap-2.5 rounded-full pl-2 pr-3 sm:pl-3 sm:pr-4 py-2
                      bg-[#1877F2] text-white shadow-sm
                      hover:bg-[#1668d6] hover:shadow-md hover:-translate-y-px
                      active:translate-y-0 transition-all duration-150">
