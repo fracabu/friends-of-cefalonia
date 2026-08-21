@@ -16,6 +16,16 @@ function Mark({ size = 40, stroke = "#0F3440" }: { size?: number; stroke?: strin
   );
 }
 
+/* Marchio Facebook, tracciato ufficiale. Serve a far capire dove porta il
+   pulsante: senza, «Il gruppo» non dice su quale piattaforma si finisce. */
+function FacebookMark({ size = 20, fill = "currentColor" }: { size?: number; fill?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} aria-hidden="true">
+      <path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96H15.83c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z" />
+    </svg>
+  );
+}
+
 /* Comparsa progressiva alla prima visualizzazione. */
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -36,12 +46,25 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#FDFDFB] text-[#24424C]">
       <header className="sticky top-0 z-40 bg-[#FDFDFB]/90 backdrop-blur border-b border-[#E4EDEC]">
-        <div className="max-w-4xl mx-auto px-5 h-16 flex items-center gap-3">
+        <div className="max-w-4xl mx-auto px-4 sm:px-5 h-16 flex items-center gap-2 sm:gap-3">
           <Mark size={32} />
-          <span className="display text-lg tracking-wide">FRIENDS OF CEFALONIA</span>
+          <span className="display text-[15px] sm:text-lg tracking-wide truncate">
+            FRIENDS OF CEFALONIA
+          </span>
           <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"
-            className="ml-auto mono text-xs rounded-full px-4 py-2 bg-[#1877F2] text-white hover:bg-[#1668d6] transition-colors">
-            Il gruppo →
+            aria-label={`Vai al gruppo Facebook, ${GROUP_MEMBERS} iscritti`}
+            className="ml-auto shrink-0 group flex items-center gap-2 sm:gap-2.5 rounded-full pl-2.5 pr-3.5 sm:pl-3 sm:pr-4 py-2
+                       bg-[#1877F2] text-white shadow-sm
+                       hover:bg-[#1668d6] hover:shadow-md hover:-translate-y-px
+                       active:translate-y-0 transition-all duration-150">
+            <FacebookMark size={22} />
+            <span className="leading-tight text-left">
+              <span className="block text-sm font-semibold">Il gruppo</span>
+              {/* Il numero sta qui e non nel testo: è la ragione per cui si clicca. */}
+              <span className="hidden sm:block mono text-[10px] text-white/75 tracking-wide">
+                {GROUP_MEMBERS} iscritti
+              </span>
+            </span>
           </a>
         </div>
       </header>
@@ -170,8 +193,9 @@ export default function App() {
               </p>
             </div>
             <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"
-              className="rounded-full h-12 px-8 flex items-center bg-white text-[#135E73] hover:bg-[#EFF5F4] font-semibold transition-colors shrink-0">
-              Entra nel gruppo →
+              className="rounded-full h-12 px-7 flex items-center gap-2.5 bg-white text-[#1877F2] hover:bg-[#EFF5F4] font-semibold transition-colors shrink-0">
+              <FacebookMark size={20} />
+              Entra nel gruppo
             </a>
           </div>
         </Reveal>
