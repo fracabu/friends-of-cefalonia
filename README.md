@@ -38,7 +38,22 @@ Il workflow in `.github/workflows/deploy.yml` compila a ogni push su `main` e
 pubblica sul branch `gh-pages`, che GitHub Pages serve. Non serve configurare
 nulla a mano: il primo push del branch attiva Pages da solo.
 
-Sito: `https://<utente>.github.io/friends-of-cefalonia/`
+Sito: **https://friendsofcefalonia.it**
+
+Il dominio è registrato su Aruba e il suo DNS punta a GitHub Pages: Aruba non
+ospita nulla, quindi non c'è niente da caricare via FTP. Il deploy resta
+quello del workflow.
+
+Perché il dominio regga, GitHub Pages ha bisogno di trovare un file `CNAME`
+nella radice di quanto viene pubblicato. Sta in `public/CNAME`, che Vite copia
+in `dist/` a ogni build. Va tenuto lì e non su `gh-pages`: il workflow ricrea
+quel branch da zero a ogni deploy, quindi un file aggiunto a mano lì sopra
+verrebbe cancellato al push successivo, e con lui il dominio.
+
+Nel DNS servono i quattro record A di GitHub Pages per il dominio nudo
+(185.199.108–111.153) e un CNAME `www` verso `<utente>.github.io`. Un record A
+che punti ancora all'hosting Aruba va rimosso: convivendo con gli altri, manda
+una parte delle visite sulla pagina sbagliata.
 
 ## Note sui contenuti
 
