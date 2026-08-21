@@ -139,6 +139,40 @@ function SiteHeader() {
   );
 }
 
+/* ================= APERTURA ================= */
+/* La fotografia torna al riquadro grafico se il file non c'è ancora, invece
+   di lasciare l'icona di immagine rotta: così il percorso può stare scritto
+   in `site.ts` già prima che la foto sia caricata in `public/foto/`. */
+function HeroVisual() {
+  const [mancante, setMancante] = useState(false);
+
+  if (HERO_PHOTO && !mancante) {
+    return (
+      <figure>
+        <img src={HERO_PHOTO} alt="Cefalonia" loading="eager"
+          onError={() => setMancante(true)}
+          className="w-full h-[240px] sm:h-[340px] lg:h-[460px] object-cover rounded-3xl" />
+        {HERO_PHOTO_CREDIT && (
+          <figcaption className="mono text-[10px] text-[#93A9B0] mt-2 text-right">
+            Foto: {HERO_PHOTO_CREDIT}
+          </figcaption>
+        )}
+      </figure>
+    );
+  }
+
+  return (
+    <div className="w-full h-[220px] sm:h-[300px] lg:h-[460px] rounded-3xl
+                    bg-gradient-to-br from-[#135E73] via-[#2E93A6] to-[#7FC3C9]
+                    flex flex-col items-center justify-center gap-3 text-white">
+      <Mark size={72} stroke="#FFFFFF" />
+      <span className="mono text-[10px] tracking-[.25em] uppercase opacity-70 text-center px-4">
+        Qui va una foto dell&apos;isola
+      </span>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <div id="top" className="min-h-screen bg-[#FDFDFB] text-[#24424C]">
@@ -182,26 +216,7 @@ export default function App() {
           </div>
 
           <div className="lg:order-last">
-            {HERO_PHOTO ? (
-              <figure>
-                <img src={HERO_PHOTO} alt="Cefalonia" loading="eager"
-                  className="w-full h-[240px] sm:h-[340px] lg:h-[460px] object-cover rounded-3xl" />
-                {HERO_PHOTO_CREDIT && (
-                  <figcaption className="mono text-[10px] text-[#93A9B0] mt-2 text-right">
-                    Foto: {HERO_PHOTO_CREDIT}
-                  </figcaption>
-                )}
-              </figure>
-            ) : (
-              <div className="w-full h-[220px] sm:h-[300px] lg:h-[460px] rounded-3xl
-                              bg-gradient-to-br from-[#135E73] via-[#2E93A6] to-[#7FC3C9]
-                              flex flex-col items-center justify-center gap-3 text-white">
-                <Mark size={72} stroke="#FFFFFF" />
-                <span className="mono text-[10px] tracking-[.25em] uppercase opacity-70 text-center px-4">
-                  Qui va una foto dell&apos;isola
-                </span>
-              </div>
-            )}
+            <HeroVisual />
           </div>
         </div>
       </section>

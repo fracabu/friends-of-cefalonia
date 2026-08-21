@@ -22,12 +22,15 @@ export const FOUNDER_YEARS = "trentacinque";
 export const FOUNDER_NAME = "";
 
 /**
- * Fotografia di apertura. Metti il file in `public/foto/` e scrivi qui il
- * percorso, per esempio "foto/hero.jpg". Finché è vuoto la pagina mostra un
- * riquadro grafico al suo posto, che non finge di essere una fotografia.
+ * Fotografia di apertura: il file `public/foto/hero.jpg`.
+ *
+ * Finché quel file non c'è — o se qui il percorso resta vuoto — la pagina
+ * mostra un riquadro grafico al suo posto, che non finge di essere una
+ * fotografia. Caricare la foto con quel nome basta a farla comparire, senza
+ * toccare il codice; per usare un altro nome, cambiare il percorso qui.
  *
  * Usa una foto vostra: orizzontale, almeno 1600 px di larghezza. Le immagini
  * prese dal web sono quasi sempre protette da copyright.
  */
-export const HERO_PHOTO = "";
+export const HERO_PHOTO = "foto/hero.jpg";
 export const HERO_PHOTO_CREDIT = "";
