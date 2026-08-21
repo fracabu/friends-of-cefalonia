@@ -1,4 +1,8 @@
 @tailwind base;
+
+/* Le àncore del menu scorrono invece di saltare. */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @tailwind components;
 @tailwind utilities;
 

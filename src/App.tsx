@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SECTIONS } from "@/data/links";
 import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, GROUP_MEMBERS_PREFIX, FOUNDER_YEARS, FOUNDER_NAME,
          HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
@@ -64,32 +64,85 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
   return <div ref={ref} className={`reveal ${className}`}>{children}</div>;
 }
 
-export default function App() {
+/* ================= TESTATA ================= */
+const NAV = [
+  { href: "#risorse", label: "Risorse" },
+  { href: "#tartarughe", label: "Tartarughe" },
+  { href: "#quiz", label: "Quiz" },
+  { href: "#terreni", label: "Terreni" },
+];
+
+function SiteHeader() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-[#FDFDFB] text-[#24424C]">
-      <header className="sticky top-0 z-40 bg-[#FDFDFB]/90 backdrop-blur border-b border-[#E4EDEC]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-5 h-16 flex items-center gap-2 sm:gap-3">
+    <header className="sticky top-0 z-40 bg-[#FDFDFB]/90 backdrop-blur border-b border-[#E4EDEC]">
+      <div className="max-w-4xl mx-auto px-4 sm:px-5 h-16 flex items-center gap-2 sm:gap-3">
+        <a href="#top" className="flex items-center gap-2 sm:gap-3 min-w-0" aria-label="Torna in cima">
           <Mark size={32} />
           <span className="display text-[15px] sm:text-lg tracking-wide truncate">
             FRIENDS OF CEFALONIA
           </span>
-          <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"
-            aria-label={`Vai al gruppo Facebook, ${GROUP_MEMBERS_PREFIX} {GROUP_MEMBERS} iscritti`}
-            className="ml-auto shrink-0 group flex items-center gap-2 sm:gap-2.5 rounded-full pl-2.5 pr-3.5 sm:pl-3 sm:pr-4 py-2
-                       bg-[#1877F2] text-white shadow-sm
-                       hover:bg-[#1668d6] hover:shadow-md hover:-translate-y-px
-                       active:translate-y-0 transition-all duration-150">
-            <FacebookMark size={22} />
-            <span className="leading-tight text-left">
-              <span className="block text-sm font-semibold">Il gruppo</span>
-              {/* Il numero sta qui e non nel testo: è la ragione per cui si clicca. */}
-              <span className="hidden sm:block mono text-[10px] text-white/75 tracking-wide">
-                {GROUP_MEMBERS_PREFIX && GROUP_MEMBERS_PREFIX + " "}{GROUP_MEMBERS} iscritti
-              </span>
+        </a>
+
+        {/* Da lg in su la navigazione sta in linea; sotto entra nel menu. */}
+        <nav className="hidden lg:flex items-center gap-1 ml-4">
+          {NAV.map((n) => (
+            <a key={n.href} href={n.href}
+              className="mono text-xs px-3 py-2 rounded-full text-[#4A6B75] hover:text-[#0F3440] hover:bg-[#EFF5F4] transition-colors">
+              {n.label}
+            </a>
+          ))}
+        </nav>
+
+        <a href={FACEBOOK_URL} target="_blank" rel="noreferrer"
+          aria-label={`Vai al gruppo Facebook, ${GROUP_MEMBERS_PREFIX} ${GROUP_MEMBERS} iscritti`}
+          className="ml-auto shrink-0 group flex items-center gap-2 sm:gap-2.5 rounded-full pl-2.5 pr-3.5 sm:pl-3 sm:pr-4 py-2
+                     bg-[#1877F2] text-white shadow-sm
+                     hover:bg-[#1668d6] hover:shadow-md hover:-translate-y-px
+                     active:translate-y-0 transition-all duration-150">
+          <FacebookMark size={22} />
+          <span className="leading-tight text-left">
+            <span className="block text-sm font-semibold">Il gruppo</span>
+            <span className="hidden sm:block mono text-[10px] text-white/75 tracking-wide">
+              {GROUP_MEMBERS_PREFIX && GROUP_MEMBERS_PREFIX + " "}{GROUP_MEMBERS} iscritti
             </span>
-          </a>
-        </div>
-      </header>
+          </span>
+        </a>
+
+        <button
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-label={open ? "Chiudi il menu" : "Apri il menu"}
+          className="lg:hidden shrink-0 w-10 h-10 -mr-1 flex flex-col items-center justify-center gap-[5px] rounded-full hover:bg-[#EFF5F4] transition-colors">
+          <span className={`block h-[2px] w-5 bg-[#0F3440] transition-transform duration-200 ${open ? "translate-y-[7px] rotate-45" : ""}`} />
+          <span className={`block h-[2px] w-5 bg-[#0F3440] transition-opacity duration-200 ${open ? "opacity-0" : ""}`} />
+          <span className={`block h-[2px] w-5 bg-[#0F3440] transition-transform duration-200 ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
+        </button>
+      </div>
+
+      {open && (
+        <nav className="lg:hidden border-t border-[#E4EDEC] bg-[#FDFDFB]">
+          <ul className="max-w-4xl mx-auto px-4 py-2">
+            {NAV.map((n) => (
+              <li key={n.href}>
+                <a href={n.href} onClick={() => setOpen(false)}
+                  className="block px-2 py-3 text-[#24424C] border-b border-[#F2F7F6] last:border-0">
+                  {n.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </header>
+  );
+}
+
+export default function App() {
+  return (
+    <div id="top" className="min-h-screen bg-[#FDFDFB] text-[#24424C]">
+      <SiteHeader />
 
       {/* ===== APERTURA ===== */}
       <section className="max-w-4xl mx-auto px-5 pt-16 pb-12">
@@ -150,7 +203,7 @@ export default function App() {
       <div className="h-1.5 bg-[repeating-linear-gradient(90deg,#D9A441_0_10px,transparent_10px_20px)]" />
 
       {/* ===== RISORSE ===== */}
-      <section id="risorse" className="max-w-4xl mx-auto px-5 py-16">
+      <section id="risorse" className="max-w-4xl mx-auto px-5 py-16 scroll-mt-20">
         <p className="mono text-xs tracking-[.3em] text-[#2E93A6] uppercase">Risorse</p>
         <h2 className="display text-3xl md:text-4xl mt-2">Link utili, verificati</h2>
         <p className="text-[#4A6B75] mt-2 max-w-xl text-sm">
@@ -161,7 +214,9 @@ export default function App() {
         <div className="mt-10 space-y-12">
           {SECTIONS.map((s) => (
             <Reveal key={s.id}>
-              <div className="flex items-start gap-3">
+              {/* scroll-mt tiene conto della testata fissa: senza, il titolo
+                  della sezione finisce sotto di essa. */}
+              <div id={s.id} className="flex items-start gap-3 scroll-mt-24">
                 <span className="text-2xl leading-none mt-0.5" aria-hidden>{s.icon}</span>
                 <div className="flex-1 min-w-0">
                   <h3 className="display text-2xl">{s.title}</h3>
@@ -214,7 +269,7 @@ export default function App() {
       </section>
 
       {/* ===== QUIZ ===== */}
-      <section id="quiz" className="bg-[#0F3440] py-16">
+      <section id="quiz" className="bg-[#0F3440] py-16 scroll-mt-16">
         <div className="max-w-xl mx-auto px-5">
           <p className="mono text-xs tracking-[.3em] text-[#D9A441] uppercase">Quiz</p>
           <h2 className="display text-3xl md:text-4xl mt-2 text-white">Quanto conosci Cefalonia?</h2>
@@ -249,7 +304,7 @@ export default function App() {
       </section>
 
       {/* ===== CAPRA IONIA ===== */}
-      <section className="max-w-4xl mx-auto px-5 pb-16">
+      <section id="terreni" className="max-w-4xl mx-auto px-5 pb-16 scroll-mt-24">
         <Reveal>
           <div className="rounded-3xl bg-[#0F3440] text-white p-8 md:p-10">
             <p className="mono text-xs tracking-[.3em] text-[#D9A441] uppercase">Il nostro portale</p>
