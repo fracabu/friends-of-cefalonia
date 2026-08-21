@@ -145,58 +145,64 @@ export default function App() {
       <SiteHeader />
 
       {/* ===== APERTURA ===== */}
-      <section className="max-w-4xl mx-auto px-5 pt-16 pb-12">
-        <p className="mono text-xs tracking-[.3em] text-[#2E93A6] uppercase">Isole Ionie · Grecia</p>
-        <h1 className="display text-[clamp(38px,7vw,68px)] leading-[1.03] mt-3">
-          Tutto quello che serve sapere <em className="not-italic text-[#135E73]">prima di venire</em> a Cefalonia.
-        </h1>
-        <p className="mt-6 text-[#4A6B75] text-lg max-w-2xl">
-          Il gruppo è nato dalle fotografie di {FOUNDER_NAME || "chi"} torna su quest&apos;isola
-          da {FOUNDER_YEARS} anni. Intorno a quelle si sono raccolte {GROUP_MEMBERS_PREFIX && GROUP_MEMBERS_PREFIX + " "}{GROUP_MEMBERS} persone:
-          qualcuna ci vive, molte ci tornano ogni estate, altre devono ancora venirci la prima volta.
-        </p>
-        <p className="mt-4 text-[#4A6B75] text-lg max-w-2xl">
-          Questa pagina raccoglie quello che ci chiedete più spesso: come arrivare, cosa sapere
-          sulle tartarughe, i numeri utili.
-        </p>
-        <p className="mt-3 text-sm text-[#93A9B0] max-w-2xl">
-          La curano gli amministratori del gruppo Facebook ufficiale
-          <span className="whitespace-nowrap"> Friends of Cefalonia</span>. Nessun link qui sotto è
-          sponsorizzato: non prendiamo commissioni da traghetti, alloggi o servizi.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a href="#risorse"
-            className="rounded-full h-12 px-7 flex items-center bg-[#0F3440] text-white hover:bg-[#14495a] transition-colors">
-            Le risorse
-          </a>
-          <a href="#quiz"
-            className="rounded-full h-12 px-7 flex items-center border border-[#CADEDD] text-[#135E73] hover:border-[#2E93A6] transition-colors">
-            Quanto conosci l&apos;isola?
-          </a>
-        </div>
-
-        {/* Fotografia di apertura: se non c'è, un riquadro dichiaratamente
-            grafico invece di un'immagine finta o di uno spazio vuoto. */}
-        <div className="mt-10">
-          {HERO_PHOTO ? (
-            <figure>
-              <img src={HERO_PHOTO} alt="Cefalonia"
-                className="w-full h-[280px] sm:h-[420px] object-cover rounded-3xl" />
-              {HERO_PHOTO_CREDIT && (
-                <figcaption className="mono text-[10px] text-[#93A9B0] mt-2 text-right">
-                  Foto: {HERO_PHOTO_CREDIT}
-                </figcaption>
-              )}
-            </figure>
-          ) : (
-            <div className="w-full h-[220px] sm:h-[320px] rounded-3xl bg-gradient-to-br from-[#135E73] via-[#2E93A6] to-[#7FC3C9]
-                            flex flex-col items-center justify-center gap-3 text-white">
-              <Mark size={72} stroke="#FFFFFF" />
-              <span className="mono text-[10px] tracking-[.25em] uppercase opacity-70">
-                Qui va una foto dell&apos;isola
-              </span>
+      <section className="max-w-6xl mx-auto px-5 pt-12 sm:pt-16 pb-12">
+        {/* Su schermo largo testo e fotografia stanno affiancati; sotto il
+            punto di rottura la fotografia scende sotto il testo. */}
+        <div className="grid lg:grid-cols-[1.05fr_.95fr] gap-8 lg:gap-12 items-center">
+          <div>
+            <p className="mono text-xs tracking-[.3em] text-[#2E93A6] uppercase">Isole Ionie · Grecia</p>
+            <h1 className="display text-[clamp(34px,4.4vw,56px)] leading-[1.06] mt-3">
+              Tutto quello che serve sapere <em className="not-italic text-[#135E73]">prima di venire</em> a Cefalonia.
+            </h1>
+            <p className="mt-6 text-[#4A6B75] text-base sm:text-lg">
+              Il gruppo è nato dalle fotografie di {FOUNDER_NAME || "chi"} torna su quest&apos;isola
+              da {FOUNDER_YEARS} anni. Intorno a quelle si sono raccolte{" "}
+              {GROUP_MEMBERS_PREFIX && GROUP_MEMBERS_PREFIX + " "}{GROUP_MEMBERS} persone:
+              qualcuna ci vive, molte ci tornano ogni estate, altre devono ancora venirci la prima volta.
+            </p>
+            <p className="mt-4 text-[#4A6B75] text-base sm:text-lg">
+              Questa pagina raccoglie quello che ci chiedete più spesso: come arrivare, cosa sapere
+              sulle tartarughe, i numeri utili.
+            </p>
+            <p className="mt-3 text-sm text-[#93A9B0]">
+              La curano gli amministratori del gruppo Facebook ufficiale
+              <span className="whitespace-nowrap"> Friends of Cefalonia</span>. Nessun link qui sotto è
+              sponsorizzato: non prendiamo commissioni da traghetti, alloggi o servizi.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="#risorse"
+                className="rounded-full h-12 px-7 flex items-center bg-[#0F3440] text-white hover:bg-[#14495a] transition-colors">
+                Le risorse
+              </a>
+              <a href="#quiz"
+                className="rounded-full h-12 px-7 flex items-center border border-[#CADEDD] text-[#135E73] hover:border-[#2E93A6] transition-colors">
+                Quanto conosci l&apos;isola?
+              </a>
             </div>
-          )}
+          </div>
+
+          <div className="lg:order-last">
+            {HERO_PHOTO ? (
+              <figure>
+                <img src={HERO_PHOTO} alt="Cefalonia" loading="eager"
+                  className="w-full h-[240px] sm:h-[340px] lg:h-[460px] object-cover rounded-3xl" />
+                {HERO_PHOTO_CREDIT && (
+                  <figcaption className="mono text-[10px] text-[#93A9B0] mt-2 text-right">
+                    Foto: {HERO_PHOTO_CREDIT}
+                  </figcaption>
+                )}
+              </figure>
+            ) : (
+              <div className="w-full h-[220px] sm:h-[300px] lg:h-[460px] rounded-3xl
+                              bg-gradient-to-br from-[#135E73] via-[#2E93A6] to-[#7FC3C9]
+                              flex flex-col items-center justify-center gap-3 text-white">
+                <Mark size={72} stroke="#FFFFFF" />
+                <span className="mono text-[10px] tracking-[.25em] uppercase opacity-70 text-center px-4">
+                  Qui va una foto dell&apos;isola
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
