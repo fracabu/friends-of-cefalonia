@@ -107,6 +107,11 @@ Se l'esecuzione fallisce con un errore di permessi, il repository ha le Actions
 limitate: in quel caso vale la strada manuale, *Settings → Pages → Source:
 Deploy from a branch → `main` / `docs`*.
 
+La sorgente è `demo/pagina.html`; `node scripts/build-demo.mjs` la incapsula in
+un documento completo — doctype, lingua, viewport, descrizione, icona — e scrive
+`docs/index.html`. Senza doctype il browser andrebbe in *quirks mode*, e le
+altezze in percentuale della mappa smetterebbero di funzionare.
+
 Va rigenerata quando cambiano i dati di esempio: la demo li porta dentro di sé,
 non li legge dal database.
 
