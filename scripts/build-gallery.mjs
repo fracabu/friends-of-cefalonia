@@ -20,11 +20,14 @@ import path from "node:path";
 import sharp from "sharp";
 
 const ORIGINALI = "foto/galleria";
+const ORIGINALE_APERTURA = "foto";          // qui sta hero.*, accanto a galleria/
+const APERTURA = "public/foto/hero.jpg";
 const USCITA = "public/foto/galleria";
 const MANIFESTO = "src/data/gallery.ts";
 const DIDASCALIE = path.join(ORIGINALI, "didascalie.json");
 
 const LARGA = 1600;   // il lato lungo della versione grande
+const APERTURA_LARGA = 2000;  // l'apertura si vede più grande delle altre
 const MINIATURA = 700;
 const ESTENSIONI = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif", ".heic", ".heif"]);
 
@@ -85,7 +88,42 @@ const slug = (nome) =>
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "foto";
 
+/**
+ * La fotografia d'apertura.
+ *
+ * Non porta il marchio stampato: sopra ce lo disegna già la pagina, in basso a
+ * sinistra. Qui si tratta solo di ridurla, perché uno scatto da telefono a 2-5
+ * MB messo in cima è la prima cosa che chi arriva deve scaricare.
+ *
+ * Si genera solo se l'originale esiste: senza, resta quella che c'è già in
+ * public/foto/, e nessuno si ritrova la pagina senza apertura.
+ */
+async function apertura() {
+  const trovato = (await readdir(ORIGINALE_APERTURA))
+    .filter((f) => path.parse(f).name.toLowerCase() === "hero" && ESTENSIONI.has(path.extname(f).toLowerCase()))
+    .sort()[0];
+  if (!trovato) return;
+
+  const sorgente = path.join(ORIGINALE_APERTURA, trovato);
+  try {
+    await sharp(sorgente)
+      .rotate()
+      .resize({ width: APERTURA_LARGA, height: APERTURA_LARGA, fit: "inside", withoutEnlargement: true })
+      .jpeg({ quality: 84, progressive: true, mozjpeg: true })
+      .toFile(APERTURA + ".tmp");
+    await rm(APERTURA, { force: true });
+    const { rename } = await import("node:fs/promises");
+    await rename(APERTURA + ".tmp", APERTURA);
+    console.log(`  apertura: ${trovato} → ${path.basename(APERTURA)}`);
+  } catch (e) {
+    await rm(APERTURA + ".tmp", { force: true });
+    console.warn(`  apertura non aggiornata (${trovato}): ${e.message}`);
+  }
+}
+
 async function main() {
+  await apertura();
+
   if (!existsSync(ORIGINALI)) {
     await scriviManifesto([]);
     console.log(`Nessuna cartella ${ORIGINALI}/: galleria vuota.`);

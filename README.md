@@ -27,9 +27,16 @@ domanda, un blocco a `quiz.ts`.
 
 | Dove metti il file | Cosa succede |
 |---|---|
-| `public/foto/hero.jpg` | Diventa la fotografia d'apertura |
+| `foto/hero.jpg` | Diventa la fotografia d'apertura, ridotta a 2000 px |
 | `foto/galleria/*.jpg` | Entrano nella galleria, ridotte e firmate |
 | `public/video/tartarughe.mp4` | Compare nella sezione delle tartarughe |
+
+Vale una regola sola: **le fotografie si caricano in `foto/`, come vengono dal
+telefono.** Il resto lo fa la build.
+
+L'apertura non porta il marchio stampato, perché la pagina glielo disegna già
+sopra; le foto della galleria sì, perché escono dal sito. Se `foto/hero.jpg`
+non c'è, resta l'apertura già pubblicata: non si finisce mai senza.
 
 Le foto della galleria vanno messe **negli originali**, in `foto/galleria/`,
 con qualsiasi nome e alla dimensione che hanno: quelle appena scaricate dal

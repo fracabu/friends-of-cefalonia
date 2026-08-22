@@ -1,0 +1,11 @@
+Le fotografie si caricano qui, come vengono dal telefono: alla pubblicazione
+vengono raddrizzate, ridotte e ricompresse da sole.
+
+  hero.jpg      la fotografia d'apertura, in cima alla pagina
+  galleria/     tutte le altre, che formano la galleria
+
+Gli originali restano qui e non vanno online: sul sito va solo la versione
+preparata. Le foto della galleria escono firmate col marchio; l'apertura no,
+perché la pagina il marchio glielo disegna già sopra.
+
+Se hero.jpg non c'è, resta l'apertura già pubblicata.
