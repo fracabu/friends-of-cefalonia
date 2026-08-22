@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verifica:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: immobiliare
+          POSTGRES_PASSWORD: immobiliare
+          POSTGRES_DB: immobiliare
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U immobiliare"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://immobiliare:immobiliare@localhost:5432/immobiliare?schema=public
+      AUTH_SECRET: chiave-di-test-lunga-almeno-trentadue-caratteri
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec prisma generate
+      - run: pnpm exec prisma db push
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm build

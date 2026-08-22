@@ -1,0 +1,66 @@
+import Link from 'next/link'
+import { SITE_NAME } from '@/lib/seo'
+
+const COLUMNS = [
+  {
+    title: 'Cerca',
+    links: [
+      { href: '/cerca?contratto=vendita', label: 'Case in vendita' },
+      { href: '/cerca?contratto=affitto', label: 'Case in affitto' },
+      { href: '/cerca?contratto=vendita&tipo=terreno', label: 'Terreni' },
+      { href: '/cerca?contratto=affitto&tipo=stanza', label: 'Stanze' },
+    ],
+  },
+  {
+    title: 'Per chi vende',
+    links: [
+      { href: '/registrati?ruolo=agente', label: 'Pubblica un annuncio' },
+      { href: '/valuta-immobile', label: 'Valuta il tuo immobile' },
+      { href: '/agenzie', label: 'Elenco agenzie' },
+    ],
+  },
+  {
+    title: 'Portale',
+    links: [
+      { href: '/chi-siamo', label: 'Chi siamo' },
+      { href: '/contatti', label: 'Contatti' },
+      { href: '/privacy', label: 'Privacy' },
+      { href: '/termini', label: 'Termini di servizio' },
+    ],
+  },
+]
+
+export function Footer() {
+  return (
+    <footer className="mt-20 border-t border-ink-100 bg-white">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <p className="font-semibold text-ink-900">{SITE_NAME}</p>
+          <p className="mt-2 max-w-xs text-sm text-ink-500">
+            Annunci immobiliari di agenzie e privati, con ricerca per zona, mappa e richieste di
+            visita.
+          </p>
+        </div>
+
+        {COLUMNS.map((column) => (
+          <div key={column.title}>
+            <p className="text-sm font-semibold text-ink-900">{column.title}</p>
+            <ul className="mt-3 space-y-2 text-sm text-ink-500">
+              {column.links.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="hover:text-ink-900">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t border-ink-100 py-6 text-center text-xs text-ink-400">
+        © {new Date().getFullYear()} {SITE_NAME}. Progetto dimostrativo.
+      </div>
+    </footer>
+  )
+}

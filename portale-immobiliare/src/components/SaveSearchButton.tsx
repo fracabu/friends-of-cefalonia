@@ -1,0 +1,38 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Button } from '@/components/ui/Button'
+
+/** Salva i filtri correnti come avviso: è il gancio che fa tornare gli utenti. */
+export function SaveSearchButton({ suggestedName }: { suggestedName: string }) {
+  const params = useSearchParams()
+  const router = useRouter()
+  const [state, setState] = useState<'idle' | 'saving' | 'saved'>('idle')
+
+  async function save() {
+    setState('saving')
+    const res = await fetch('/api/ricerche-salvate', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        name: suggestedName,
+        query: params.toString(),
+        frequency: 'DAILY',
+      }),
+    })
+
+    if (res.status === 401) {
+      router.push(`/accedi?redirect=${encodeURIComponent(`/cerca?${params.toString()}`)}`)
+      setState('idle')
+      return
+    }
+    setState(res.ok ? 'saved' : 'idle')
+  }
+
+  return (
+    <Button variant="secondary" size="sm" onClick={save} disabled={state !== 'idle'}>
+      {state === 'saved' ? 'Ricerca salvata' : state === 'saving' ? 'Salvo…' : 'Salva questa ricerca'}
+    </Button>
+  )
+}
