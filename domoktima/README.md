@@ -1,13 +1,24 @@
-# Domopolis
+# Domoktima · Δομόκτημα
 
 Portale di annunci immobiliari sul modello dei grandi portali italiani: ricerca
 per comune, zona e **area disegnata a mano sulla mappa**, scheda immobile con
 galleria e richiesta di visita, pannello per le agenzie che pubblicano.
 
-Il nome unisce δόμος, la casa, e πόλις, la città; il marchio è una casa ridotta
-a tre tratti, con la porta a forma di Π. Il nome sta in una sola variabile
-(`NEXT_PUBLIC_SITE_NAME`) e il marchio in `src/components/Logo.tsx`,
-`src/app/icon.svg` e `public/logo.svg`: cambiarlo è questione di minuti.
+Il nome tiene insieme le due lingue del portale: **domo**, la casa, che un
+italiano legge senza pensarci, e **κτήμα** (*ktima*), che in Grecia è la parola
+del bene immobile — la stessa del *Κτηματολόγιο*, il catasto, e del
+*κτηματομεσιτικό γραφείο*, l'agenzia immobiliare. Sotto il nome, nel piè di
+pagina, il descrittore lo dice per esteso in entrambe: «ακίνητα · immobiliare».
+
+Il marchio è una casa ridotta a tre tratti, con la porta a forma di **Π**:
+insieme una porta e una lettera greca, e il prospetto di un tempio senza doverlo
+disegnare. È in `currentColor`, quindi vive su fondo chiaro e scuro senza una
+seconda versione, e regge a sedici pixel — la misura in cui un marchio si vede
+davvero, nella linguetta del browser.
+
+Il nome sta in una sola variabile (`NEXT_PUBLIC_SITE_NAME`) e il marchio in tre
+file (`src/components/Logo.tsx`, `src/app/icon.svg`, `public/logo.svg`):
+cambiarli è questione di minuti.
 
 **Stack**: Next.js 15 (App Router) · TypeScript · PostgreSQL con Prisma ·
 Tailwind CSS · Leaflet · Zod.

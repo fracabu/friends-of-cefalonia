@@ -1,7 +1,7 @@
 import type { ContractType, PropertyType } from '@prisma/client'
 import { PROPERTY_TYPE_LABELS } from './labels'
 
-export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? 'Domopolis'
+export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? 'Domoktima'
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 
 /** Titolo dell'annuncio come lo vuole Google: tipologia, locali, zona, città. */

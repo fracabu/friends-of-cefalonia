@@ -37,19 +37,32 @@ export function LogoMark({ className = 'h-8 w-8' }: { className?: string }) {
   )
 }
 
+/**
+ * Il nome per esteso, con la possibilità di appoggiargli sotto il descrittore
+ * nelle due lingue del portale. Nell'intestazione il descrittore si toglie —
+ * lì lo spazio è poco e il nome basta a sé — mentre in fondo alla pagina dice
+ * a chi arriva dalla Grecia di che cosa si tratta.
+ */
 export function Logo({
   name,
+  subtitle,
   className = '',
   markClassName = 'h-8 w-8 text-brand-600',
 }: {
   name: string
+  subtitle?: string
   className?: string
   markClassName?: string
 }) {
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`}>
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <LogoMark className={markClassName} />
-      <span className="text-lg font-semibold tracking-tight text-ink-900">{name}</span>
+      <span className="flex flex-col leading-tight">
+        <span className="text-lg font-semibold tracking-tight text-ink-900">{name}</span>
+        {subtitle ? (
+          <span className="text-[10px] uppercase tracking-[0.2em] text-ink-400">{subtitle}</span>
+        ) : null}
+      </span>
     </span>
   )
 }
