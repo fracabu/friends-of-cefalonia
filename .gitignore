@@ -6,4 +6,5 @@ dist/
 # Generati da scripts/build-gallery.mjs a ogni build: gli originali stanno in
 # foto/galleria/, questi si rifanno da soli e non vanno versionati.
 public/foto/galleria/
+public/foto/hero.jpg
 src/data/gallery.ts
