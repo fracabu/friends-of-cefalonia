@@ -34,6 +34,13 @@ jobs:
 
       - run: pnpm build
 
+      # Pages keeps the custom domain as a CNAME file on the published branch,
+      # and the deploy below replaces that branch wholesale. The file therefore
+      # has to come out of the build, from public/CNAME: without it every push
+      # to main unsets the domain and the HTTPS certificate stops being issued.
+      - name: Check the custom domain survived the build
+        run: test -s dist/CNAME
+
       # gh-pages holds only generated output, so each deploy replaces it
       # wholesale rather than accumulating history.
       - name: Publish dist/ to gh-pages

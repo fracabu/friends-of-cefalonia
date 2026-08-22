@@ -40,6 +40,34 @@ nulla a mano: il primo push del branch attiva Pages da solo.
 
 Sito: `https://<utente>.github.io/friends-of-cefalonia/`
 
+## Dominio personalizzato e HTTPS
+
+Il dominio sta in `public/CNAME`, una riga sola. Deve stare lì e non solo nelle
+impostazioni di GitHub: Pages tiene il dominio come file `CNAME` sul branch
+pubblicato, e il workflow riscrive quel branch da zero a ogni deploy. Senza
+`public/CNAME` ogni push su `main` cancella il dominio, il certificato HTTPS
+smette di essere emesso e il browser segnala «sito non sicuro».
+
+Nel DNS del registrar servono, per il dominio `friendsofcefalonia.it`:
+
+| Nome | Tipo | Valore |
+|---|---|---|
+| `@` | A | `185.199.108.153` |
+| `@` | A | `185.199.109.153` |
+| `@` | A | `185.199.110.153` |
+| `@` | A | `185.199.111.153` |
+| `www` | CNAME | `<utente>.github.io.` |
+
+Vanno tolti gli A record di parcheggio del registrar, altrimenti restano
+insieme a quelli di GitHub e il certificato non viene emesso. Il record `www`
+non va aggiunto anche fra le impostazioni di Pages: con l'apex configurato,
+GitHub lo associa già da sé e rispondere «già registrato» è il comportamento
+atteso, non un errore.
+
+Dopo che il DNS si è propagato, in *Settings → Pages* il certificato viene
+emesso in un tempo che va da qualche minuto a 24 ore; solo allora si può
+spuntare **Enforce HTTPS**.
+
 ## Note sui contenuti
 
 I link sono stati verificati alla scrittura, ma orari e tratte dei traghetti
