@@ -1,12 +1,8 @@
 import { Prisma, type ContractType, type EnergyClass, type PropertyType } from '@prisma/client'
 import { z } from 'zod'
-import {
-  areaBounds,
-  decodePolyline,
-  describeArea,
-  type Area,
-  type LatLng,
-} from './geo'
+import { areaBounds, decodePolyline, type Area, type LatLng } from './geo'
+import { interpola } from '@/i18n'
+import type { Dizionario } from '@/i18n'
 
 /**
  * Un solo punto di verità per la ricerca.
@@ -30,15 +26,6 @@ export const SORTS = {
 } satisfies Record<string, Prisma.ListingOrderByWithRelationInput>
 
 export type SortKey = keyof typeof SORTS
-
-export const SORT_LABELS: Record<SortKey, string> = {
-  rilevanza: 'Più rilevanti',
-  recenti: 'Più recenti',
-  'prezzo-asc': 'Prezzo crescente',
-  'prezzo-desc': 'Prezzo decrescente',
-  'superficie-desc': 'Superficie maggiore',
-  'superficie-asc': 'Superficie minore',
-}
 
 export const PAGE_SIZE = 24
 
@@ -396,79 +383,90 @@ export function buildListingOrderBy(f: SearchFilters): Prisma.ListingOrderByWith
 
 // ------------------------------------------------------------ etichette ----
 
-const AMENITY_LABELS: Record<string, string> = {
-  ascensore: 'Ascensore',
-  giardino: 'Giardino',
-  terrazzo: 'Terrazzo',
-  balcone: 'Balcone',
-  box: 'Box / posto auto',
-  cantina: 'Cantina',
-  piscina: 'Piscina',
-  aria: 'Aria condizionata',
-  animali: 'Animali ammessi',
+/** Come si chiama l'area scelta, nella lingua di chi guarda. */
+export function descriviArea(area: Area, d: Dizionario): string {
+  if (area.kind === 'polygon') return d.mappa.areaDisegnata
+  if (area.kind === 'circle') return interpola(d.mappa.areaRaggio, { n: area.radiusKm })
+  return d.mappa.areaVista
 }
 
 /** Riassunto leggibile: titolo della pagina e nome proposto per la ricerca salvata. */
-export function describeFilters(f: SearchFilters): string {
+export function describeFilters(f: SearchFilters, d: Dizionario): string {
   const parts: string[] = []
-  if (f.contratto) parts.push(f.contratto === 'SALE' ? 'in vendita' : 'in affitto')
-  if (f.comune) parts.push(`a ${f.comune.join(', ')}`)
-  else if (f.provincia) parts.push(`in provincia di ${f.provincia.toUpperCase()}`)
-  if (f.zona) parts.push(`zona ${f.zona.join(', ')}`)
+  if (f.contratto) parts.push(d.et.contratto[f.contratto].toLowerCase())
+  if (f.comune) parts.push(f.comune.join(', '))
+  if (f.zona) parts.push(f.zona.join(', '))
 
   const area = parseArea(f)
-  if (area && !f.comune) parts.push(describeArea(area).toLowerCase())
-  if (f.prezzoMax) parts.push(`fino a ${f.prezzoMax.toLocaleString('it-IT')} euro`)
+  if (area && !f.comune) parts.push(descriviArea(area, d).toLowerCase())
 
-  return parts.join(' ')
+  return parts.join(' · ')
 }
 
 /** I filtri attivi come chip richiudibili: chiave da togliere ed etichetta. */
-export function activeFilterChips(f: SearchFilters): Array<{ param: string; label: string }> {
+export function activeFilterChips(
+  f: SearchFilters,
+  d: Dizionario,
+  formattaPrezzo: (valore: number) => string,
+): Array<{ param: string; label: string }> {
   const chips: Array<{ param: string; label: string }> = []
   const push = (param: string, label: string) => chips.push({ param, label })
 
   if (f.q) push('q', `«${f.q}»`)
   if (f.comune) push('comune', f.comune.join(', '))
   if (f.zona) push('zona', f.zona.join(', '))
-  if (f.provincia) push('provincia', `provincia ${f.provincia.toUpperCase()}`)
-  if (f.tipo) push('tipo', `${f.tipo.length} tipologie`)
-  if (f.prezzoMin) push('prezzoMin', `da ${f.prezzoMin.toLocaleString('it-IT')} €`)
-  if (f.prezzoMax) push('prezzoMax', `fino a ${f.prezzoMax.toLocaleString('it-IT')} €`)
-  if (f.superficieMin) push('superficieMin', `da ${f.superficieMin} m²`)
-  if (f.superficieMax) push('superficieMax', `fino a ${f.superficieMax} m²`)
-  if (f.localiMin) push('localiMin', `da ${f.localiMin} locali`)
-  if (f.localiMax) push('localiMax', `fino a ${f.localiMax} locali`)
-  if (f.cameremin) push('cameremin', `da ${f.cameremin} camere`)
-  if (f.bagniMin) push('bagniMin', `da ${f.bagniMin} bagni`)
-  if (f.pianoTerra) push('pianoTerra', 'piano terra')
-  if (f.ultimoPiano) push('ultimoPiano', 'ultimo piano')
-  if (f.annoMin) push('annoMin', `dal ${f.annoMin}`)
-  if (f.annoMax) push('annoMax', `fino al ${f.annoMax}`)
-  if (f.classeMin) push('classeMin', `classe ${f.classeMin} o migliore`)
-  if (f.riscaldamento) push('riscaldamento', 'riscaldamento')
-  if (f.arredato) push('arredato', 'arredamento')
-  if (f.stato) push('stato', 'stato immobile')
-  if (f.proprieta) push('proprieta', 'tipo di proprietà')
-  if (f.disponibilita) push('disponibilita', 'disponibilità')
-  if (f.asta) push('asta', 'aste giudiziarie')
-  if (f.nuovaCostruzione) push('nuovaCostruzione', 'nuova costruzione')
-  if (f.conFoto) push('conFoto', 'con fotografie')
-  if (f.planimetria) push('planimetria', 'con planimetria')
-  if (f.virtualTour) push('virtualTour', 'con tour virtuale')
-  if (f.speseIncluse) push('speseIncluse', 'spese incluse')
-  if (f.trattativaRiservata) push('trattativaRiservata', 'trattativa riservata')
-  if (f.pubblicatoDa) push('pubblicatoDa', `ultimi ${f.pubblicatoDa} giorni`)
-  if (f.inserzionista) push('inserzionista', f.inserzionista)
-  if (f.rif) push('rif', `rif. ${f.rif}`)
+  if (f.tipo) push('tipo', f.tipo.map((t) => d.et.tipo[t]).join(', '))
+  if (f.prezzoMin) push('prezzoMin', `${d.ricerca.prezzoMin}: ${formattaPrezzo(f.prezzoMin)}`)
+  if (f.prezzoMax) push('prezzoMax', `${d.ricerca.prezzoMax}: ${formattaPrezzo(f.prezzoMax)}`)
+  if (f.superficieMin) push('superficieMin', `${d.ricerca.superficieMin}: ${f.superficieMin} m²`)
+  if (f.superficieMax) push('superficieMax', `${d.ricerca.superficieMax}: ${f.superficieMax} m²`)
+  if (f.localiMin) push('localiMin', `${d.ricerca.localiDa} ${f.localiMin}`)
+  if (f.localiMax) push('localiMax', `${d.ricerca.localiA} ${f.localiMax}`)
+  if (f.cameremin) push('cameremin', `${d.annuncio.camere}: ${f.cameremin}+`)
+  if (f.bagniMin) push('bagniMin', `${d.annuncio.bagni}: ${f.bagniMin}+`)
+  if (f.pianoTerra) push('pianoTerra', d.ricerca.soloPianoTerra)
+  if (f.ultimoPiano) push('ultimoPiano', d.ricerca.soloUltimoPiano)
+  if (f.annoMin) push('annoMin', `${d.ricerca.annoDa} ${f.annoMin}`)
+  if (f.annoMax) push('annoMax', `${d.ricerca.annoA} ${f.annoMax}`)
+  if (f.classeMin) push('classeMin', `${d.annuncio.classe} ${f.classeMin}+`)
+  if (f.riscaldamento) push('riscaldamento', d.et.riscaldamento[f.riscaldamento])
+  if (f.arredato) push('arredato', d.et.arredamento[f.arredato])
+  if (f.stato) push('stato', d.et.condizione[f.stato])
+  if (f.proprieta) push('proprieta', d.et.proprieta[f.proprieta])
+  if (f.disponibilita) push('disponibilita', d.et.disponibilita[f.disponibilita])
+  if (f.asta) push('asta', d.ricerca.aste)
+  if (f.nuovaCostruzione) push('nuovaCostruzione', d.ricerca.nuovaCostruzione)
+  if (f.conFoto) push('conFoto', d.ricerca.conFoto)
+  if (f.planimetria) push('planimetria', d.ricerca.conPlanimetria)
+  if (f.virtualTour) push('virtualTour', d.ricerca.conTour)
+  if (f.speseIncluse) push('speseIncluse', d.ricerca.speseIncluse)
+  if (f.trattativaRiservata) push('trattativaRiservata', d.ricerca.soloRiservate)
+  if (f.pubblicatoDa) push('pubblicatoDa', `${d.ricerca.pubblicatoDa} ${f.pubblicatoDa}`)
+  if (f.inserzionista)
+    push('inserzionista', f.inserzionista === 'agenzia' ? d.ricerca.agenzieOpz : d.ricerca.privatiOpz)
+  if (f.rif) push('rif', `${d.ricerca.riferimento} ${f.rif}`)
 
-  for (const [param, label] of Object.entries(AMENITY_LABELS)) {
-    if (f[param as keyof SearchFilters]) push(param, label.toLowerCase())
+  const dotazioni: Record<string, keyof Dizionario['et']['dotazione']> = {
+    ascensore: 'elevator',
+    giardino: 'garden',
+    terrazzo: 'terrace',
+    balcone: 'balcony',
+    box: 'parking',
+    cantina: 'cellar',
+    piscina: 'pool',
+    aria: 'airCon',
+    animali: 'pets',
+  }
+  for (const [param, chiave] of Object.entries(dotazioni)) {
+    if (f[param as keyof SearchFilters]) push(param, d.et.dotazione[chiave])
   }
 
   const area = parseArea(f)
   if (area) {
-    push(area.kind === 'polygon' ? 'area' : area.kind === 'circle' ? 'centro' : 'bbox', describeArea(area))
+    push(
+      area.kind === 'polygon' ? 'area' : area.kind === 'circle' ? 'centro' : 'bbox',
+      descriviArea(area, d),
+    )
   }
 
   return chips

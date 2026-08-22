@@ -1,22 +1,6 @@
-import type { ContractType, PropertyType } from '@prisma/client'
-import { PROPERTY_TYPE_LABELS } from './labels'
 
 export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? 'Domakinita'
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-
-/** Titolo dell'annuncio come lo vuole Google: tipologia, locali, zona, città. */
-export function listingTitle(listing: {
-  type: PropertyType
-  rooms: number
-  surface: number
-  city: string
-  zone: string | null
-  contract: ContractType
-}) {
-  const contract = listing.contract === 'SALE' ? 'in vendita' : 'in affitto'
-  const where = listing.zone ? `${listing.zone}, ${listing.city}` : listing.city
-  return `${PROPERTY_TYPE_LABELS[listing.type]} ${contract} a ${where} - ${listing.rooms} locali, ${listing.surface} m²`
-}
 
 /** Dati strutturati schema.org per la scheda immobile. */
 export function listingJsonLd(listing: {

@@ -25,10 +25,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ errors: parsed.error.flatten().fieldErrors }, { status: 400 })
   }
 
-  const data = parsed.data
+  const { traduzioni, ...data } = parsed.data
   const created = await db.listing.create({
     data: {
       ...data,
+      translations: {
+        create: traduzioni
+          .filter((t) => t.locale !== data.locale)
+          .map((t) => ({ locale: t.locale, title: t.title, description: t.description })),
+      },
       slug: 'provvisorio', // sostituito subito sotto: serve l'id per renderlo unico
       ownerId: session.userId,
       agencyId: session.agencyId,

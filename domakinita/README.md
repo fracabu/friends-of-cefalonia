@@ -117,6 +117,46 @@ non li legge dal database.
 
 ---
 
+## Le tre lingue
+
+Il portale parla **italiano, inglese e greco**. Non è un vezzo: il pubblico sono
+gli italiani che comprano nelle Ionie, i greci che vendono e i nordeuropei che
+arrivano d'estate. Con una lingua sola, due terzi del mercato non entrano.
+
+Ogni pagina vive sotto la sua lingua — `/it/cerca`, `/en/cerca`, `/el/cerca` —
+e chi arriva senza prefisso viene mandato alla propria: prima la scelta salvata
+nel cookie, poi l'intestazione del browser, infine l'italiano. Lo fa
+`src/middleware.ts`, che passa la lingua anche al layout tramite
+un'intestazione, perché l'attributo `lang` su `<html>` va scritto lì.
+
+| Dove | Cosa contiene |
+|---|---|
+| `src/i18n/config.ts` | le lingue, i codici per `Intl`, la scelta dall'header |
+| `src/i18n/dizionari/it.ts` | il dizionario italiano, che fa **anche da tipo** |
+| `src/i18n/dizionari/{en,el}.ts` | inglese e greco |
+| `src/i18n/client.tsx` | il contesto per i componenti client |
+
+L'italiano è la forma: se ci si aggiunge una voce, TypeScript pretende la
+traduzione nelle altre due prima di lasciar compilare. È il motivo per cui non
+si accumulano stringhe tradotte a metà.
+
+Numeri, prezzi, date e distanze nel tempo li fa `Intl` — «3 giorni fa», «3 days
+ago», «πριν από 3 ημέρες» escono dalla stessa riga di codice.
+
+### Gli annunci
+
+Un annuncio ha una lingua sua (`Listing.locale`, quella in cui l'agenzia l'ha
+scritto) e può avere una traduzione per ciascuna delle altre
+(`ListingTranslation`). Il modulo di inserimento mostra titolo e descrizione
+nelle altre due lingue; se restano vuote, chi naviga in quella lingua vede
+l'originale e la scheda lo dichiara, invece di far finta di niente.
+
+Ogni pagina dichiara le altre due con `hreflang`, e la sitemap le elenca tutte:
+per i motori sono la stessa cosa detta in tre modi, non tre pagine che si fanno
+concorrenza.
+
+---
+
 ## La ricerca
 
 È la parte che un portale deve fare meglio di tutte, quindi ha la sua sezione.

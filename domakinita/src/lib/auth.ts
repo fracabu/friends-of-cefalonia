@@ -84,16 +84,23 @@ export async function getCurrentUser() {
 }
 
 /** Da usare nelle pagine private: rimanda al login conservando la destinazione. */
-export async function requireUser(returnTo = '/dashboard') {
+export async function requireUser(returnTo = '/it/dashboard') {
   const session = await getSession()
-  if (!session) redirect(`/accedi?redirect=${encodeURIComponent(returnTo)}`)
+  if (!session) {
+    // `returnTo` porta già la lingua: la si riusa per la pagina di accesso.
+    const lingua = returnTo.split('/')[1] || 'it'
+    redirect(`/${lingua}/accedi?redirect=${encodeURIComponent(returnTo)}`)
+  }
   return session
 }
 
 /** Da usare in dashboard: solo agenzie e amministratori pubblicano annunci. */
-export async function requireAgent(returnTo = '/dashboard') {
+export async function requireAgent(returnTo = '/it/dashboard') {
   const session = await requireUser(returnTo)
-  if (session.role !== 'AGENT' && session.role !== 'ADMIN') redirect('/dashboard?errore=permessi')
+  if (session.role !== 'AGENT' && session.role !== 'ADMIN') {
+    const lingua = returnTo.split('/')[1] || 'it'
+    redirect(`/${lingua}/dashboard?errore=permessi`)
+  }
   return session
 }
 

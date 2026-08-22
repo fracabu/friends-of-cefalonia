@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
       // Le aree private e le ricerche filtrate non vanno in indice.
-      disallow: ['/dashboard', '/preferiti', '/ricerche-salvate', '/api/'],
+      // Le aree private esistono in tre lingue: il carattere jolly le copre tutte.
+      disallow: ['/*/dashboard', '/*/preferiti', '/*/ricerche-salvate', '/api/'],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   }

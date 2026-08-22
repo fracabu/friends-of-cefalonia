@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Field, Input } from '@/components/ui/Field'
+import { useI18n } from '@/i18n/client'
 
 /** Login e registrazione condividono tutto tranne due campi: un modulo solo. */
 export function AuthForm({
@@ -15,6 +16,7 @@ export function AuthForm({
 }) {
   const router = useRouter()
   const params = useSearchParams()
+  const { lingua, d } = useI18n()
   const [role, setRole] = useState<'USER' | 'AGENT'>(defaultRole)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [pending, setPending] = useState(false)
@@ -36,13 +38,13 @@ export function AuthForm({
     if (res.ok) {
       const body = await res.json()
       const redirect = params.get('redirect')
-      router.push(redirect ?? (body.role === 'USER' ? '/preferiti' : '/dashboard'))
+      router.push(redirect ?? `/${lingua}${body.role === 'USER' ? '/preferiti' : '/dashboard'}`)
       router.refresh()
       return
     }
 
     const body = await res.json().catch(() => ({}))
-    const flat = body.errors ?? { form: 'Qualcosa non ha funzionato. Riprova.' }
+    const flat = body.errors ?? { form: d.auth.erroreGenerico }
     setErrors(
       Object.fromEntries(
         Object.entries(flat).map(([k, v]) => [k, Array.isArray(v) ? String(v[0]) : String(v)]),
@@ -58,8 +60,8 @@ export function AuthForm({
           <div className="inline-flex w-full rounded-xl bg-ink-100 p-1">
             {(
               [
-                ['USER', 'Cerco casa'],
-                ['AGENT', 'Vendo o affitto'],
+                ['USER', d.auth.cercoCasa],
+                ['AGENT', d.auth.vendo],
               ] as const
             ).map(([value, label]) => (
               <button
@@ -78,27 +80,27 @@ export function AuthForm({
             ))}
           </div>
 
-          <Field label="Nome e cognome" htmlFor="name" error={errors.name}>
+          <Field label={d.auth.nome} htmlFor="name" error={errors.name}>
             <Input id="name" name="name" required autoComplete="name" />
           </Field>
 
           {role === 'AGENT' ? (
-            <Field label="Nome dell'agenzia" htmlFor="agencyName" error={errors.agencyName}>
+            <Field label={d.auth.nomeAgenzia} htmlFor="agencyName" error={errors.agencyName}>
               <Input id="agencyName" name="agencyName" required />
             </Field>
           ) : null}
         </>
       ) : null}
 
-      <Field label="Email" htmlFor="email" error={errors.email}>
+      <Field label={d.auth.email} htmlFor="email" error={errors.email}>
         <Input id="email" name="email" type="email" required autoComplete="email" />
       </Field>
 
       <Field
-        label="Password"
+        label={d.auth.password}
         htmlFor="password"
         error={errors.password}
-        hint={mode === 'register' ? 'Almeno 8 caratteri' : undefined}
+        hint={mode === 'register' ? d.auth.passwordNota : undefined}
       >
         <Input
           id="password"
@@ -110,7 +112,7 @@ export function AuthForm({
       </Field>
 
       {mode === 'register' ? (
-        <Field label="Telefono" htmlFor="phone" error={errors.phone} hint="Facoltativo">
+        <Field label={d.auth.telefono} htmlFor="phone" error={errors.phone} hint={d.auth.facoltativo}>
           <Input id="phone" name="phone" type="tel" autoComplete="tel" />
         </Field>
       ) : null}
@@ -118,7 +120,7 @@ export function AuthForm({
       {errors.form ? <p className="text-sm text-red-600">{errors.form}</p> : null}
 
       <Button type="submit" size="lg" className="w-full" disabled={pending}>
-        {pending ? 'Attendi…' : mode === 'login' ? 'Accedi' : 'Crea account'}
+        {pending ? d.auth.attendi : mode === 'login' ? d.nav.accedi : d.auth.creaAccount}
       </Button>
     </form>
   )

@@ -1,10 +1,13 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/Badge'
 import { FavoriteButton } from '@/components/FavoriteButton'
 import { formatMonthlyPrice, formatPrice, formatRelative, formatSurface } from '@/lib/format'
-import { PROPERTY_TYPE_LABELS } from '@/lib/labels'
 import type { ListingCard as ListingCardData } from '@/lib/listings'
+import { useI18n, useHref } from '@/i18n/client'
+import { testoAnnuncio } from '@/lib/listings-testo'
 
 export function ListingCard({
   listing,
@@ -15,11 +18,14 @@ export function ListingCard({
   isFavorite?: boolean
   priority?: boolean
 }) {
+  const { lingua, d } = useI18n()
+  const href = useHref()
   const cover = listing.images[0]
+  const { title } = testoAnnuncio(listing, lingua)
   const price =
     listing.contract === 'RENT'
-      ? formatMonthlyPrice(listing.price, listing.priceOnRequest)
-      : formatPrice(listing.price, listing.priceOnRequest)
+      ? formatMonthlyPrice(listing.price, listing.priceOnRequest, lingua, d.annuncio.trattativaRiservata, d.annuncio.alMese)
+      : formatPrice(listing.price, listing.priceOnRequest, lingua, d.annuncio.trattativaRiservata)
 
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-card transition-shadow hover:shadow-lg">
@@ -27,7 +33,7 @@ export function ListingCard({
         {cover ? (
           <Image
             src={cover.thumbUrl ?? cover.url}
-            alt={cover.alt ?? listing.title}
+            alt={cover.alt ?? title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
             priority={priority}
@@ -35,28 +41,28 @@ export function ListingCard({
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-ink-400">
-            Nessuna fotografia
+            {d.annuncio.nessunaFoto}
           </div>
         )}
 
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
           {listing.featured ? (
             <Badge tone="brand" className="bg-white/95 backdrop-blur">
-              In evidenza
+              {d.annuncio.inEvidenza}
             </Badge>
           ) : null}
           {listing.isNewBuild ? (
             <Badge tone="success" className="bg-white/95 backdrop-blur">
-              Nuova costruzione
+              {d.annuncio.nuovaCostruzione}
             </Badge>
           ) : null}
           {listing.isAuction ? (
             <Badge tone="warning" className="bg-white/95 backdrop-blur">
-              Asta
+              {d.annuncio.asta}
             </Badge>
           ) : null}
           {listing.virtualTourUrl ? (
-            <Badge className="bg-white/95 backdrop-blur">Tour virtuale</Badge>
+            <Badge className="bg-white/95 backdrop-blur">{d.annuncio.tourVirtuale}</Badge>
           ) : null}
         </div>
 
@@ -69,8 +75,8 @@ export function ListingCard({
         <p className="text-lg font-semibold text-ink-900">{price}</p>
 
         <h3 className="mt-1 line-clamp-2 text-sm font-medium text-ink-800">
-          <Link href={`/annuncio/${listing.slug}`} className="after:absolute after:inset-0">
-            {listing.title}
+          <Link href={href(`/annuncio/${listing.slug}`)} className="after:absolute after:inset-0">
+            {title}
           </Link>
         </h3>
 
@@ -81,34 +87,34 @@ export function ListingCard({
 
         <dl className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-600">
           <div>
-            <dt className="sr-only">Tipologia</dt>
-            <dd>{PROPERTY_TYPE_LABELS[listing.type]}</dd>
+            <dt className="sr-only">{d.annuncio.tipologia}</dt>
+            <dd>{d.et.tipo[listing.type]}</dd>
           </div>
           {listing.type === 'LAND' ? null : (
             <div>
-              <dt className="sr-only">Locali</dt>
+              <dt className="sr-only">{d.annuncio.locali}</dt>
               <dd>
-                {listing.rooms} {listing.rooms === 1 ? 'locale' : 'locali'}
+                {listing.rooms} {listing.rooms === 1 ? d.annuncio.locale : d.annuncio.localiPl}
               </dd>
             </div>
           )}
           <div>
-            <dt className="sr-only">Superficie</dt>
-            <dd>{formatSurface(listing.surface)}</dd>
+            <dt className="sr-only">{d.annuncio.superficie}</dt>
+            <dd>{formatSurface(listing.surface, lingua)}</dd>
           </div>
           {listing.bathrooms ? (
             <div>
-              <dt className="sr-only">Bagni</dt>
+              <dt className="sr-only">{d.annuncio.bagni}</dt>
               <dd>
-                {listing.bathrooms} {listing.bathrooms === 1 ? 'bagno' : 'bagni'}
+                {listing.bathrooms} {listing.bathrooms === 1 ? d.annuncio.bagno : d.annuncio.bagniPl}
               </dd>
             </div>
           ) : null}
         </dl>
 
         <p className="mt-3 flex items-center justify-between text-xs text-ink-400">
-          <span>{listing.agency?.name ?? 'Privato'}</span>
-          {listing.publishedAt ? <span>{formatRelative(listing.publishedAt)}</span> : null}
+          <span>{listing.agency?.name ?? d.annuncio.privato}</span>
+          {listing.publishedAt ? <span>{formatRelative(listing.publishedAt, lingua)}</span> : null}
         </p>
       </div>
     </article>

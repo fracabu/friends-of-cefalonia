@@ -2,6 +2,10 @@ import 'server-only'
 import { Prisma } from '@prisma/client'
 import { db } from './db'
 import { containsPoint, type LatLng } from './geo'
+
+// Il testo tradotto serve anche ai componenti client: sta in un modulo a
+// parte, senza «server-only», e da qui si ri-espone per comodità.
+export { testoAnnuncio } from './listings-testo'
 import {
   PAGE_SIZE,
   buildListingOrderBy,
@@ -34,6 +38,8 @@ export const listingCardSelect = {
   isNewBuild: true,
   virtualTourUrl: true,
   publishedAt: true,
+  locale: true,
+  translations: { select: { locale: true, title: true } },
   images: {
     select: { url: true, thumbUrl: true, alt: true },
     orderBy: [{ isCover: 'desc' }, { position: 'asc' }],
@@ -184,6 +190,7 @@ export function getListingBySlug(slug: string) {
     where: { slug, status: { in: ['PUBLISHED', 'RESERVED', 'SOLD', 'RENTED'] } },
     include: {
       images: { orderBy: [{ isCover: 'desc' }, { position: 'asc' }] },
+      translations: true,
       agency: true,
       owner: { select: { id: true, name: true, phone: true, email: true } },
     },

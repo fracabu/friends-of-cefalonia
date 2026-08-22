@@ -2,11 +2,13 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useI18n } from '@/i18n/client'
 
 type Photo = { url: string; alt: string | null; width: number | null; height: number | null }
 
 /** Galleria della scheda: griglia, poi visore a schermo intero con frecce. */
 export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
+  const { d } = useI18n()
   const [index, setIndex] = useState<number | null>(null)
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
   if (!photos.length) {
     return (
       <div className="grid aspect-[16/9] place-items-center rounded-2xl bg-ink-100 text-sm text-ink-400">
-        Nessuna fotografia disponibile
+        {d.annuncio.nessunaFotoLunga}
       </div>
     )
   }
@@ -51,7 +53,7 @@ export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
             <Image src={photo.url} alt={photo.alt ?? title} fill sizes="25vw" className="object-cover" />
             {i === 3 && photos.length > 5 ? (
               <span className="absolute inset-0 grid place-items-center bg-ink-900/60 text-sm font-medium text-white">
-                +{photos.length - 5} foto
+                +{photos.length - 5} {d.annuncio.altreFoto}
               </span>
             ) : null}
           </button>
@@ -62,16 +64,16 @@ export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={`Fotografie di ${title}`}
+          aria-label={`${d.annuncio.fotografieDi} ${title}`}
           className="fixed inset-0 z-50 flex flex-col bg-ink-900/95 p-4"
           onClick={() => setIndex(null)}
         >
           <div className="flex justify-between text-sm text-white">
             <span>
-              {index + 1} di {photos.length}
+              {index + 1} {d.annuncio.di} {photos.length}
             </span>
             <button type="button" onClick={() => setIndex(null)} className="rounded px-2 py-1 hover:bg-white/10">
-              Chiudi
+              {d.annuncio.chiudi}
             </button>
           </div>
 
@@ -85,7 +87,7 @@ export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
             />
             <button
               type="button"
-              aria-label="Fotografia precedente"
+              aria-label={d.annuncio.fotoPrecedente}
               onClick={() => setIndex((i) => (i === null ? null : (i - 1 + photos.length) % photos.length))}
               className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-2 text-lg"
             >
@@ -93,7 +95,7 @@ export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
             </button>
             <button
               type="button"
-              aria-label="Fotografia successiva"
+              aria-label={d.annuncio.fotoSuccessiva}
               onClick={() => setIndex((i) => (i === null ? null : (i + 1) % photos.length))}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-2 text-lg"
             >

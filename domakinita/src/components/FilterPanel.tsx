@@ -4,35 +4,30 @@ import { useCallback, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Checkbox, Field, Input, Select } from '@/components/ui/Field'
-import {
-  CONDITION_LABELS,
-  FURNISHED_LABELS,
-  HEATING_LABELS,
-  PROPERTY_TYPE_LABELS,
-  PROPERTY_TYPE_SLUGS,
-} from '@/lib/labels'
+import { PROPERTY_TYPE_SLUGS } from '@/lib/labels'
 import { ENERGY_ORDER } from '@/lib/search'
+import { useI18n } from '@/i18n/client'
 
-/** Interruttori: nome del parametro nell'URL ed etichetta. */
+/** Nome del parametro nell'URL e chiave della sua etichetta nel dizionario. */
 const AMENITIES = [
-  ['ascensore', 'Ascensore'],
-  ['giardino', 'Giardino'],
-  ['terrazzo', 'Terrazzo'],
-  ['balcone', 'Balcone'],
-  ['box', 'Box / posto auto'],
-  ['cantina', 'Cantina'],
-  ['piscina', 'Piscina'],
-  ['aria', 'Aria condizionata'],
-  ['animali', 'Animali ammessi'],
+  ['ascensore', 'elevator'],
+  ['giardino', 'garden'],
+  ['terrazzo', 'terrace'],
+  ['balcone', 'balcony'],
+  ['box', 'parking'],
+  ['cantina', 'cellar'],
+  ['piscina', 'pool'],
+  ['aria', 'airCon'],
+  ['animali', 'pets'],
 ] as const
 
 const LISTING_FLAGS = [
-  ['conFoto', 'Solo con fotografie'],
-  ['planimetria', 'Con planimetria'],
-  ['virtualTour', 'Con tour virtuale'],
-  ['nuovaCostruzione', 'Nuova costruzione'],
-  ['speseIncluse', 'Spese incluse'],
-  ['asta', 'Immobili all’asta'],
+  ['conFoto', 'conFoto'],
+  ['planimetria', 'conPlanimetria'],
+  ['virtualTour', 'conTour'],
+  ['nuovaCostruzione', 'nuovaCostruzione'],
+  ['speseIncluse', 'speseIncluse'],
+  ['asta', 'aste'],
 ] as const
 
 const TEXT_PARAMS = [
@@ -77,6 +72,7 @@ const BOOLEAN_PARAMS = [
 export function FilterPanel({ total }: { total: number }) {
   const router = useRouter()
   const params = useSearchParams()
+  const { lingua, d } = useI18n()
   const [open, setOpen] = useState(false)
 
   const current = useMemo(() => new URLSearchParams(params.toString()), [params])
@@ -89,9 +85,9 @@ export function FilterPanel({ total }: { total: number }) {
         else next.set(key, value)
       }
       next.delete('pagina') // cambiando un filtro si torna alla prima pagina
-      router.push(`/cerca?${next.toString()}`)
+      router.push(`/${lingua}/cerca?${next.toString()}`)
     },
-    [params, router],
+    [lingua, params, router],
   )
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -119,7 +115,7 @@ export function FilterPanel({ total }: { total: number }) {
     <div className="rounded-2xl border border-ink-100 bg-white shadow-card">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-100 px-4 py-3">
         <p className="text-sm text-ink-600">
-          <strong className="text-ink-900">{total.toLocaleString('it-IT')}</strong> immobili
+          <strong className="text-ink-900">{total.toLocaleString(lingua)}</strong> {d.ricerca.corrispondono}
         </p>
 
         <div className="flex items-center gap-2">
@@ -136,13 +132,13 @@ export function FilterPanel({ total }: { total: number }) {
                     : 'rounded-md px-3 py-1 text-sm capitalize text-ink-600'
                 }
               >
-                {value}
+                {value === 'vendita' ? d.nav.vendita : d.nav.affitto}
               </button>
             ))}
           </div>
 
           <Button variant="secondary" size="sm" onClick={() => setOpen((v) => !v)}>
-            {open ? 'Chiudi i filtri' : `Tutti i filtri${activeCount ? ` (${activeCount})` : ''}`}
+            {open ? d.ricerca.chiudiFiltri : `${d.ricerca.tuttiFiltri}${activeCount ? ` (${activeCount})` : ''}`}
           </Button>
         </div>
       </div>
@@ -150,7 +146,7 @@ export function FilterPanel({ total }: { total: number }) {
       {open ? (
         <form onSubmit={onSubmit} className="space-y-7 px-4 py-5">
           <fieldset>
-            <legend className="mb-2 text-sm font-medium text-ink-700">Tipologia</legend>
+            <legend className="mb-2 text-sm font-medium text-ink-700">{d.ricerca.tipologia}</legend>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {Object.entries(PROPERTY_TYPE_SLUGS).map(([key, slug]) => (
                 <Checkbox
@@ -158,29 +154,29 @@ export function FilterPanel({ total }: { total: number }) {
                   name="tipo"
                   value={slug}
                   defaultChecked={selectedTypes.includes(slug)}
-                  label={PROPERTY_TYPE_LABELS[key as keyof typeof PROPERTY_TYPE_LABELS]}
+                  label={d.et.tipo[key as keyof typeof d.et.tipo]}
                 />
               ))}
             </div>
           </fieldset>
 
           <fieldset>
-            <legend className="mb-2 text-sm font-medium text-ink-700">Prezzo e superficie</legend>
+            <legend className="mb-2 text-sm font-medium text-ink-700">{d.ricerca.sezPrezzo}</legend>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <Field label="Prezzo minimo">
+              <Field label={d.ricerca.prezzoMin}>
                 <Input name="prezzoMin" type="number" min={0} step={1000} inputMode="numeric" defaultValue={current.get('prezzoMin') ?? ''} placeholder="€" />
               </Field>
-              <Field label="Prezzo massimo">
+              <Field label={d.ricerca.prezzoMax}>
                 <Input name="prezzoMax" type="number" min={0} step={1000} inputMode="numeric" defaultValue={current.get('prezzoMax') ?? ''} placeholder="€" />
               </Field>
-              <Field label="Superficie minima">
+              <Field label={d.ricerca.superficieMin}>
                 <Input name="superficieMin" type="number" min={0} inputMode="numeric" defaultValue={current.get('superficieMin') ?? ''} placeholder="m²" />
               </Field>
-              <Field label="Superficie massima">
+              <Field label={d.ricerca.superficieMax}>
                 <Input name="superficieMax" type="number" min={0} inputMode="numeric" defaultValue={current.get('superficieMax') ?? ''} placeholder="m²" />
               </Field>
               {contract === 'affitto' ? (
-                <Field label="Cauzione massima">
+                <Field label={d.ricerca.cauzioneMax}>
                   <Input name="cauzioneMax" type="number" min={0} inputMode="numeric" defaultValue={current.get('cauzioneMax') ?? ''} placeholder="€" />
                 </Field>
               ) : null}
@@ -188,18 +184,18 @@ export function FilterPanel({ total }: { total: number }) {
             <div className="mt-3">
               <Checkbox
                 name="trattativaRiservata"
-                label="Solo trattative riservate"
+                label={d.ricerca.soloRiservate}
                 defaultChecked={current.get('trattativaRiservata') === '1'}
               />
             </div>
           </fieldset>
 
           <fieldset>
-            <legend className="mb-2 text-sm font-medium text-ink-700">Composizione</legend>
+            <legend className="mb-2 text-sm font-medium text-ink-700">{d.ricerca.sezComposizione}</legend>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <Field label="Locali da">
+              <Field label={d.ricerca.localiDa}>
                 <Select name="localiMin" defaultValue={current.get('localiMin') ?? ''}>
-                  <option value="">Indifferente</option>
+                  <option value="">{d.ricerca.indifferente}</option>
                   {[1, 2, 3, 4, 5, 6].map((n) => (
                     <option key={n} value={n}>
                       {n}
@@ -207,9 +203,9 @@ export function FilterPanel({ total }: { total: number }) {
                   ))}
                 </Select>
               </Field>
-              <Field label="Locali fino a">
+              <Field label={d.ricerca.localiA}>
                 <Select name="localiMax" defaultValue={current.get('localiMax') ?? ''}>
-                  <option value="">Indifferente</option>
+                  <option value="">{d.ricerca.indifferente}</option>
                   {[1, 2, 3, 4, 5, 6].map((n) => (
                     <option key={n} value={n}>
                       {n}
@@ -217,9 +213,9 @@ export function FilterPanel({ total }: { total: number }) {
                   ))}
                 </Select>
               </Field>
-              <Field label="Camere da letto (minimo)">
+              <Field label={d.ricerca.camereMin}>
                 <Select name="cameremin" defaultValue={current.get('cameremin') ?? ''}>
-                  <option value="">Indifferente</option>
+                  <option value="">{d.ricerca.indifferente}</option>
                   {[1, 2, 3, 4].map((n) => (
                     <option key={n} value={n}>
                       {n}+
@@ -227,9 +223,9 @@ export function FilterPanel({ total }: { total: number }) {
                   ))}
                 </Select>
               </Field>
-              <Field label="Bagni (minimo)">
+              <Field label={d.ricerca.bagniMin}>
                 <Select name="bagniMin" defaultValue={current.get('bagniMin') ?? ''}>
-                  <option value="">Indifferente</option>
+                  <option value="">{d.ricerca.indifferente}</option>
                   {[1, 2, 3].map((n) => (
                     <option key={n} value={n}>
                       {n}+
@@ -237,61 +233,61 @@ export function FilterPanel({ total }: { total: number }) {
                   ))}
                 </Select>
               </Field>
-              <Field label="Piano da" hint="0 = piano terra">
+              <Field label={d.ricerca.pianoDa} hint={d.ricerca.pianoNota}>
                 <Input name="pianoMin" type="number" defaultValue={current.get('pianoMin') ?? ''} />
               </Field>
-              <Field label="Piano fino a">
+              <Field label={d.ricerca.pianoA}>
                 <Input name="pianoMax" type="number" defaultValue={current.get('pianoMax') ?? ''} />
               </Field>
-              <Field label="Costruito dal">
+              <Field label={d.ricerca.annoDa}>
                 <Input name="annoMin" type="number" min={1800} max={2100} defaultValue={current.get('annoMin') ?? ''} />
               </Field>
-              <Field label="Costruito fino al">
+              <Field label={d.ricerca.annoA}>
                 <Input name="annoMax" type="number" min={1800} max={2100} defaultValue={current.get('annoMax') ?? ''} />
               </Field>
             </div>
             <div className="mt-3 flex flex-wrap gap-4">
-              <Checkbox name="pianoTerra" label="Solo piano terra" defaultChecked={current.get('pianoTerra') === '1'} />
-              <Checkbox name="ultimoPiano" label="Solo ultimo piano" defaultChecked={current.get('ultimoPiano') === '1'} />
+              <Checkbox name="pianoTerra" label={d.ricerca.soloPianoTerra} defaultChecked={current.get('pianoTerra') === '1'} />
+              <Checkbox name="ultimoPiano" label={d.ricerca.soloUltimoPiano} defaultChecked={current.get('ultimoPiano') === '1'} />
             </div>
           </fieldset>
 
           <fieldset>
-            <legend className="mb-2 text-sm font-medium text-ink-700">Caratteristiche</legend>
+            <legend className="mb-2 text-sm font-medium text-ink-700">{d.ricerca.sezCaratteristiche}</legend>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <Field label="Stato dell'immobile">
+              <Field label={d.ricerca.stato}>
                 <Select name="stato" defaultValue={current.get('stato') ?? ''}>
-                  <option value="">Indifferente</option>
-                  {Object.entries(CONDITION_LABELS).map(([value, label]) => (
+                  <option value="">{d.ricerca.indifferente}</option>
+                  {Object.entries(d.et.condizione).map(([value, label]) => (
                     <option key={value} value={value}>
                       {label}
                     </option>
                   ))}
                 </Select>
               </Field>
-              <Field label="Arredamento">
+              <Field label={d.ricerca.arredamento}>
                 <Select name="arredato" defaultValue={current.get('arredato') ?? ''}>
-                  <option value="">Indifferente</option>
-                  {Object.entries(FURNISHED_LABELS).map(([value, label]) => (
+                  <option value="">{d.ricerca.indifferente}</option>
+                  {Object.entries(d.et.arredamento).map(([value, label]) => (
                     <option key={value} value={value}>
                       {label}
                     </option>
                   ))}
                 </Select>
               </Field>
-              <Field label="Riscaldamento">
+              <Field label={d.ricerca.riscaldamento}>
                 <Select name="riscaldamento" defaultValue={current.get('riscaldamento') ?? ''}>
-                  <option value="">Indifferente</option>
-                  {Object.entries(HEATING_LABELS).map(([value, label]) => (
+                  <option value="">{d.ricerca.indifferente}</option>
+                  {Object.entries(d.et.riscaldamento).map(([value, label]) => (
                     <option key={value} value={value}>
                       {label}
                     </option>
                   ))}
                 </Select>
               </Field>
-              <Field label="Classe energetica" hint="La classe indicata o migliore">
+              <Field label={d.ricerca.classe} hint={d.ricerca.classeNota}>
                 <Select name="classeMin" defaultValue={current.get('classeMin') ?? ''}>
-                  <option value="">Indifferente</option>
+                  <option value="">{d.ricerca.indifferente}</option>
                   {ENERGY_ORDER.map((value) => (
                     <option key={value} value={value}>
                       {value}
@@ -299,67 +295,77 @@ export function FilterPanel({ total }: { total: number }) {
                   ))}
                 </Select>
               </Field>
-              <Field label="Tipo di proprietà">
+              <Field label={d.ricerca.proprieta}>
                 <Select name="proprieta" defaultValue={current.get('proprieta') ?? ''}>
-                  <option value="">Indifferente</option>
-                  <option value="FULL">Intera proprietà</option>
-                  <option value="BARE">Nuda proprietà</option>
-                  <option value="SHARED">Multiproprietà</option>
+                  <option value="">{d.ricerca.indifferente}</option>
+                  <option value="FULL">{d.et.proprieta.FULL}</option>
+                  <option value="BARE">{d.et.proprieta.BARE}</option>
+                  <option value="SHARED">{d.et.proprieta.SHARED}</option>
                 </Select>
               </Field>
-              <Field label="Disponibilità">
+              <Field label={d.ricerca.disponibilita}>
                 <Select name="disponibilita" defaultValue={current.get('disponibilita') ?? ''}>
-                  <option value="">Indifferente</option>
-                  <option value="FREE">Libero</option>
-                  <option value="OCCUPIED">Occupato</option>
-                  <option value="RENTED">Affittato, a reddito</option>
+                  <option value="">{d.ricerca.indifferente}</option>
+                  <option value="FREE">{d.et.disponibilita.FREE}</option>
+                  <option value="OCCUPIED">{d.et.disponibilita.OCCUPIED}</option>
+                  <option value="RENTED">{d.et.disponibilita.RENTED}</option>
                 </Select>
               </Field>
-              <Field label="Zona / quartiere" hint="Più zone separate da virgola">
+              <Field label={d.ricerca.zona} hint={d.ricerca.zonaNota}>
                 <Input name="zona" defaultValue={current.get('zona') ?? ''} placeholder="Trastevere, Prati" />
               </Field>
-              <Field label="Riferimento annuncio">
+              <Field label={d.ricerca.riferimento}>
                 <Input name="rif" defaultValue={current.get('rif') ?? ''} placeholder="RIF-1024" />
               </Field>
             </div>
 
             <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
-              {AMENITIES.map(([param, label]) => (
-                <Checkbox key={param} name={param} defaultChecked={current.get(param) === '1'} label={label} />
+              {AMENITIES.map(([param, chiave]) => (
+                <Checkbox
+                  key={param}
+                  name={param}
+                  defaultChecked={current.get(param) === '1'}
+                  label={d.et.dotazione[chiave]}
+                />
               ))}
             </div>
           </fieldset>
 
           <fieldset>
-            <legend className="mb-2 text-sm font-medium text-ink-700">L&apos;annuncio</legend>
+            <legend className="mb-2 text-sm font-medium text-ink-700">{d.ricerca.sezAnnuncio}</legend>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <Field label="Pubblicato negli ultimi">
+              <Field label={d.ricerca.pubblicatoDa}>
                 <Select name="pubblicatoDa" defaultValue={current.get('pubblicatoDa') ?? ''}>
-                  <option value="">Sempre</option>
-                  <option value="1">24 ore</option>
-                  <option value="3">3 giorni</option>
-                  <option value="7">7 giorni</option>
-                  <option value="30">30 giorni</option>
+                  <option value="">{d.ricerca.sempre}</option>
+                  <option value="1">{d.ricerca.ore24}</option>
+                  <option value="3">{d.ricerca.giorni3}</option>
+                  <option value="7">{d.ricerca.giorni7}</option>
+                  <option value="30">{d.ricerca.giorni30}</option>
                 </Select>
               </Field>
-              <Field label="Inserzionista">
+              <Field label={d.ricerca.inserzionista}>
                 <Select name="inserzionista" defaultValue={current.get('inserzionista') ?? ''}>
-                  <option value="">Tutti</option>
-                  <option value="agenzia">Agenzie</option>
-                  <option value="privato">Privati</option>
+                  <option value="">{d.ricerca.tutti}</option>
+                  <option value="agenzia">{d.ricerca.agenzieOpz}</option>
+                  <option value="privato">{d.ricerca.privatiOpz}</option>
                 </Select>
               </Field>
             </div>
 
             <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {LISTING_FLAGS.map(([param, label]) => (
-                <Checkbox key={param} name={param} defaultChecked={current.get(param) === '1'} label={label} />
+              {LISTING_FLAGS.map(([param, chiave]) => (
+                <Checkbox
+                  key={param}
+                  name={param}
+                  defaultChecked={current.get(param) === '1'}
+                  label={d.ricerca[chiave]}
+                />
               ))}
             </div>
           </fieldset>
 
           <div className="flex items-center gap-3 border-t border-ink-100 pt-5">
-            <Button type="submit">Mostra {total.toLocaleString('it-IT')} risultati</Button>
+            <Button type="submit">{d.ricerca.mostraRisultati.replace('{n}', total.toLocaleString(lingua))}</Button>
             <Button
               type="button"
               variant="ghost"
@@ -370,11 +376,11 @@ export function FilterPanel({ total }: { total: number }) {
                   const value = current.get(key)
                   if (value) keep.set(key, value)
                 }
-                router.push(`/cerca?${keep.toString()}`)
+                router.push(`/${lingua}/cerca?${keep.toString()}`)
                 setOpen(false)
               }}
             >
-              Azzera i filtri
+              {d.ricerca.azzeraFiltri}
             </Button>
           </div>
         </form>

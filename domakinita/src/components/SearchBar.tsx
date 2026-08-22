@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import { useI18n } from '@/i18n/client'
 
 type Suggestion = { slug: string; name: string; type: string; province: string | null }
 
@@ -21,6 +22,7 @@ export function SearchBar({
   className?: string
 }) {
   const router = useRouter()
+  const { lingua, d } = useI18n()
   const [contract, setContract] = useState(defaultContract)
   const [city, setCity] = useState(defaultCity)
   const [type, setType] = useState('')
@@ -64,7 +66,7 @@ export function SearchBar({
     const params = new URLSearchParams({ contratto: contract })
     if (city.trim()) params.set('comune', city.trim())
     if (type) params.set('tipo', type)
-    router.push(`/cerca?${params.toString()}`)
+    router.push(`/${lingua}/cerca?${params.toString()}`)
   }
 
   return (
@@ -80,11 +82,11 @@ export function SearchBar({
             onClick={() => setContract(value)}
             aria-pressed={contract === value}
             className={cn(
-              'rounded-lg px-4 py-1.5 text-sm font-medium capitalize transition',
+              'rounded-lg px-4 py-1.5 text-sm font-medium transition',
               contract === value ? 'bg-white text-ink-900 shadow-sm' : 'text-ink-600',
             )}
           >
-            {value}
+            {value === 'vendita' ? d.nav.vendita : d.nav.affitto}
           </button>
         ))}
       </div>
@@ -92,7 +94,7 @@ export function SearchBar({
       <div className="flex flex-col gap-2 sm:flex-row">
         <div ref={box} className="relative flex-1">
           <label htmlFor="ricerca-comune" className="sr-only">
-            Località o zona
+            {d.ricerca.localitaEtichetta}
           </label>
           <input
             id="ricerca-comune"
@@ -103,7 +105,7 @@ export function SearchBar({
             }}
             onFocus={() => setOpen(true)}
             autoComplete="off"
-            placeholder="Cerca per località, per esempio Argostoli, Fiskardo"
+            placeholder={d.ricerca.placeholder}
             className="w-full rounded-xl border border-ink-200 px-4 py-3 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
           />
 
@@ -129,7 +131,7 @@ export function SearchBar({
         </div>
 
         <label htmlFor="ricerca-tipo" className="sr-only">
-          Tipologia
+          {d.ricerca.tipologia}
         </label>
         <select
           id="ricerca-tipo"
@@ -137,19 +139,19 @@ export function SearchBar({
           onChange={(e) => setType(e.target.value)}
           className="rounded-xl border border-ink-200 px-4 py-3 text-sm focus:border-brand-500 focus:outline-none sm:w-56"
         >
-          <option value="">Tutte le tipologie</option>
-          <option value="appartamento">Appartamento</option>
-          <option value="attico">Attico</option>
-          <option value="villa">Villa</option>
-          <option value="casa">Casa indipendente</option>
-          <option value="loft">Loft</option>
-                    <option value="ufficio">Ufficio</option>
-          <option value="negozio">Negozio</option>
-          <option value="terreno">Terreno edificabile</option>
+          <option value="">{d.ricerca.tutteTipologie}</option>
+          <option value="appartamento">{d.et.tipo.APARTMENT}</option>
+          <option value="attico">{d.et.tipo.ATTIC}</option>
+          <option value="villa">{d.et.tipo.VILLA}</option>
+          <option value="casa">{d.et.tipo.TOWNHOUSE}</option>
+          <option value="loft">{d.et.tipo.LOFT}</option>
+          <option value="ufficio">{d.et.tipo.OFFICE}</option>
+          <option value="negozio">{d.et.tipo.SHOP}</option>
+          <option value="terreno">{d.et.tipo.LAND}</option>
         </select>
 
         <Button type="submit" size="lg" className="sm:w-40">
-          Cerca
+          {d.ricerca.cerca}
         </Button>
       </div>
     </form>

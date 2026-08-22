@@ -216,6 +216,10 @@ model Listing {
   agencyId String?
   agency   Agency? @relation(fields: [agencyId], references: [id], onDelete: SetNull)
 
+  /// La lingua in cui l'agenzia ha scritto l'annuncio.
+  locale       String               @default("it")
+  translations ListingTranslation[]
+
   images    ListingImage[]
   favorites Favorite[]
   leads     Lead[]
@@ -229,6 +233,20 @@ model Listing {
   @@index([latitude, longitude])
   @@index([ownerId])
   @@index([agencyId])
+}
+
+/// Titolo e descrizione nelle altre lingue del portale. Quello che manca
+/// ricade sul testo originale dell'annuncio: meglio l'italiano che il vuoto.
+model ListingTranslation {
+  id          String  @id @default(cuid())
+  listingId   String
+  listing     Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  locale      String
+  title       String
+  description String  @db.Text
+
+  @@unique([listingId, locale])
+  @@index([locale])
 }
 
 model ListingImage {

@@ -1,26 +1,25 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import './globals.css'
+import { CODICI_HTML, linguaSicura } from '@/i18n/config'
 import { SITE_NAME, SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${SITE_NAME} — Case e terreni a Cefalonia`,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description:
-    'Case, ville e terreni a Cefalonia: annunci delle agenzie dell’isola, ricerca per paese e per area disegnata sulla mappa, richieste di visita.',
-  openGraph: {
-    type: 'website',
-    locale: 'it_IT',
-    siteName: SITE_NAME,
-  },
+  // Titolo e descrizione li scrive il layout della lingua: qui resta solo
+  // ciò che non cambia da una lingua all'altra.
+  title: SITE_NAME,
+  openGraph: { type: 'website', siteName: SITE_NAME },
   robots: { index: true, follow: true },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // La lingua arriva dal middleware: qui i parametri del segmento [lingua]
+  // non sono ancora visibili, ma l'attributo lang va scritto su <html>.
+  const lingua = linguaSicura((await headers()).get('x-lingua'))
+
   return (
-    <html lang="it">
+    <html lang={CODICI_HTML[lingua]}>
       <body className="min-h-screen">{children}</body>
     </html>
   )

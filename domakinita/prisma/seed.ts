@@ -79,6 +79,96 @@ const NOMI_TIPO: Partial<Record<PropertyType, string>> = {
   WAREHOUSE: 'Magazzino',
 }
 
+// Il portale parla tre lingue: gli annunci di esempio anche. Il testo
+// originale è italiano, inglese e greco sono traduzioni dell'agenzia.
+type Lingua = 'it' | 'en' | 'el'
+const ALTRE_LINGUE: Lingua[] = ['en', 'el']
+
+const NOMI_TIPO_LINGUA: Record<Lingua, Partial<Record<PropertyType, string>>> = {
+  it: NOMI_TIPO,
+  en: {
+    ATTIC: 'Penthouse',
+    VILLA: 'Villa',
+    TOWNHOUSE: 'Detached house',
+    LOFT: 'Loft',
+    OFFICE: 'Office',
+    SHOP: 'Shop',
+    ROOM: 'Room',
+    LAND: 'Building plot',
+    BUILDING: 'Whole building',
+    GARAGE: 'Garage',
+    WAREHOUSE: 'Warehouse',
+  },
+  el: {
+    ATTIC: 'Ρετιρέ',
+    VILLA: 'Βίλα',
+    TOWNHOUSE: 'Μονοκατοικία',
+    LOFT: 'Λοφτ',
+    OFFICE: 'Γραφείο',
+    SHOP: 'Κατάστημα',
+    ROOM: 'Δωμάτιο',
+    LAND: 'Οικόπεδο',
+    BUILDING: 'Κτίριο',
+    GARAGE: 'Γκαράζ',
+    WAREHOUSE: 'Αποθήκη',
+  },
+}
+
+const NOMI_LOCALI: Record<Lingua, string[]> = {
+  it: ['Monolocale', 'Bilocale', 'Trilocale', 'Quadrilocale', 'Cinque locali'],
+  en: ['Studio', 'One-bedroom flat', 'Two-bedroom flat', 'Three-bedroom flat', 'Four-bedroom flat'],
+  el: ['Γκαρσονιέρα', 'Δυάρι', 'Τριάρι', 'Τεσσάρι', 'Πενταδωμάτιο'],
+}
+
+const A_DOVE: Record<Lingua, string> = { it: 'a', en: 'in', el: 'στο' }
+
+function titoloIn(lingua: Lingua, type: PropertyType, rooms: number, dove: string) {
+  const nome =
+    NOMI_TIPO_LINGUA[lingua][type] ??
+    NOMI_LOCALI[lingua][rooms - 1] ??
+    `${rooms} ${lingua === 'it' ? 'locali' : lingua === 'en' ? 'rooms' : 'δωμάτια'}`
+  return `${nome} ${A_DOVE[lingua]} ${dove}`
+}
+
+function descrizioneIn(
+  lingua: Lingua,
+  type: PropertyType,
+  rooms: number,
+  surface: number,
+  dove: string,
+  mare: boolean,
+) {
+  if (lingua === 'it') return descrizione(type, rooms, surface, dove, mare)
+
+  if (lingua === 'en') {
+    if (type === 'LAND') {
+      return `Building plot of ${surface} m² in ${dove}, reached by a surfaced road, with utilities available at the boundary.
+
+${mare ? 'The plot looks out over the Ionian sea and faces south-west, which means sun until sunset.' : 'The plot is level, edged by a dry-stone wall and planted with olive trees.'}
+
+Its size allows a single dwelling under the current planning ratios. Land registry papers are in order: Greek practice asks for a topographic survey and a building certificate, and both are ready.`
+    }
+    return `In ${dove} we offer a property of ${surface} m² with ${rooms} rooms.
+
+${mare ? 'The main windows face the sea, with the coast opening up in front of the veranda.' : 'The property sits in the quiet part of the village, minutes from the shops.'} The rooms are bright, living and sleeping areas are separate, and the outdoor space is already laid out.
+
+Kefalonia has direct flights from several Italian cities in summer, and is reachable all year through Athens or the port of Patras. Viewings by appointment, video call included.`
+  }
+
+  if (type === 'LAND') {
+    return `Οικόπεδο ${surface} τ.μ. ${dove}, με πρόσβαση από ασφαλτοστρωμένο δρόμο και παροχές στο όριο.
+
+${mare ? 'Το οικόπεδο έχει ανοιχτή θέα στο Ιόνιο και νοτιοδυτικό προσανατολισμό: ήλιος μέχρι τη δύση.' : 'Το οικόπεδο είναι επίπεδο, με ξερολιθιά στα όρια και ελιές.'}
+
+Η έκταση επιτρέπει την ανέγερση μονοκατοικίας με τους ισχύοντες συντελεστές. Τοπογραφικό και βεβαίωση αρτιότητας είναι έτοιμα.`
+  }
+  return `${dove} διατίθεται ακίνητο ${surface} τ.μ. με ${rooms} δωμάτια.
+
+${mare ? 'Τα κύρια ανοίγματα βλέπουν στη θάλασσα, με την ακτή να απλώνεται μπροστά από τη βεράντα.' : 'Το ακίνητο βρίσκεται στο ήσυχο τμήμα του χωριού, λίγα λεπτά από τα καταστήματα.'} Οι χώροι είναι φωτεινοί, η ημέρα χωρίζεται από τη νύχτα και ο περιβάλλων χώρος είναι διαμορφωμένος.
+
+Η Κεφαλονιά έχει απευθείας πτήσεις από πολλές ιταλικές πόλεις το καλοκαίρι, και όλο τον χρόνο μέσω Αθήνας ή από το λιμάνι της Πάτρας. Επισκέψεις κατόπιν ραντεβού, ακόμη και με βιντεοκλήση.`
+}
+
 const CONDITIONS = ['NEW', 'RENOVATED', 'GOOD', 'TO_RENOVATE'] as const
 const HEATINGS = ['AUTONOMOUS', 'CENTRALIZED'] as const
 const ENERGIES = ['A2', 'A1', 'B', 'C', 'D', 'E', 'F', 'G'] as const
@@ -294,6 +384,14 @@ async function main() {
         views: between(20, 900),
         ownerId: agente.id,
         agencyId: agente.agencyId,
+        locale: 'it',
+        translations: {
+          create: ALTRE_LINGUE.map((lingua) => ({
+            locale: lingua,
+            title: titoloIn(lingua, type, rooms, dove),
+            description: descrizioneIn(lingua, type, rooms, surface, dove, mare),
+          })),
+        },
       },
     })
 

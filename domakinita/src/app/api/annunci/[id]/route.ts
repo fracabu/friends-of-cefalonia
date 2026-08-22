@@ -18,7 +18,7 @@ export async function PATCH(request: Request, { params }: Context) {
   const session = await getSession()
   const listing = await db.listing.findUnique({
     where: { id: (await params).id },
-    select: { id: true, ownerId: true, agencyId: true, publishedAt: true },
+    select: { id: true, ownerId: true, agencyId: true, publishedAt: true, locale: true },
   })
   if (!listing) return NextResponse.json({ error: 'Annuncio non trovato' }, { status: 404 })
   if (!canEditListing(session, listing)) {
@@ -30,7 +30,18 @@ export async function PATCH(request: Request, { params }: Context) {
     return NextResponse.json({ errors: parsed.error.flatten().fieldErrors }, { status: 400 })
   }
 
-  const data = parsed.data
+  const { traduzioni, ...data } = parsed.data
+
+  // Ogni lingua ha una riga sola: si aggiorna quella, non se ne accumulano.
+  for (const t of traduzioni ?? []) {
+    if (t.locale === (data.locale ?? listing.locale)) continue
+    await db.listingTranslation.upsert({
+      where: { listingId_locale: { listingId: listing.id, locale: t.locale } },
+      create: { listingId: listing.id, locale: t.locale, title: t.title, description: t.description },
+      update: { title: t.title, description: t.description },
+    })
+  }
+
   const updated = await db.listing.update({
     where: { id: listing.id },
     data: {

@@ -6,6 +6,7 @@ import { ListingMap } from '@/components/ListingMap'
 import { Button } from '@/components/ui/Button'
 import { encodePolyline, type Area, type Bounds, type LatLng } from '@/lib/geo'
 import type { MapPoint } from '@/components/ListingMap'
+import { useI18n } from '@/i18n/client'
 
 const RADII = [1, 3, 5, 10, 20]
 
@@ -28,6 +29,7 @@ export function SearchMap({
 }) {
   const router = useRouter()
   const params = useSearchParams()
+  const { lingua, d } = useI18n()
   const [drawing, setDrawing] = useState(false)
   const [followMap, setFollowMap] = useState(params.get('bbox') != null)
   const [radius, setRadius] = useState(Number(params.get('raggio')) || 5)
@@ -43,9 +45,9 @@ export function SearchMap({
         if (value !== null) next.set(key, value)
       }
       next.delete('pagina')
-      router.push(`/cerca?${next.toString()}`, { scroll: false })
+      router.push(`/${lingua}/cerca?${next.toString()}`, { scroll: false })
     },
-    [params, router],
+    [lingua, params, router],
   )
 
   const onAreaDrawn = useCallback(
@@ -95,12 +97,12 @@ export function SearchMap({
           variant={drawing ? 'primary' : 'secondary'}
           onClick={() => setDrawing((v) => !v)}
         >
-          {drawing ? 'Disegna sulla mappa…' : area?.kind === 'polygon' ? 'Ridisegna la zona' : 'Disegna la zona'}
+          {drawing ? d.mappa.disegnando : area?.kind === 'polygon' ? d.mappa.ridisegna : d.mappa.disegna}
         </Button>
 
         <div className="flex items-center gap-1 rounded-xl border border-ink-200 bg-white px-2 py-1">
           <label htmlFor="raggio" className="text-xs text-ink-500">
-            Raggio
+            {d.mappa.raggio}
           </label>
           <select
             id="raggio"
@@ -115,7 +117,7 @@ export function SearchMap({
             ))}
           </select>
           <Button size="sm" variant="ghost" onClick={searchRadius}>
-            Applica
+            {d.mappa.applica}
           </Button>
         </div>
 
@@ -135,19 +137,19 @@ export function SearchMap({
             }}
             className="h-4 w-4 rounded border-ink-300 text-brand-600"
           />
-          Cerca mentre sposto la mappa
+          {d.mappa.segui}
         </label>
 
         {area ? (
           <Button size="sm" variant="ghost" onClick={clearArea}>
-            Togli l&apos;area
+            {d.mappa.togliArea}
           </Button>
         ) : null}
       </div>
 
       {drawing ? (
         <p className="mb-2 rounded-xl bg-brand-50 px-3 py-2 text-sm text-brand-800">
-          Tieni premuto e traccia la zona che ti interessa: al rilascio la ricerca si aggiorna.
+          {d.mappa.istruzioni}
         </p>
       ) : null}
 

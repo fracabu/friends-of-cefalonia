@@ -1,11 +1,13 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useI18n } from '@/i18n/client'
 
 /** I filtri attivi, ciascuno con la sua croce per toglierlo. */
 export function ActiveFilters({ chips }: { chips: Array<{ param: string; label: string }> }) {
   const router = useRouter()
   const params = useSearchParams()
+  const { lingua, d } = useI18n()
 
   if (!chips.length) return null
 
@@ -16,7 +18,7 @@ export function ActiveFilters({ chips }: { chips: Array<{ param: string; label: 
     if (param === 'centro') next.delete('raggio')
     if (param === 'raggio') next.delete('centro')
     next.delete('pagina')
-    router.push(`/cerca?${next.toString()}`)
+    router.push(`/${lingua}/cerca?${next.toString()}`)
   }
 
   return (
@@ -32,7 +34,7 @@ export function ActiveFilters({ chips }: { chips: Array<{ param: string; label: 
             <span aria-hidden className="text-brand-500">
               &times;
             </span>
-            <span className="sr-only">Togli il filtro</span>
+            <span className="sr-only">{d.ricerca.togliFiltro}</span>
           </button>
         </li>
       ))}

@@ -135,6 +135,19 @@ export const listingSchema = z.object({
   latitude: optFloat,
   longitude: optFloat,
 
+  locale: z.enum(['it', 'en', 'el']).default('it'),
+  /** Titolo e descrizione nelle altre lingue: quelle vuote non arrivano. */
+  traduzioni: z
+    .array(
+      z.object({
+        locale: z.enum(['it', 'en', 'el']),
+        title: z.string().trim().min(3).max(140),
+        description: z.string().trim().min(20).max(8000),
+      }),
+    )
+    .optional()
+    .default([]),
+
   features: z
     .union([z.string(), z.array(z.string())])
     .optional()

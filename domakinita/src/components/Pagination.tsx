@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { useI18n } from '@/i18n/client'
 
 /** Paginazione con link veri: i motori di ricerca devono poterla percorrere. */
 export function Pagination({
@@ -11,16 +14,17 @@ export function Pagination({
   pageCount: number
   buildHref: (page: number) => string
 }) {
+  const { d } = useI18n()
   if (pageCount <= 1) return null
 
   const pages = new Set<number>([1, pageCount, page - 1, page, page + 1])
   const visible = [...pages].filter((p) => p >= 1 && p <= pageCount).sort((a, b) => a - b)
 
   return (
-    <nav aria-label="Paginazione" className="flex flex-wrap items-center justify-center gap-1 py-8">
+    <nav aria-label={d.ricerca.paginazione} className="flex flex-wrap items-center justify-center gap-1 py-8">
       {page > 1 ? (
         <Link href={buildHref(page - 1)} rel="prev" className="rounded-lg px-3 py-2 text-sm text-ink-600 hover:bg-ink-100">
-          Precedente
+          {d.ricerca.precedente}
         </Link>
       ) : null}
 
@@ -44,7 +48,7 @@ export function Pagination({
 
       {page < pageCount ? (
         <Link href={buildHref(page + 1)} rel="next" className="rounded-lg px-3 py-2 text-sm text-ink-600 hover:bg-ink-100">
-          Successiva
+          {d.ricerca.successiva}
         </Link>
       ) : null}
     </nav>
