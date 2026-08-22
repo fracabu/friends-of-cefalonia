@@ -1,14 +1,15 @@
-# Domoktima · Δομόκτημα
+# Domakinita · Δομακίνητα
 
 Portale di annunci immobiliari sul modello dei grandi portali italiani: ricerca
 per comune, zona e **area disegnata a mano sulla mappa**, scheda immobile con
 galleria e richiesta di visita, pannello per le agenzie che pubblicano.
 
 Il nome tiene insieme le due lingue del portale: **domo**, la casa, che un
-italiano legge senza pensarci, e **κτήμα** (*ktima*), che in Grecia è la parola
-del bene immobile — la stessa del *Κτηματολόγιο*, il catasto, e del
-*κτηματομεσιτικό γραφείο*, l'agenzia immobiliare. Sotto il nome, nel piè di
-pagina, il descrittore lo dice per esteso in entrambe: «ακίνητα · immobiliare».
+italiano legge senza pensarci, e **ακίνητα** (*akinita*), che in Grecia è la
+parola dell'immobiliare — alla lettera «i beni che non si spostano», ed è il
+termine con cui si cerca casa lì, come da noi si cerca «immobiliare». Sotto il
+nome, nel piè di pagina, il descrittore lo dice per esteso in greco: «αγγελίες
+ακινήτων», annunci immobiliari.
 
 Il marchio è una casa ridotta a tre tratti, con la porta a forma di **Π**:
 insieme una porta e una lettera greca, e il prospetto di un tempio senza doverlo

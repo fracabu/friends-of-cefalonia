@@ -36,7 +36,7 @@ export function Footer() {
     <footer className="mt-20 border-t border-ink-100 bg-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Logo name={SITE_NAME} subtitle="ακίνητα · immobiliare" markClassName="h-7 w-7 text-brand-600" />
+          <Logo name={SITE_NAME} subtitle="αγγελίες ακινήτων" markClassName="h-7 w-7 text-brand-600" />
           <p className="mt-2 max-w-xs text-sm text-ink-500">
             Annunci immobiliari di agenzie e privati, con ricerca per zona, mappa e richieste di
             visita.
