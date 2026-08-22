@@ -19,6 +19,7 @@ Tutto il testo modificabile sta in tre file, senza toccare i componenti:
 | `src/data/links.ts` | Le sezioni di risorse e i link, con la loro descrizione |
 | `src/data/quiz.ts` | Le domande del quiz, la risposta esatta e la spiegazione |
 | `src/data/site.ts` | URL del gruppo Facebook, di Capra Ionia, numero di iscritti |
+| `src/data/cucina.ts` | Piatti, prodotti, la Robola e i consigli a tavola |
 
 Aggiungere un link significa aggiungere una riga a `links.ts`. Aggiungere una
 domanda, un blocco a `quiz.ts`.
@@ -28,6 +29,8 @@ domanda, un blocco a `quiz.ts`.
 | Dove metti il file | Cosa succede |
 |---|---|
 | `foto/hero.jpg` | Diventa la fotografia d'apertura, ridotta a 2000 px |
+| `foto/vini.jpg` | Apre il blocco sulla Robola, dentro «A tavola» |
+| `foto/tartarughe.jpg` | Apre la sezione delle tartarughe |
 | `foto/galleria/*.jpg` | Entrano nella galleria, ridotte e firmate |
 | `public/video/tartarughe.mp4` | Compare nella sezione delle tartarughe |
 

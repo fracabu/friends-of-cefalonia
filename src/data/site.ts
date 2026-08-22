@@ -47,3 +47,14 @@ export const HERO_PHOTO_CREDIT = "";
 export const VIDEO_TARTARUGHE = "video/tartarughe.mp4";
 export const VIDEO_TARTARUGHE_POSTER = "";
 export const VIDEO_TARTARUGHE_CREDIT = "";
+
+/**
+ * Fotografie delle sezioni: i file stanno in `foto/`, con questi nomi, e la
+ * build ne pubblica la versione ridotta. Come per l'apertura, il percorso può
+ * essere scritto prima che il file esista: finché manca, la sezione si limita
+ * a non mostrarla.
+ */
+export const FOTO_VINI = "foto/vini.jpg";
+export const FOTO_TARTARUGHE = "foto/tartarughe.jpg";
+export const FOTO_VINI_CREDITO = "";
+export const FOTO_TARTARUGHE_CREDITO = "";
