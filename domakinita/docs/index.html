@@ -195,13 +195,12 @@
 
   /* ---------------------------------------------------------------- layout */
   .cols { display: grid; grid-template-columns: 1fr 480px; gap: 20px; margin-top: 16px; align-items: start; }
-  @media (max-width: 1080px) { .cols { grid-template-columns: 1fr; } }
 
-  .tabs { display: none; margin: 14px 0 0; }
+  /* Su schermo stretto la mappa non si nasconde: sale sopra l'elenco, perche'
+     e' da li' che si disegna la zona ed e' la prima cosa da vedere. */
   @media (max-width: 1080px) {
-    .tabs { display: inline-flex; }
-    .cols.mappa > .results { display: none; }
-    .cols.lista > .mapwrap { display: none; }
+    .cols { grid-template-columns: 1fr; }
+    .cols > .mapwrap { order: -1; position: static; }
   }
 
   .results-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
@@ -240,13 +239,14 @@
 
   /* ----------------------------------------------------------------- map */
   .mapwrap { position: sticky; top: 76px; }
+  .maptitle { margin: 0 0 9px; font-size: 15px; letter-spacing: -.01em; }
   .maptools { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 9px; align-items: center; }
   .radiogroup { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px; padding: 4px 4px 4px 10px; font-size: 13px; color: var(--muted); }
   .radiogroup select { border: 0; background: transparent; padding: 4px; }
 
   .mapbox { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
   canvas { display: block; width: 100%; height: 560px; touch-action: none; }
-  @media (max-width: 1080px) { canvas { height: 440px; } }
+  @media (max-width: 1080px) { canvas { height: 400px; } }
 
   .hint {
     position: absolute; left: 12px; right: 12px; bottom: 12px;
@@ -283,6 +283,17 @@
 
   footer.end { margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: space-between; }
   footer.end a { color: var(--accent); }
+
+  /* Sul telefono l'intestazione occupa quattro righe: se restasse appiccicata
+     in alto coprirebbe i filtri attivi appena si scorre. */
+  @media (max-width: 700px) {
+    header.top { position: static; }
+    .tag { display: none; }
+    .top-right { width: 100%; }
+    .top-right .btn { width: 100%; justify-content: center; }
+    .searchrow { flex-wrap: wrap; }
+    .searchrow select { flex: 1; }
+  }
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -380,12 +391,7 @@
 
   <ul class="chips" id="chips"></ul>
 
-  <div class="seg tabs" role="group" aria-label="Vista">
-    <button type="button" id="t-lista" aria-pressed="true">Elenco</button>
-    <button type="button" id="t-mappa" aria-pressed="false">Mappa</button>
-  </div>
-
-  <div class="cols lista" id="cols">
+  <div class="cols" id="cols">
     <section class="results">
       <div class="results-head">
         <h1 style="margin:0;font-size:20px;letter-spacing:-.02em" id="titolo">Immobili in vendita</h1>
@@ -394,8 +400,9 @@
     </section>
 
     <section class="mapwrap">
+      <h2 class="maptitle">Cerca sulla mappa</h2>
       <div class="maptools">
-        <button class="btn" id="disegna">Disegna la zona</button>
+        <button class="btn primary" id="disegna">✎ Disegna la zona</button>
         <div class="radiogroup">
           <label for="km">Raggio</label>
           <select id="km"><option>1</option><option>3</option><option selected>5</option><option>10</option><option>20</option></select>
@@ -957,14 +964,6 @@ function costruisciControlli() {
     });
   }
 
-  for (const [id, vista] of [['t-lista', 'lista'], ['t-mappa', 'mappa']]) {
-    el(id).addEventListener('click', () => {
-      el('cols').className = 'cols ' + vista;
-      el('t-lista').setAttribute('aria-pressed', String(vista === 'lista'));
-      el('t-mappa').setAttribute('aria-pressed', String(vista === 'mappa'));
-      if (vista === 'mappa') { misura(); disegnaMappa(); }
-    });
-  }
 }
 
 /* ------------------------------------------------------- disegno sull'area */
