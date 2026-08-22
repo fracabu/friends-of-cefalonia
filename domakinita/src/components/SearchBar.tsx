@@ -92,7 +92,7 @@ export function SearchBar({
       <div className="flex flex-col gap-2 sm:flex-row">
         <div ref={box} className="relative flex-1">
           <label htmlFor="ricerca-comune" className="sr-only">
-            Comune o zona
+            Località o zona
           </label>
           <input
             id="ricerca-comune"
@@ -103,7 +103,7 @@ export function SearchBar({
             }}
             onFocus={() => setOpen(true)}
             autoComplete="off"
-            placeholder="Cerca per comune o zona, per esempio Roma, Trastevere"
+            placeholder="Cerca per località, per esempio Argostoli, Fiskardo"
             className="w-full rounded-xl border border-ink-200 px-4 py-3 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
           />
 
@@ -141,12 +141,11 @@ export function SearchBar({
           <option value="appartamento">Appartamento</option>
           <option value="attico">Attico</option>
           <option value="villa">Villa</option>
-          <option value="villetta">Villetta a schiera</option>
+          <option value="casa">Casa indipendente</option>
           <option value="loft">Loft</option>
-          <option value="stanza">Stanza</option>
-          <option value="ufficio">Ufficio</option>
+                    <option value="ufficio">Ufficio</option>
           <option value="negozio">Negozio</option>
-          <option value="terreno">Terreno</option>
+          <option value="terreno">Terreno edificabile</option>
         </select>
 
         <Button type="submit" size="lg" className="sm:w-40">

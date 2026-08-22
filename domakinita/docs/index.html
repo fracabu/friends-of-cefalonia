@@ -1,0 +1,1100 @@
+<title>Domakinita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ---------------------------------------------------------------- token */
+  :root {
+    --ground: #f6f8fc;
+    --surface: #ffffff;
+    --surface-2: #eef2f9;
+    --ink: #0f1421;
+    --ink-2: #3f4a60;
+    --muted: #6a7690;
+    --line: #e2e7f1;
+    --line-strong: #cfd7e6;
+    --accent: #1d63f0;
+    --accent-ink: #ffffff;
+    --accent-soft: #e9f0ff;
+    --accent-line: #bcd3ff;
+    --ok: #0d8a63;
+    --ok-soft: #e3f5ee;
+    --warn: #a96206;
+    --warn-soft: #fdf0dd;
+    --shadow: 0 1px 2px rgba(15, 20, 33, .05), 0 10px 30px -18px rgba(15, 20, 33, .35);
+    --radius: 14px;
+    --land: #e8edf6;
+    --land-line: #d3dcec;
+  }
+
+  :root:not([data-theme="light"]) {
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0b0f17;
+      --surface: #141a26;
+      --surface-2: #1b2331;
+      --ink: #e9edf6;
+      --ink-2: #b9c3d6;
+      --muted: #8996ad;
+      --line: #232c3c;
+      --line-strong: #33405a;
+      --accent: #5f95ff;
+      --accent-ink: #08111f;
+      --accent-soft: #16233c;
+      --accent-line: #2b4270;
+      --ok: #4fd2a4;
+      --ok-soft: #10281f;
+      --warn: #e5a44e;
+      --warn-soft: #2a1f0d;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 14px 34px -20px rgba(0, 0, 0, .9);
+      --land: #182131;
+      --land-line: #26334a;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0b0f17;
+    --surface: #141a26;
+    --surface-2: #1b2331;
+    --ink: #e9edf6;
+    --ink-2: #b9c3d6;
+    --muted: #8996ad;
+    --line: #232c3c;
+    --line-strong: #33405a;
+    --accent: #5f95ff;
+    --accent-ink: #08111f;
+    --accent-soft: #16233c;
+    --accent-line: #2b4270;
+    --ok: #4fd2a4;
+    --ok-soft: #10281f;
+    --warn: #e5a44e;
+    --warn-soft: #2a1f0d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 14px 34px -20px rgba(0, 0, 0, .9);
+    --land: #182131;
+    --land-line: #26334a;
+    color-scheme: dark;
+  }
+
+  /* ----------------------------------------------------------------- base */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 15px/1.55 "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .brand-name { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; text-wrap: balance; }
+
+  button, input, select { font: inherit; color: inherit; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  .num { font-variant-numeric: tabular-nums; }
+
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+  /* ---------------------------------------------------------------- shell */
+  .shell { max-width: 1360px; margin: 0 auto; padding: 0 18px 64px; }
+
+  header.top {
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .top-in {
+    max-width: 1360px; margin: 0 auto; padding: 11px 18px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand svg { width: 30px; height: 30px; color: var(--accent); }
+  .brand-name { font-size: 20px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+  .brand-sub {
+    display: block; margin-top: 3px;
+    font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+  }
+
+  .tag {
+    margin-left: 2px; padding: 3px 9px; border-radius: 999px;
+    background: var(--surface-2); border: 1px solid var(--line);
+    font-size: 11px; color: var(--muted); letter-spacing: .04em;
+  }
+
+  .seg { display: inline-flex; background: var(--surface-2); border-radius: 10px; padding: 3px; gap: 2px; }
+  .seg button {
+    border: 0; background: transparent; color: var(--muted);
+    padding: 6px 15px; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 14px;
+  }
+  .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+
+  .top-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+  .btn {
+    border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+    padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 500; font-size: 14px;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn:hover { border-color: var(--accent-line); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn.primary:hover { filter: brightness(1.06); }
+  .btn.quiet { border-color: transparent; background: transparent; color: var(--muted); }
+  .btn.quiet:hover { color: var(--ink); background: var(--surface-2); }
+  .btn.on { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+
+  /* ------------------------------------------------------------- searchbar */
+  .searchrow { display: flex; gap: 8px; align-items: center; flex: 1 1 260px; min-width: 220px; }
+  .searchrow select, .searchrow input {
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px;
+    padding: 8px 11px; min-width: 0;
+  }
+  .searchrow input { flex: 1; }
+
+  /* ---------------------------------------------------------------- panel */
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 14px; flex-wrap: wrap; }
+  .count { font-size: 14px; color: var(--muted); }
+  .count b { color: var(--ink); font-weight: 600; font-size: 16px; }
+
+  .filters { border-top: 1px solid var(--line); padding: 16px 14px 18px; display: none; }
+  .filters.open { display: block; }
+
+  fieldset { border: 0; margin: 0 0 18px; padding: 0; }
+  legend { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 9px; }
+
+  .grid-f { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .field input, .field select {
+    width: 100%; background: var(--surface); border: 1px solid var(--line-strong);
+    border-radius: 9px; padding: 7px 10px;
+  }
+
+  .checks { display: grid; gap: 8px 14px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+  .check input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+  /* ---------------------------------------------------------------- chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+    border-radius: 999px; padding: 4px 8px 4px 11px; font-size: 12.5px; font-weight: 500; cursor: pointer;
+  }
+  .chip:hover { filter: brightness(.97); }
+  .chip span { font-size: 15px; line-height: 1; opacity: .7; }
+
+  /* ---------------------------------------------------------------- layout */
+  .cols { display: grid; grid-template-columns: 1fr 480px; gap: 20px; margin-top: 16px; align-items: start; }
+  @media (max-width: 1080px) { .cols { grid-template-columns: 1fr; } }
+
+  .tabs { display: none; margin: 14px 0 0; }
+  @media (max-width: 1080px) {
+    .tabs { display: inline-flex; }
+    .cols.mappa > .results { display: none; }
+    .cols.lista > .mapwrap { display: none; }
+  }
+
+  .results-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .sortsel { background: var(--surface); border: 1px solid var(--line-strong); border-radius: 9px; padding: 7px 10px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+  /* ---------------------------------------------------------------- card */
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow); cursor: pointer; text-align: left;
+    padding: 0; display: flex; flex-direction: column; transition: transform .18s ease, border-color .18s ease;
+  }
+  .card:hover, .card.hot { transform: translateY(-2px); border-color: var(--accent-line); }
+  .thumb { position: relative; aspect-ratio: 4 / 3; display: grid; place-items: center; }
+  .thumb svg { width: 46px; height: 46px; color: rgba(255, 255, 255, .82); }
+  .badges { position: absolute; left: 9px; top: 9px; display: flex; gap: 5px; flex-wrap: wrap; }
+  .badge {
+    font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px; background: var(--surface); color: var(--ink-2);
+  }
+  .badge.ok { background: var(--ok-soft); color: var(--ok); }
+  .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.acc { background: var(--accent-soft); color: var(--accent); }
+
+  .card-body { padding: 13px 14px 15px; display: flex; flex-direction: column; gap: 5px; }
+  .price { font-family: Archivo, sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
+  .card h3 { margin: 0; font-size: 14.5px; font-weight: 500; line-height: 1.35; color: var(--ink-2); }
+  .where { font-size: 13px; color: var(--muted); }
+  .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; color: var(--ink-2); margin-top: 3px; }
+  .foot { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--muted); margin-top: 7px; }
+
+  .empty { padding: 56px 20px; text-align: center; border: 1px dashed var(--line-strong); border-radius: var(--radius); }
+  .empty h3 { margin: 0 0 6px; font-size: 17px; }
+  .empty p { margin: 0 auto 16px; max-width: 42ch; color: var(--muted); font-size: 14px; }
+
+  /* ----------------------------------------------------------------- map */
+  .mapwrap { position: sticky; top: 76px; }
+  .maptools { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 9px; align-items: center; }
+  .radiogroup { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px; padding: 4px 4px 4px 10px; font-size: 13px; color: var(--muted); }
+  .radiogroup select { border: 0; background: transparent; padding: 4px; }
+
+  .mapbox { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+  canvas { display: block; width: 100%; height: 560px; touch-action: none; }
+  @media (max-width: 1080px) { canvas { height: 440px; } }
+
+  .hint {
+    position: absolute; left: 12px; right: 12px; bottom: 12px;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+    padding: 8px 12px; border-radius: 10px; font-size: 13px; text-align: center;
+  }
+  .mapnote { margin-top: 8px; font-size: 12px; color: var(--muted); }
+
+  .tip {
+    position: absolute; pointer-events: none; z-index: 5;
+    background: var(--ink); color: var(--ground); padding: 5px 9px; border-radius: 8px;
+    font-size: 12px; font-weight: 500; white-space: nowrap; transform: translate(-50%, -140%);
+  }
+
+  /* --------------------------------------------------------------- dialog */
+  dialog {
+    border: 1px solid var(--line); border-radius: 16px; padding: 0; max-width: 680px; width: calc(100% - 32px);
+    background: var(--surface); color: var(--ink); box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .6);
+  }
+  dialog::backdrop { background: rgba(8, 12, 20, .55); backdrop-filter: blur(2px); }
+  .dlg-head { padding: 18px 20px; border-bottom: 1px solid var(--line); display: flex; gap: 14px; justify-content: space-between; }
+  .dlg-body { padding: 18px 20px 22px; display: grid; gap: 18px; }
+  .dlg h2 { margin: 6px 0 0; font-size: 20px; letter-spacing: -.01em; }
+  .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px 18px; }
+  .spec dt { font-size: 12px; color: var(--muted); }
+  .spec dd { margin: 2px 0 0; font-weight: 500; }
+  .desc { color: var(--ink-2); font-size: 14.5px; margin: 0; }
+  .taglist { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+  .taglist li { background: var(--surface-2); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; color: var(--ink-2); }
+  .lead { background: var(--surface-2); border-radius: 12px; padding: 14px; display: grid; gap: 10px; }
+  .lead input, .lead textarea { width: 100%; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 9px; padding: 8px 10px; }
+  .lead textarea { min-height: 72px; resize: vertical; }
+  .ok-msg { color: var(--ok); font-size: 14px; font-weight: 500; }
+
+  footer.end { margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: space-between; }
+  footer.end a { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M3.6 14.2 16 4.6l12.4 9.6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6.6 13v14.4h18.8V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12.4 27.4v-8h7.2v8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>
+        <span class="brand-name">Domakinita</span>
+        <span class="brand-sub">αγγελίες ακινήτων</span>
+      </span>
+    </div>
+
+    <span class="tag">demo · 60 annunci a Cefalonia</span>
+
+    <div class="searchrow">
+      <div class="seg" role="group" aria-label="Tipo di contratto">
+        <button type="button" id="c-v" aria-pressed="true">Vendita</button>
+        <button type="button" id="c-a" aria-pressed="false">Affitto</button>
+      </div>
+      <select id="comune" aria-label="Comune"></select>
+    </div>
+
+    <div class="top-right">
+      <button class="btn" id="apri-filtri" aria-expanded="false" aria-controls="filtri">Tutti i filtri</button>
+    </div>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="panel" style="margin-top:16px">
+    <div class="bar">
+      <p class="count"><b id="totale" class="num">0</b> immobili corrispondono alla ricerca</p>
+      <label class="count">Ordina
+        <select class="sortsel" id="ordina" aria-label="Ordinamento">
+          <option value="rilevanza">Più rilevanti</option>
+          <option value="recenti">Più recenti</option>
+          <option value="prezzo-asc">Prezzo crescente</option>
+          <option value="prezzo-desc">Prezzo decrescente</option>
+          <option value="superficie-desc">Superficie maggiore</option>
+        </select>
+      </label>
+    </div>
+
+    <form class="filters" id="filtri">
+      <fieldset>
+        <legend>Tipologia</legend>
+        <div class="checks" id="tipi"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Prezzo e superficie</legend>
+        <div class="grid-f">
+          <div class="field"><label for="pmin">Prezzo minimo €</label><input class="num" id="pmin" type="number" min="0" step="1000" inputmode="numeric"></div>
+          <div class="field"><label for="pmax">Prezzo massimo €</label><input class="num" id="pmax" type="number" min="0" step="1000" inputmode="numeric"></div>
+          <div class="field"><label for="smin">Superficie minima m²</label><input class="num" id="smin" type="number" min="0" inputmode="numeric"></div>
+          <div class="field"><label for="smax">Superficie massima m²</label><input class="num" id="smax" type="number" min="0" inputmode="numeric"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Composizione</legend>
+        <div class="grid-f">
+          <div class="field"><label for="lmin">Locali da</label><select id="lmin"><option value="">Indifferente</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="field"><label for="bmin">Bagni da</label><select id="bmin"><option value="">Indifferente</option><option>1</option><option>2</option><option>3</option></select></div>
+          <div class="field"><label for="stato">Stato</label><select id="stato"><option value="">Indifferente</option><option value="NEW">Nuovo / in costruzione</option><option value="RENOVATED">Ristrutturato</option><option value="GOOD">Buono / abitabile</option><option value="TO_RENOVATE">Da ristrutturare</option></select></div>
+          <div class="field"><label for="classe">Classe energetica almeno</label><select id="classe"><option value="">Indifferente</option></select></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Dotazioni</legend>
+        <div class="checks" id="dotazioni"></div>
+      </fieldset>
+
+      <fieldset style="margin-bottom:0">
+        <legend>L'annuncio</legend>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="f-nuova"> Nuova costruzione</label>
+          <label class="check"><input type="checkbox" id="f-asta"> Immobili all'asta</label>
+          <label class="check"><input type="checkbox" id="f-evidenza"> Solo in evidenza</label>
+        </div>
+      </fieldset>
+
+      <div style="display:flex;gap:10px;margin-top:18px">
+        <button class="btn quiet" type="button" id="azzera">Azzera i filtri</button>
+      </div>
+    </form>
+  </div>
+
+  <ul class="chips" id="chips"></ul>
+
+  <div class="seg tabs" role="group" aria-label="Vista">
+    <button type="button" id="t-lista" aria-pressed="true">Elenco</button>
+    <button type="button" id="t-mappa" aria-pressed="false">Mappa</button>
+  </div>
+
+  <div class="cols lista" id="cols">
+    <section class="results">
+      <div class="results-head">
+        <h1 style="margin:0;font-size:20px;letter-spacing:-.02em" id="titolo">Immobili in vendita</h1>
+      </div>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <section class="mapwrap">
+      <div class="maptools">
+        <button class="btn" id="disegna">Disegna la zona</button>
+        <div class="radiogroup">
+          <label for="km">Raggio</label>
+          <select id="km"><option>1</option><option>3</option><option selected>5</option><option>10</option><option>20</option></select>
+          <button class="btn quiet" id="raggio" type="button">Scegli il centro</button>
+        </div>
+        <button class="btn quiet" id="pulisci" hidden>Togli l'area</button>
+      </div>
+
+      <div class="mapbox">
+        <canvas id="mappa" aria-label="Mappa schematica degli immobili"></canvas>
+        <p class="hint" id="hint" hidden>Tieni premuto e traccia il contorno della zona: al rilascio i risultati si aggiornano.</p>
+        <div class="tip" id="tip" hidden></div>
+      </div>
+      <p class="mapnote" id="mapnote">Profilo schematico dell'isola: nella versione online al suo posto c'è OpenStreetMap. Il disegno dell'area, il raggio e il filtro sono gli stessi.</p>
+    </section>
+  </div>
+
+  <footer class="end">
+    <p style="margin:0">Demo statica di <b>Domakinita</b>: dati di esempio, nessun server. Nell'applicazione vera la ricerca gira su PostgreSQL.</p>
+    <p style="margin:0"><a href="https://github.com/fracabu/domakinita">github.com/fracabu/domakinita</a></p>
+  </footer>
+</main>
+
+<dialog id="dlg" class="dlg" aria-label="Scheda dell'immobile">
+  <div class="dlg-head">
+    <div>
+      <span class="badge acc" id="d-contratto">Vendita</span>
+      <h2 id="d-titolo">—</h2>
+      <p class="where" id="d-dove" style="margin:6px 0 0"></p>
+    </div>
+    <button class="btn quiet" id="chiudi" aria-label="Chiudi">✕</button>
+  </div>
+  <div class="dlg-body">
+    <p class="price" id="d-prezzo" style="font-size:26px;margin:0"></p>
+    <dl class="specs" id="d-specs"></dl>
+    <p class="desc" id="d-desc"></p>
+    <ul class="taglist" id="d-tag"></ul>
+    <form class="lead" id="d-lead">
+      <strong style="font-size:14px">Richiedi informazioni</strong>
+      <input placeholder="Nome e cognome" required aria-label="Nome e cognome">
+      <input type="email" placeholder="La tua email" required aria-label="Email">
+      <textarea aria-label="Messaggio">Buongiorno, vorrei fissare una visita per questo immobile.</textarea>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="btn primary" type="submit">Invia richiesta</button>
+        <span class="ok-msg" id="d-ok" hidden>Richiesta inviata — è una demo, non parte nulla.</span>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<script type="application/json" id="dati">[{"i":0,"t":"Casa indipendente a Minies","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":311000,"s":134,"ro":3,"ba":1,"fl":2,"tf":1,"ci":"Minies","pr":"KE","zo":null,"la":38.13885682383832,"ln":20.48452604029654,"am":["giardino","balcone","piscina","aria"],"co":"NEW","he":"CENTRALIZED","en":"D","fu":null,"ft":false,"nb":true,"au":false,"yb":1981,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-08-21"},{"i":1,"t":"Terreno edificabile a Castello di San Giorgio, Peratata","d":"Il lotto gode di vista aperta sul mare Ionio ed è orientato a sud-ovest, il che significa sole fino al tramonto.","c":"v","ty":"LAND","p":181000,"s":2590,"ro":1,"ba":null,"fl":null,"tf":null,"ci":"Peratata","pr":"KE","zo":"Castello di San Giorgio","la":38.14141812605784,"ln":20.54749721831526,"am":["giardino"],"co":null,"he":null,"en":null,"fu":null,"ft":false,"nb":false,"au":false,"yb":null,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-21"},{"i":2,"t":"Casa indipendente a Lassi, Argostoli","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":205000,"s":93,"ro":6,"ba":3,"fl":2,"tf":2,"ci":"Argostoli","pr":"KE","zo":"Lassi","la":38.17660586905889,"ln":20.49027076485124,"am":["giardino","terrazzo","balcone","aria"],"co":"GOOD","he":"CENTRALIZED","en":"G","fu":null,"ft":false,"nb":false,"au":false,"yb":1987,"cf":null,"ag":"Kefalonia Properties","pd":"2026-08-21"},{"i":3,"t":"Monolocale a Aeroporto, Svoronata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":152000,"s":48,"ro":1,"ba":1,"fl":0,"tf":2,"ci":"Svoronata","pr":"KE","zo":"Aeroporto","la":38.13516223791242,"ln":20.48172815557732,"am":["terrazzo","balcone","cantina","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"D","fu":null,"ft":false,"nb":false,"au":false,"yb":1990,"cf":null,"ag":"Kefalonia Properties","pd":"2026-08-19"},{"i":4,"t":"Attico a Ammes, Svoronata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"ATTIC","p":331000,"s":122,"ro":2,"ba":1,"fl":2,"tf":2,"ci":"Svoronata","pr":"KE","zo":"Ammes","la":38.13396831653267,"ln":20.46674738050601,"am":["giardino","terrazzo","balcone","box"],"co":"NEW","he":"AUTONOMOUS","en":"G","fu":null,"ft":false,"nb":false,"au":false,"yb":2000,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-08-18"},{"i":5,"t":"Casa indipendente a Castello, Assos","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":560000,"s":120,"ro":6,"ba":3,"fl":0,"tf":2,"ci":"Assos","pr":"KE","zo":"Castello","la":38.37640628288109,"ln":20.52991750422958,"am":["giardino","terrazzo","balcone","box","piscina","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"C","fu":null,"ft":false,"nb":false,"au":false,"yb":2017,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-08-17"},{"i":6,"t":"Villa a Spiaggia, Katelios","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"VILLA","p":577000,"s":294,"ro":8,"ba":3,"fl":null,"tf":3,"ci":"Katelios","pr":"KE","zo":"Spiaggia","la":38.07453606877942,"ln":20.70325802188832,"am":["terrazzo","balcone"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"C","fu":null,"ft":false,"nb":false,"au":false,"yb":2018,"cf":75,"ag":"Kefalonia Properties","pd":"2026-08-17"},{"i":7,"t":"Terreno edificabile a Minies","d":"Il lotto è pianeggiante, delimitato da un muretto a secco e piantato a ulivi.","c":"v","ty":"LAND","p":198000,"s":2507,"ro":1,"ba":null,"fl":null,"tf":null,"ci":"Minies","pr":"KE","zo":null,"la":38.15041231124941,"ln":20.48162973494828,"am":["box"],"co":null,"he":null,"en":null,"fu":null,"ft":false,"nb":true,"au":false,"yb":null,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-08-15"},{"i":8,"t":"Terreno edificabile a Platys Gialos, Lassi","d":"Il lotto gode di vista aperta sul mare Ionio ed è orientato a sud-ovest, il che significa sole fino al tramonto.","c":"v","ty":"LAND","p":74000,"s":570,"ro":1,"ba":null,"fl":null,"tf":null,"ci":"Lassi","pr":"KE","zo":"Platys Gialos","la":38.17435745629463,"ln":20.46477523024641,"am":["giardino","box"],"co":null,"he":null,"en":null,"fu":null,"ft":false,"nb":false,"au":false,"yb":null,"cf":null,"ag":"Kefalonia Properties","pd":"2026-08-14"},{"i":9,"t":"Villa a Castello, Assos","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":3620,"s":272,"ro":7,"ba":3,"fl":null,"tf":3,"ci":"Assos","pr":"KE","zo":"Castello","la":38.37287955839261,"ln":20.52856853185664,"am":["giardino","box","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"C","fu":"PARTIALLY","ft":false,"nb":true,"au":false,"yb":2006,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-13"},{"i":10,"t":"Villa a Emblisi, Fiskardo","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"VILLA","p":1294000,"s":241,"ro":8,"ba":3,"fl":null,"tf":2,"ci":"Fiskardo","pr":"KE","zo":"Emblisi","la":38.44850399307255,"ln":20.58618805097863,"am":["giardino","terrazzo","box","piscina"],"co":"NEW","he":"AUTONOMOUS","en":"A1","fu":null,"ft":true,"nb":false,"au":false,"yb":2024,"cf":70,"ag":"Kefalonia Properties","pd":"2026-08-13"},{"i":11,"t":"Negozio a Myrtos, Divarata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"SHOP","p":158000,"s":38,"ro":2,"ba":1,"fl":0,"tf":1,"ci":"Divarata","pr":"KE","zo":"Myrtos","la":38.3180143001603,"ln":20.56024459573906,"am":["giardino","terrazzo","balcone","aria"],"co":"GOOD","he":"CENTRALIZED","en":"D","fu":null,"ft":false,"nb":false,"au":false,"yb":1977,"cf":40,"ag":"Ionian Home Argostoli","pd":"2026-08-12"},{"i":12,"t":"Quadrilocale a Paradise Beach, Agia Efimia","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":230000,"s":74,"ro":4,"ba":2,"fl":1,"tf":3,"ci":"Agia Efimia","pr":"KE","zo":"Paradise Beach","la":38.29527035161294,"ln":20.602474861409,"am":["balcone","box","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"D","fu":null,"ft":true,"nb":true,"au":false,"yb":2007,"cf":82,"ag":"Kefalonia Properties","pd":"2026-08-11"},{"i":13,"t":"Quadrilocale a Minies","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":126000,"s":59,"ro":4,"ba":2,"fl":1,"tf":3,"ci":"Minies","pr":"KE","zo":null,"la":38.14480666961335,"ln":20.46832439371128,"am":["balcone","box","cantina","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"E","fu":null,"ft":false,"nb":false,"au":true,"yb":2011,"cf":35,"ag":"Kefalonia Properties","pd":"2026-08-11"},{"i":14,"t":"Monolocale a Avithos, Spartia","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"APARTMENT","p":320,"s":48,"ro":1,"ba":1,"fl":1,"tf":2,"ci":"Spartia","pr":"KE","zo":"Avithos","la":38.11000869583525,"ln":20.50969565628492,"am":["ascensore","balcone","box","cantina","aria"],"co":"NEW","he":"CENTRALIZED","en":"C","fu":"UNFURNISHED","ft":false,"nb":false,"au":false,"yb":2006,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-09"},{"i":15,"t":"Casa indipendente a Minies","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":451000,"s":187,"ro":3,"ba":1,"fl":2,"tf":3,"ci":"Minies","pr":"KE","zo":null,"la":38.1475749845691,"ln":20.48013905604812,"am":["terrazzo","balcone","piscina","aria"],"co":"NEW","he":"AUTONOMOUS","en":"B","fu":null,"ft":false,"nb":false,"au":false,"yb":1990,"cf":null,"ag":"Kefalonia Properties","pd":"2026-08-09"},{"i":16,"t":"Casa indipendente a Myrtos, Divarata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"TOWNHOUSE","p":1770,"s":141,"ro":4,"ba":2,"fl":1,"tf":1,"ci":"Divarata","pr":"KE","zo":"Myrtos","la":38.31501516705584,"ln":20.57020622235956,"am":["giardino","balcone","box","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"D","fu":"PARTIALLY","ft":false,"nb":true,"au":false,"yb":1986,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-08-09"},{"i":17,"t":"Monolocale a Minies","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":116000,"s":54,"ro":1,"ba":1,"fl":0,"tf":3,"ci":"Minies","pr":"KE","zo":null,"la":38.15101521732565,"ln":20.47192542160256,"am":["ascensore","balcone","box","cantina","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"A2","fu":null,"ft":true,"nb":false,"au":false,"yb":1996,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-08"},{"i":18,"t":"Bilocale a Karavados","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":105000,"s":42,"ro":2,"ba":1,"fl":2,"tf":2,"ci":"Karavados","pr":"KE","zo":null,"la":38.11362314460334,"ln":20.52611528074322,"am":["ascensore","terrazzo","balcone","box","cantina","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"D","fu":null,"ft":true,"nb":true,"au":true,"yb":2011,"cf":90,"ag":"Ionian Home Argostoli","pd":"2026-08-08"},{"i":19,"t":"Villa a Porto, Fiskardo","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":4200,"s":240,"ro":5,"ba":2,"fl":null,"tf":3,"ci":"Fiskardo","pr":"KE","zo":"Porto","la":38.45440777294152,"ln":20.57267104307753,"am":["giardino","terrazzo","balcone","box","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"D","fu":"UNFURNISHED","ft":false,"nb":false,"au":false,"yb":2002,"cf":null,"ag":"Kefalonia Properties","pd":"2026-08-07"},{"i":20,"t":"Bilocale a Kourkoumelata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":199000,"s":67,"ro":2,"ba":1,"fl":1,"tf":2,"ci":"Kourkoumelata","pr":"KE","zo":null,"la":38.12652529115323,"ln":20.49372273655608,"am":["box","aria"],"co":"GOOD","he":"CENTRALIZED","en":"A2","fu":null,"ft":false,"nb":false,"au":false,"yb":1994,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-08-07"},{"i":21,"t":"Monolocale a Kourkoumelata","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":87000,"s":46,"ro":1,"ba":1,"fl":1,"tf":2,"ci":"Kourkoumelata","pr":"KE","zo":null,"la":38.12471607865299,"ln":20.49442655596649,"am":["ascensore","terrazzo","cantina"],"co":"NEW","he":"AUTONOMOUS","en":"B","fu":null,"ft":false,"nb":true,"au":false,"yb":2011,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-07"},{"i":22,"t":"Casa indipendente a Kourkoumelata","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":303000,"s":171,"ro":5,"ba":2,"fl":2,"tf":3,"ci":"Kourkoumelata","pr":"KE","zo":null,"la":38.12490223044995,"ln":20.51232633264735,"am":["giardino","balcone","piscina","aria"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"E","fu":null,"ft":false,"nb":false,"au":false,"yb":2024,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-08-05"},{"i":23,"t":"Casa indipendente a Spiaggia, Katelios","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":254000,"s":116,"ro":4,"ba":2,"fl":2,"tf":2,"ci":"Katelios","pr":"KE","zo":"Spiaggia","la":38.08698075362481,"ln":20.71456087408238,"am":["giardino","terrazzo","box","cantina","aria"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"A1","fu":null,"ft":true,"nb":false,"au":false,"yb":2016,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-05"},{"i":24,"t":"Casa indipendente a Centro, Skala","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"TOWNHOUSE","p":910,"s":96,"ro":6,"ba":3,"fl":1,"tf":3,"ci":"Skala","pr":"KE","zo":"Centro","la":38.06195932181365,"ln":20.78757904792414,"am":["giardino","terrazzo","balcone","box","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"G","fu":"FURNISHED","ft":false,"nb":false,"au":false,"yb":1979,"cf":89,"ag":"Fiskardo Estates","pd":"2026-08-03"},{"i":25,"t":"Attico a Castello di San Giorgio, Peratata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"ATTIC","p":218000,"s":105,"ro":4,"ba":2,"fl":0,"tf":1,"ci":"Peratata","pr":"KE","zo":"Castello di San Giorgio","la":38.1496592716733,"ln":20.53862919761799,"am":["giardino","terrazzo","balcone","box"],"co":"NEW","he":"AUTONOMOUS","en":"A1","fu":null,"ft":false,"nb":false,"au":false,"yb":2024,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-02"},{"i":26,"t":"Villa a Avithos, Spartia","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":1030,"s":121,"ro":6,"ba":3,"fl":null,"tf":3,"ci":"Spartia","pr":"KE","zo":"Avithos","la":38.11042602059152,"ln":20.51905807363381,"am":["giardino","terrazzo","balcone","aria"],"co":"NEW","he":"AUTONOMOUS","en":"A1","fu":"FURNISHED","ft":false,"nb":false,"au":false,"yb":2009,"cf":null,"ag":"Kefalonia Properties","pd":"2026-08-02"},{"i":27,"t":"Villa a Minies","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"VILLA","p":522000,"s":220,"ro":8,"ba":3,"fl":null,"tf":3,"ci":"Minies","pr":"KE","zo":null,"la":38.1429004319692,"ln":20.46805612146482,"am":["giardino","terrazzo","balcone","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"A1","fu":null,"ft":false,"nb":false,"au":false,"yb":2013,"cf":null,"ag":"Fiskardo Estates","pd":"2026-08-01"},{"i":28,"t":"Villa a Lepeda, Lixouri","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":1030,"s":192,"ro":8,"ba":3,"fl":null,"tf":1,"ci":"Lixouri","pr":"KE","zo":"Lepeda","la":38.2072940395318,"ln":20.42891628017793,"am":["giardino","balcone","box","cantina"],"co":"GOOD","he":"CENTRALIZED","en":"C","fu":"UNFURNISHED","ft":false,"nb":false,"au":false,"yb":1987,"cf":56,"ag":"Fiskardo Estates","pd":"2026-07-30"},{"i":29,"t":"Trilocale a Karavomylos, Sami","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":267000,"s":117,"ro":3,"ba":1,"fl":2,"tf":1,"ci":"Sami","pr":"KE","zo":"Karavomylos","la":38.25786609390956,"ln":20.64348270016769,"am":["terrazzo","balcone","box","aria"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"A2","fu":null,"ft":false,"nb":false,"au":false,"yb":1996,"cf":79,"ag":"Ionian Home Argostoli","pd":"2026-07-29"},{"i":30,"t":"Villa a Lungomare, Lixouri","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"VILLA","p":635000,"s":262,"ro":4,"ba":2,"fl":null,"tf":1,"ci":"Lixouri","pr":"KE","zo":"Lungomare","la":38.20890410071816,"ln":20.43778657455957,"am":["giardino","box","aria"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"G","fu":null,"ft":false,"nb":false,"au":false,"yb":1977,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-07-26"},{"i":31,"t":"Attico a Ragia, Poros","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"ATTIC","p":223000,"s":80,"ro":3,"ba":1,"fl":1,"tf":2,"ci":"Poros","pr":"KE","zo":"Ragia","la":38.1447046280168,"ln":20.77783877869765,"am":["giardino","terrazzo","box","cantina","aria"],"co":"GOOD","he":"AUTONOMOUS","en":"G","fu":null,"ft":false,"nb":false,"au":false,"yb":2003,"cf":null,"ag":"Kefalonia Properties","pd":"2026-07-25"},{"i":32,"t":"Villa a Myrtos, Divarata","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":2710,"s":244,"ro":7,"ba":3,"fl":null,"tf":2,"ci":"Divarata","pr":"KE","zo":"Myrtos","la":38.32925619389601,"ln":20.55170764545561,"am":["giardino","box"],"co":"GOOD","he":"AUTONOMOUS","en":"B","fu":"UNFURNISHED","ft":false,"nb":false,"au":false,"yb":2006,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-07-24"},{"i":33,"t":"Villa a Centro, Skala","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":1790,"s":159,"ro":7,"ba":3,"fl":null,"tf":3,"ci":"Skala","pr":"KE","zo":"Centro","la":38.06049553176668,"ln":20.79366910606018,"am":["giardino","balcone","cantina","piscina","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"A1","fu":"FURNISHED","ft":false,"nb":false,"au":false,"yb":1979,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-24"},{"i":34,"t":"Casa indipendente a Kourkoumelata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":362000,"s":123,"ro":4,"ba":2,"fl":2,"tf":3,"ci":"Kourkoumelata","pr":"KE","zo":null,"la":38.12596404259558,"ln":20.50340347503079,"am":["balcone","box","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"G","fu":null,"ft":false,"nb":false,"au":false,"yb":1984,"cf":null,"ag":"Kefalonia Properties","pd":"2026-07-23"},{"i":35,"t":"Monolocale a Minies","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":183000,"s":84,"ro":1,"ba":1,"fl":0,"tf":2,"ci":"Minies","pr":"KE","zo":null,"la":38.14057533377595,"ln":20.48796847090335,"am":["balcone","box"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"D","fu":null,"ft":false,"nb":false,"au":false,"yb":2004,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-23"},{"i":36,"t":"Quadrilocale a Avithos, Spartia","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":239000,"s":93,"ro":4,"ba":2,"fl":0,"tf":3,"ci":"Spartia","pr":"KE","zo":"Avithos","la":38.10136391383317,"ln":20.51499313278636,"am":["balcone","cantina","aria"],"co":"GOOD","he":"AUTONOMOUS","en":"E","fu":null,"ft":false,"nb":false,"au":false,"yb":2013,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-22"},{"i":37,"t":"Villa a Spiaggia, Skala","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"VILLA","p":445000,"s":175,"ro":5,"ba":2,"fl":null,"tf":2,"ci":"Skala","pr":"KE","zo":"Spiaggia","la":38.06755517810397,"ln":20.79094358453271,"am":["giardino","terrazzo","balcone","box","piscina"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"C","fu":null,"ft":false,"nb":false,"au":false,"yb":2017,"cf":88,"ag":"Ionian Home Argostoli","pd":"2026-07-21"},{"i":38,"t":"Terreno edificabile a Porto, Agia Efimia","d":"Il lotto gode di vista aperta sul mare Ionio ed è orientato a sud-ovest, il che significa sole fino al tramonto.","c":"v","ty":"LAND","p":165000,"s":1439,"ro":1,"ba":null,"fl":null,"tf":null,"ci":"Agia Efimia","pr":"KE","zo":"Porto","la":38.30201016739849,"ln":20.5923129138045,"am":["giardino"],"co":null,"he":null,"en":null,"fu":null,"ft":true,"nb":false,"au":false,"yb":null,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-07-20"},{"i":39,"t":"Negozio a Centro, Skala","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"SHOP","p":293000,"s":91,"ro":1,"ba":1,"fl":1,"tf":2,"ci":"Skala","pr":"KE","zo":"Centro","la":38.06832185846101,"ln":20.78922022540914,"am":["giardino","balcone","box","cantina","aria"],"co":"RENOVATED","he":"CENTRALIZED","en":"A1","fu":null,"ft":false,"nb":false,"au":true,"yb":1987,"cf":66,"ag":"Ionian Home Argostoli","pd":"2026-07-19"},{"i":40,"t":"Attico a Myrtos, Divarata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"ATTIC","p":1410,"s":139,"ro":2,"ba":1,"fl":2,"tf":2,"ci":"Divarata","pr":"KE","zo":"Myrtos","la":38.32399495270774,"ln":20.5673465081572,"am":["giardino","terrazzo","balcone","box","cantina","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"F","fu":"PARTIALLY","ft":false,"nb":false,"au":false,"yb":1992,"cf":35,"ag":"Ionian Home Argostoli","pd":"2026-07-17"},{"i":41,"t":"Casa indipendente a Centro, Skala","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":522000,"s":183,"ro":3,"ba":1,"fl":0,"tf":3,"ci":"Skala","pr":"KE","zo":"Centro","la":38.06215658696182,"ln":20.80354248011694,"am":["giardino","cantina","piscina","aria"],"co":"RENOVATED","he":"AUTONOMOUS","en":"B","fu":null,"ft":false,"nb":false,"au":false,"yb":1992,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-17"},{"i":42,"t":"Villa a Spiaggia, Skala","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":1430,"s":154,"ro":4,"ba":2,"fl":null,"tf":3,"ci":"Skala","pr":"KE","zo":"Spiaggia","la":38.05487123673129,"ln":20.79405190463271,"am":["giardino","balcone","piscina","aria"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"C","fu":"UNFURNISHED","ft":false,"nb":false,"au":false,"yb":2008,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-07-17"},{"i":43,"t":"Bilocale a Centro, Skala","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":241000,"s":100,"ro":2,"ba":1,"fl":0,"tf":2,"ci":"Skala","pr":"KE","zo":"Centro","la":38.05431072682421,"ln":20.79061054812605,"am":["ascensore","terrazzo","cantina","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"A1","fu":null,"ft":false,"nb":false,"au":false,"yb":1983,"cf":null,"ag":"Kefalonia Properties","pd":"2026-07-14"},{"i":44,"t":"Casa indipendente a Lungomare, Lixouri","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"TOWNHOUSE","p":213000,"s":110,"ro":4,"ba":2,"fl":0,"tf":3,"ci":"Lixouri","pr":"KE","zo":"Lungomare","la":38.21094139446617,"ln":20.44575643413379,"am":["giardino","balcone","box","piscina","aria"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"B","fu":null,"ft":false,"nb":false,"au":false,"yb":1976,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-07-12"},{"i":45,"t":"Villa a Centro, Skala","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"VILLA","p":2360,"s":243,"ro":8,"ba":3,"fl":null,"tf":3,"ci":"Skala","pr":"KE","zo":"Centro","la":38.06245622222591,"ln":20.79152743185963,"am":["giardino","box","piscina","aria"],"co":"NEW","he":"AUTONOMOUS","en":"A1","fu":"PARTIALLY","ft":false,"nb":false,"au":false,"yb":1986,"cf":21,"ag":"Kefalonia Properties","pd":"2026-07-12"},{"i":46,"t":"Monolocale a Drapano, Argostoli","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":214000,"s":83,"ro":1,"ba":1,"fl":2,"tf":1,"ci":"Argostoli","pr":"KE","zo":"Drapano","la":38.17177870046105,"ln":20.48675786579167,"am":["ascensore","terrazzo","balcone","box","aria"],"co":"NEW","he":"AUTONOMOUS","en":"E","fu":null,"ft":false,"nb":true,"au":false,"yb":2007,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-11"},{"i":47,"t":"Casa indipendente a Baia, Assos","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"TOWNHOUSE","p":970,"s":106,"ro":5,"ba":2,"fl":2,"tf":1,"ci":"Assos","pr":"KE","zo":"Baia","la":38.38417210161295,"ln":20.5291983144111,"am":["balcone","box","cantina","piscina"],"co":"NEW","he":"CENTRALIZED","en":"A1","fu":"FURNISHED","ft":false,"nb":false,"au":false,"yb":2019,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-10"},{"i":48,"t":"Villa a Myrtos, Divarata","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"VILLA","p":418000,"s":146,"ro":6,"ba":3,"fl":null,"tf":2,"ci":"Divarata","pr":"KE","zo":"Myrtos","la":38.31162335338742,"ln":20.57189818386338,"am":["giardino","terrazzo","box","aria"],"co":"RENOVATED","he":"AUTONOMOUS","en":"A2","fu":null,"ft":false,"nb":true,"au":false,"yb":2004,"cf":null,"ag":"Kefalonia Properties","pd":"2026-07-10"},{"i":49,"t":"Villa a Spiaggia, Katelios","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"VILLA","p":359000,"s":163,"ro":5,"ba":2,"fl":null,"tf":3,"ci":"Katelios","pr":"KE","zo":"Spiaggia","la":38.0785258090822,"ln":20.70635489095235,"am":["giardino","balcone","aria"],"co":"GOOD","he":"CENTRALIZED","en":"B","fu":null,"ft":false,"nb":false,"au":false,"yb":2004,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-09"},{"i":50,"t":"Negozio a Drapano, Argostoli","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"SHOP","p":220000,"s":104,"ro":3,"ba":1,"fl":0,"tf":3,"ci":"Argostoli","pr":"KE","zo":"Drapano","la":38.16716703082658,"ln":20.48750997295626,"am":["giardino","balcone","aria"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"E","fu":null,"ft":false,"nb":true,"au":false,"yb":2020,"cf":null,"ag":"Kefalonia Properties","pd":"2026-07-08"},{"i":51,"t":"Bilocale a Foki, Fiskardo","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"APARTMENT","p":700,"s":47,"ro":2,"ba":1,"fl":1,"tf":3,"ci":"Fiskardo","pr":"KE","zo":"Foki","la":38.46199077971094,"ln":20.57809962643874,"am":["terrazzo","balcone","box"],"co":"TO_RENOVATE","he":"CENTRALIZED","en":"B","fu":"PARTIALLY","ft":false,"nb":false,"au":true,"yb":1994,"cf":46,"ag":"Kefalonia Properties","pd":"2026-07-07"},{"i":52,"t":"Trilocale a Porto, Sami","d":"L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"a","ty":"APARTMENT","p":340,"s":46,"ro":3,"ba":1,"fl":0,"tf":1,"ci":"Sami","pr":"KE","zo":"Porto","la":38.25888734161593,"ln":20.65890576959052,"am":["ascensore","terrazzo","box","cantina"],"co":"RENOVATED","he":"AUTONOMOUS","en":"C","fu":"FURNISHED","ft":false,"nb":false,"au":false,"yb":2005,"cf":null,"ag":"Kefalonia Properties","pd":"2026-07-06"},{"i":53,"t":"Trilocale a Castello di San Giorgio, Peratata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":158000,"s":68,"ro":3,"ba":1,"fl":2,"tf":3,"ci":"Peratata","pr":"KE","zo":"Castello di San Giorgio","la":38.14610227395781,"ln":20.54910121612833,"am":["terrazzo"],"co":"GOOD","he":"CENTRALIZED","en":"B","fu":null,"ft":false,"nb":true,"au":false,"yb":2023,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-04"},{"i":54,"t":"Terreno edificabile a Kourkoumelata","d":"Il lotto gode di vista aperta sul mare Ionio ed è orientato a sud-ovest, il che significa sole fino al tramonto.","c":"v","ty":"LAND","p":242000,"s":2879,"ro":1,"ba":null,"fl":null,"tf":null,"ci":"Kourkoumelata","pr":"KE","zo":null,"la":38.11170101843774,"ln":20.50304555491893,"am":["giardino","box"],"co":null,"he":null,"en":null,"fu":null,"ft":false,"nb":false,"au":false,"yb":null,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-07-03"},{"i":55,"t":"Trilocale a Minies","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":251000,"s":93,"ro":3,"ba":1,"fl":2,"tf":1,"ci":"Minies","pr":"KE","zo":null,"la":38.14627586191799,"ln":20.47747551243147,"am":["terrazzo","balcone","cantina","aria"],"co":"GOOD","he":"AUTONOMOUS","en":"D","fu":null,"ft":false,"nb":false,"au":false,"yb":2013,"cf":null,"ag":"Kefalonia Properties","pd":"2026-07-03"},{"i":56,"t":"Attico a Ragia, Poros","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"ATTIC","p":204000,"s":98,"ro":2,"ba":1,"fl":0,"tf":2,"ci":"Poros","pr":"KE","zo":"Ragia","la":38.15279141194001,"ln":20.77035100242752,"am":["giardino","balcone","box","aria"],"co":"TO_RENOVATE","he":"AUTONOMOUS","en":"E","fu":null,"ft":false,"nb":false,"au":false,"yb":1988,"cf":47,"ag":"Fiskardo Estates","pd":"2026-07-03"},{"i":57,"t":"Terreno edificabile a Foki, Fiskardo","d":"Il lotto è pianeggiante, delimitato da un muretto a secco e piantato a ulivi.","c":"v","ty":"LAND","p":325000,"s":2357,"ro":1,"ba":null,"fl":null,"tf":null,"ci":"Fiskardo","pr":"KE","zo":"Foki","la":38.45862527684588,"ln":20.57352905952353,"am":["giardino"],"co":null,"he":null,"en":null,"fu":null,"ft":false,"nb":false,"au":false,"yb":null,"cf":null,"ag":"Ionian Home Argostoli","pd":"2026-07-02"},{"i":58,"t":"Bilocale a Aeroporto, Svoronata","d":"Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda. Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.","c":"v","ty":"APARTMENT","p":171000,"s":71,"ro":2,"ba":1,"fl":2,"tf":3,"ci":"Svoronata","pr":"KE","zo":"Aeroporto","la":38.12565726117418,"ln":20.46747162297065,"am":["ascensore","terrazzo","cantina","aria"],"co":"GOOD","he":"CENTRALIZED","en":"G","fu":null,"ft":false,"nb":false,"au":false,"yb":1997,"cf":null,"ag":"Fiskardo Estates","pd":"2026-07-01"},{"i":59,"t":"Terreno edificabile a Karavados","d":"Il lotto è pianeggiante, delimitato da un muretto a secco e piantato a ulivi.","c":"v","ty":"LAND","p":92000,"s":1626,"ro":1,"ba":null,"fl":null,"tf":null,"ci":"Karavados","pr":"KE","zo":null,"la":38.11284744366073,"ln":20.53410090172966,"am":["giardino","box"],"co":null,"he":null,"en":null,"fu":null,"ft":false,"nb":true,"au":true,"yb":null,"cf":null,"ag":"Kefalonia Properties","pd":"2026-06-30"}]</script>
+<script>
+/* Domakinita — demo statica. Stessa logica di ricerca dell'applicazione:
+   filtri, poligono disegnato a mano, raggio. Qui i dati stanno in pagina. */
+
+const DATI = JSON.parse(document.getElementById('dati').textContent);
+
+const TIPI = {
+  APARTMENT: 'Appartamento', ATTIC: 'Attico', VILLA: 'Villa', TOWNHOUSE: 'Casa indipendente',
+  LOFT: 'Loft', ROOM: 'Stanza', GARAGE: 'Box', OFFICE: 'Ufficio', SHOP: 'Negozio',
+  WAREHOUSE: 'Capannone', LAND: 'Terreno edificabile', BUILDING: 'Stabile',
+};
+const STATI = { NEW: 'Nuovo / in costruzione', RENOVATED: 'Ristrutturato', GOOD: 'Buono / abitabile', TO_RENOVATE: 'Da ristrutturare' };
+const RISC = { AUTONOMOUS: 'Autonomo', CENTRALIZED: 'Centralizzato', ABSENT: 'Assente' };
+const ARR = { FURNISHED: 'Arredato', PARTIALLY: 'Parzialmente arredato', UNFURNISHED: 'Non arredato' };
+const DOTAZIONI = {
+  ascensore: 'Ascensore', giardino: 'Giardino', terrazzo: 'Terrazzo', balcone: 'Balcone',
+  box: 'Box / posto auto', cantina: 'Cantina', piscina: 'Piscina', aria: 'Aria condizionata',
+};
+const CLASSI = ['A4', 'A3', 'A2', 'A1', 'A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
+const euro = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+const numero = new Intl.NumberFormat('it-IT');
+const prezzo = (l) => (l.c === 'a' ? euro.format(l.p) + '/mese' : euro.format(l.p));
+const prezzoBreve = (l) => (l.c === 'a' ? numero.format(l.p) + ' €' : l.p >= 1e6 ? (l.p / 1e6).toFixed(1).replace('.0', '') + ' M' : Math.round(l.p / 1000) + ' mila');
+
+/* ------------------------------------------------------------------ stato */
+
+const S = {
+  contratto: 'v', comune: '', tipi: new Set(), dotazioni: new Set(),
+  pmin: null, pmax: null, smin: null, smax: null, lmin: '', bmin: '',
+  stato: '', classe: '', nuova: false, asta: false, evidenza: false,
+  ordina: 'rilevanza', area: null, hover: null,
+};
+
+/* ------------------------------------------------------- geometria e mappa */
+
+const CEFALONIA = [
+  [38.470, 20.580], [38.455, 20.610], [38.425, 20.625], [38.395, 20.620], [38.360, 20.640],
+  [38.330, 20.650], [38.300, 20.615], [38.285, 20.640], [38.265, 20.665], [38.250, 20.665],
+  [38.225, 20.700], [38.195, 20.740], [38.160, 20.790], [38.120, 20.815], [38.075, 20.805],
+  [38.050, 20.775], [38.045, 20.730], [38.065, 20.690], [38.080, 20.640], [38.095, 20.600],
+  [38.090, 20.560], [38.105, 20.520], [38.115, 20.490], [38.135, 20.470], [38.150, 20.455],
+  [38.170, 20.470], [38.190, 20.482], [38.212, 20.487], [38.222, 20.470], [38.205, 20.452],
+  [38.190, 20.438], [38.185, 20.420], [38.170, 20.400], [38.165, 20.375], [38.190, 20.355],
+  [38.230, 20.350], [38.265, 20.362], [38.288, 20.392], [38.290, 20.420], [38.270, 20.450],
+  [38.245, 20.472], [38.232, 20.500], [38.258, 20.500], [38.288, 20.505], [38.312, 20.500],
+  [38.336, 20.520], [38.360, 20.530], [38.386, 20.535], [38.412, 20.545], [38.442, 20.560],
+];
+const ITACA = [
+  [38.470, 20.680], [38.440, 20.720], [38.400, 20.730], [38.375, 20.700], [38.360, 20.660],
+  [38.390, 20.650], [38.420, 20.660],
+];
+
+const BBOX = { s: 38.02, n: 38.50, w: 20.32, e: 20.85 };
+const COSLAT = Math.cos((38.25 * Math.PI) / 180);
+
+const canvas = document.getElementById('mappa');
+const ctx = canvas.getContext('2d');
+let view = { ox: 0, oy: 0, k: 1 };
+
+function misura() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const larg = (BBOX.e - BBOX.w) * COSLAT;
+  const alt = BBOX.n - BBOX.s;
+  const pad = 18;
+  view.k = Math.min((rect.width - pad * 2) / larg, (rect.height - pad * 2) / alt);
+  view.ox = (rect.width - larg * view.k) / 2;
+  view.oy = (rect.height - alt * view.k) / 2;
+  view.w = rect.width;
+  view.h = rect.height;
+}
+
+const proietta = (lat, lng) => [
+  view.ox + (lng - BBOX.w) * COSLAT * view.k,
+  view.oy + (BBOX.n - lat) * view.k,
+];
+const riproietta = (x, y) => [
+  BBOX.n - (y - view.oy) / view.k,
+  BBOX.w + (x - view.ox) / (COSLAT * view.k),
+];
+
+function dentroPoligono(pt, poly) {
+  let dentro = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [ai, bi] = poly[i];
+    const [aj, bj] = poly[j];
+    if ((ai > pt[0]) !== (aj > pt[0]) && pt[1] < ((bj - bi) * (pt[0] - ai)) / (aj - ai) + bi) dentro = !dentro;
+  }
+  return dentro;
+}
+
+function km(a, b) {
+  const rad = (d) => (d * Math.PI) / 180;
+  const dLat = rad(b[0] - a[0]);
+  const dLng = rad(b[1] - a[1]);
+  const h = Math.sin(dLat / 2) ** 2 + Math.sin(dLng / 2) ** 2 * Math.cos(rad(a[0])) * Math.cos(rad(b[0]));
+  return 2 * 6371 * Math.asin(Math.sqrt(h));
+}
+
+/* Ramer-Douglas-Peucker: il tratto a mano libera fa centinaia di punti quasi
+   uguali, e per il filtro ne bastano poche decine. */
+function semplifica(punti, tol = 0.0006) {
+  if (punti.length <= 4) return punti;
+  const tieni = new Array(punti.length).fill(false);
+  tieni[0] = tieni[punti.length - 1] = true;
+  const pila = [[0, punti.length - 1]];
+  while (pila.length) {
+    const [a, b] = pila.pop();
+    let max = 0, idx = a;
+    for (let i = a + 1; i < b; i++) {
+      const d = distanza(punti[i], punti[a], punti[b]);
+      if (d > max) { max = d; idx = i; }
+    }
+    if (max > tol) { tieni[idx] = true; pila.push([a, idx], [idx, b]); }
+  }
+  return punti.filter((_, i) => tieni[i]);
+}
+function distanza(p, a, b) {
+  const dx = b[0] - a[0], dy = b[1] - a[1];
+  if (!dx && !dy) return Math.hypot(p[0] - a[0], p[1] - a[1]);
+  const t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / (dx * dx + dy * dy)));
+  return Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy));
+}
+
+const nelArea = (l) => {
+  if (!S.area) return true;
+  if (S.area.kind === 'poly') return dentroPoligono([l.la, l.ln], S.area.pts);
+  return km(S.area.c, [l.la, l.ln]) <= S.area.r;
+};
+
+/* ---------------------------------------------------------------- filtri */
+
+function filtra() {
+  const out = DATI.filter((l) => {
+    if (l.c !== S.contratto) return false;
+    if (S.asta ? !l.au : l.au) return false;
+    if (S.comune && l.ci !== S.comune) return false;
+    if (S.tipi.size && !S.tipi.has(l.ty)) return false;
+    if (S.pmin != null && l.p < S.pmin) return false;
+    if (S.pmax != null && l.p > S.pmax) return false;
+    if (S.smin != null && l.s < S.smin) return false;
+    if (S.smax != null && l.s > S.smax) return false;
+    if (S.lmin && l.ro < +S.lmin) return false;
+    if (S.bmin && (l.ba ?? 0) < +S.bmin) return false;
+    if (S.stato && l.co !== S.stato) return false;
+    if (S.classe && CLASSI.indexOf(l.en) > CLASSI.indexOf(S.classe)) return false;
+    if (S.nuova && !l.nb) return false;
+    if (S.evidenza && !l.ft) return false;
+    for (const d of S.dotazioni) if (!l.am.includes(d)) return false;
+    return nelArea(l);
+  });
+
+  const ord = {
+    rilevanza: (a, b) => (b.ft - a.ft) || b.pd.localeCompare(a.pd),
+    recenti: (a, b) => b.pd.localeCompare(a.pd),
+    'prezzo-asc': (a, b) => a.p - b.p,
+    'prezzo-desc': (a, b) => b.p - a.p,
+    'superficie-desc': (a, b) => b.s - a.s,
+  }[S.ordina];
+
+  return out.sort(ord);
+}
+
+/* --------------------------------------------------------------- disegno */
+
+let colori = {};
+function leggiColori() {
+  const cs = getComputedStyle(document.documentElement);
+  const v = (n) => cs.getPropertyValue(n).trim();
+  colori = {
+    land: v('--land'), landLine: v('--land-line'), accent: v('--accent'),
+    muted: v('--muted'), surface: v('--surface'), ink: v('--ink'), line: v('--line-strong'),
+  };
+}
+
+function tracciaTerra(poly) {
+  ctx.beginPath();
+  poly.forEach(([lat, lng], i) => {
+    const [x, y] = proietta(lat, lng);
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = colori.land;
+  ctx.fill();
+  ctx.strokeStyle = colori.landLine;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
+
+let tratto = null;
+let risultati = [];
+
+function disegnaMappa() {
+  ctx.clearRect(0, 0, view.w, view.h);
+  ctx.fillStyle = colori.surface;
+  ctx.fillRect(0, 0, view.w, view.h);
+
+  [CEFALONIA, ITACA].forEach(tracciaTerra);
+
+  const dentro = new Set(risultati.map((l) => l.i));
+
+  // Prima i puntini spenti: fanno da contesto senza rubare l'occhio.
+  for (const l of DATI) {
+    if (dentro.has(l.i)) continue;
+    const [x, y] = proietta(l.la, l.ln);
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = colori.line;
+    ctx.fill();
+  }
+
+  if (S.area) {
+    ctx.beginPath();
+    if (S.area.kind === 'poly') {
+      S.area.pts.forEach(([lat, lng], i) => {
+        const [x, y] = proietta(lat, lng);
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.closePath();
+    } else {
+      const [cx, cy] = proietta(S.area.c[0], S.area.c[1]);
+      const [, ey] = proietta(S.area.c[0] - S.area.r / 111.32, S.area.c[1]);
+      ctx.arc(cx, cy, Math.abs(ey - cy), 0, Math.PI * 2);
+    }
+    ctx.fillStyle = colori.accent + '1f';
+    ctx.fill();
+    ctx.strokeStyle = colori.accent;
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+  }
+
+  for (const l of risultati) {
+    const [x, y] = proietta(l.la, l.ln);
+    const caldo = S.hover === l.i;
+    ctx.beginPath();
+    ctx.arc(x, y, caldo ? 7 : 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = colori.accent;
+    ctx.fill();
+    ctx.strokeStyle = colori.surface;
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+  }
+
+  if (tratto && tratto.length > 1) {
+    ctx.beginPath();
+    tratto.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+    ctx.strokeStyle = colori.accent;
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+  }
+
+  ctx.font = '500 11px "IBM Plex Sans", sans-serif';
+  ctx.fillStyle = colori.muted;
+  ctx.textAlign = 'center';
+  for (const [nome, lat, lng] of CITTA) {
+    const [x, y] = proietta(lat, lng);
+    ctx.fillText(nome, x, y - 11);
+  }
+}
+
+const CITTA = [
+  ['Argostoli', 38.175, 20.489], ['Lixouri', 38.201, 20.437], ['Sami', 38.250, 20.647],
+  ['Agia Efimia', 38.301, 20.600], ['Fiskardo', 38.457, 20.575], ['Assos', 38.379, 20.539],
+  ['Skala', 38.062, 20.794], ['Poros', 38.147, 20.777], ['Lourdata', 38.113, 20.612],
+  ['Itaca', 38.415, 20.690],
+];
+
+/* ------------------------------------------------------------- interfaccia */
+
+const el = (id) => document.getElementById(id);
+
+function sfondo(l) {
+  // Nessuna fotografia in demo: un fondo diverso per annuncio, ricavato dal
+  // suo indice, tiene le schede distinguibili senza immagini remote.
+  const h = (l.i * 47) % 360;
+  return `linear-gradient(140deg, hsl(${h} 42% 46%), hsl(${(h + 38) % 360} 46% 34%))`;
+}
+
+function scheda(l) {
+  const b = document.createElement('button');
+  b.className = 'card';
+  b.type = 'button';
+  b.dataset.i = l.i;
+  b.innerHTML = `
+    <div class="thumb" style="background:${sfondo(l)}">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M3.6 14.2 16 4.6l12.4 9.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6.6 13v14.4h18.8V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12.4 27.4v-8h7.2v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="badges">
+        ${l.ft ? '<span class="badge acc">In evidenza</span>' : ''}
+        ${l.nb ? '<span class="badge ok">Nuova costruzione</span>' : ''}
+        ${l.au ? '<span class="badge warn">Asta</span>' : ''}
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="price num" style="margin:0">${prezzo(l)}</p>
+      <h3>${l.t}</h3>
+      <p class="where">${l.zo ? l.zo + ', ' : ''}${l.ci} (${l.pr})</p>
+      <p class="meta num" style="margin:0">
+        <span>${TIPI[l.ty]}</span>${l.ty === 'LAND' ? '' : `<span>${l.ro} ${l.ro === 1 ? 'locale' : 'locali'}</span>`}<span>${numero.format(l.s)} m²</span>${l.ba ? `<span>${l.ba} ${l.ba === 1 ? 'bagno' : 'bagni'}</span>` : ''}
+      </p>
+      <p class="foot"><span>${l.ag}</span><span class="num">${new Date(l.pd).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}</span></p>
+    </div>`;
+  b.addEventListener('click', () => apri(l));
+  b.addEventListener('mouseenter', () => { S.hover = l.i; disegnaMappa(); });
+  b.addEventListener('mouseleave', () => { S.hover = null; disegnaMappa(); });
+  return b;
+}
+
+function etichette() {
+  const c = [];
+  if (S.comune) c.push(['comune', S.comune]);
+  if (S.tipi.size) c.push(['tipi', [...S.tipi].map((t) => TIPI[t]).join(', ')]);
+  if (S.pmin != null) c.push(['pmin', 'da ' + euro.format(S.pmin)]);
+  if (S.pmax != null) c.push(['pmax', 'fino a ' + euro.format(S.pmax)]);
+  if (S.smin != null) c.push(['smin', 'da ' + S.smin + ' m²']);
+  if (S.smax != null) c.push(['smax', 'fino a ' + S.smax + ' m²']);
+  if (S.lmin) c.push(['lmin', 'da ' + S.lmin + ' locali']);
+  if (S.bmin) c.push(['bmin', 'da ' + S.bmin + ' bagni']);
+  if (S.stato) c.push(['stato', STATI[S.stato]]);
+  if (S.classe) c.push(['classe', 'classe ' + S.classe + ' o migliore']);
+  if (S.nuova) c.push(['nuova', 'nuova costruzione']);
+  if (S.asta) c.push(['asta', 'aste']);
+  if (S.evidenza) c.push(['evidenza', 'in evidenza']);
+  for (const d of S.dotazioni) c.push(['dot:' + d, DOTAZIONI[d].toLowerCase()]);
+  if (S.area) c.push(['area', S.area.kind === 'poly' ? 'area disegnata sulla mappa' : `entro ${S.area.r} km dal punto scelto`]);
+  return c;
+}
+
+function togli(chiave) {
+  if (chiave.startsWith('dot:')) S.dotazioni.delete(chiave.slice(4));
+  else if (chiave === 'tipi') S.tipi.clear();
+  else if (chiave === 'area') S.area = null;
+  else if (chiave === 'comune') S.comune = '';
+  else if (['nuova', 'asta', 'evidenza'].includes(chiave)) S[chiave] = false;
+  else if (['pmin', 'pmax', 'smin', 'smax'].includes(chiave)) S[chiave] = null;
+  else S[chiave] = '';
+  sincronizzaControlli();
+  aggiorna();
+}
+
+function sincronizzaControlli() {
+  el('comune').value = S.comune;
+  el('pmin').value = S.pmin ?? '';
+  el('pmax').value = S.pmax ?? '';
+  el('smin').value = S.smin ?? '';
+  el('smax').value = S.smax ?? '';
+  el('lmin').value = S.lmin;
+  el('bmin').value = S.bmin;
+  el('stato').value = S.stato;
+  el('classe').value = S.classe;
+  el('f-nuova').checked = S.nuova;
+  el('f-asta').checked = S.asta;
+  el('f-evidenza').checked = S.evidenza;
+  document.querySelectorAll('#tipi input').forEach((i) => (i.checked = S.tipi.has(i.value)));
+  document.querySelectorAll('#dotazioni input').forEach((i) => (i.checked = S.dotazioni.has(i.value)));
+  el('pulisci').hidden = !S.area;
+}
+
+function aggiorna() {
+  risultati = filtra();
+  el('totale').textContent = numero.format(risultati.length);
+  el('titolo').textContent = 'Immobili ' + (S.contratto === 'v' ? 'in vendita' : 'in affitto') + (S.comune ? ' a ' + S.comune : '');
+
+  const chips = el('chips');
+  chips.textContent = '';
+  for (const [chiave, testo] of etichette()) {
+    const li = document.createElement('li');
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.innerHTML = `${testo} <span aria-hidden="true">×</span>`;
+    b.setAttribute('aria-label', 'Togli il filtro ' + testo);
+    b.addEventListener('click', () => togli(chiave));
+    li.append(b);
+    chips.append(li);
+  }
+
+  const cards = el('cards');
+  cards.textContent = '';
+  if (!risultati.length) {
+    cards.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <h3>Nessun immobile con questi filtri</h3>
+      <p>${S.area ? 'Prova ad allargare l’area disegnata sulla mappa o a togliere qualche filtro.' : 'Prova ad alzare il prezzo massimo, ad allargare la zona o a togliere qualche dotazione.'}</p>
+      <button class="btn primary" type="button" id="reset2">Azzera la ricerca</button>
+    </div>`;
+    el('reset2').addEventListener('click', azzera);
+  } else {
+    for (const l of risultati) cards.append(scheda(l));
+  }
+
+  disegnaMappa();
+}
+
+function azzera() {
+  Object.assign(S, {
+    comune: '', pmin: null, pmax: null, smin: null, smax: null, lmin: '', bmin: '',
+    stato: '', classe: '', nuova: false, asta: false, evidenza: false, area: null,
+  });
+  S.tipi.clear();
+  S.dotazioni.clear();
+  sincronizzaControlli();
+  aggiorna();
+}
+
+/* ---------------------------------------------------------------- scheda */
+
+const dlg = el('dlg');
+
+function apri(l) {
+  el('d-contratto').textContent = l.c === 'v' ? 'Vendita' : 'Affitto';
+  el('d-titolo').textContent = l.t;
+  el('d-dove').textContent = `${l.zo ? l.zo + ', ' : ''}${l.ci} (${l.pr}) · ${l.ag}`;
+  el('d-prezzo').textContent = prezzo(l);
+  el('d-desc').textContent = l.d;
+
+  const specs = [
+    ['Tipologia', TIPI[l.ty]],
+    ['Superficie', numero.format(l.s) + ' m²'],
+    ['Locali', l.ty === 'LAND' ? null : l.ro],
+    ['Bagni', l.ba],
+    ['Piano', l.fl === 0 ? 'Piano terra' : l.fl != null ? `${l.fl}° di ${l.tf ?? '—'}` : null],
+    ['Stato', STATI[l.co]],
+    ['Riscaldamento', RISC[l.he]],
+    ['Classe energetica', l.en],
+    ['Arredamento', ARR[l.fu]],
+    ['Anno', l.yb],
+    ['Spese condominiali', l.cf ? l.cf + ' €/mese' : null],
+    ['Prezzo al m²', l.c === 'v' ? euro.format(Math.round(l.p / l.s)) : null],
+  ].filter(([, v]) => v != null && v !== '');
+
+  el('d-specs').innerHTML = specs
+    .map(([k, v]) => `<div class="spec"><dt>${k}</dt><dd class="num">${v}</dd></div>`)
+    .join('');
+  el('d-tag').innerHTML = l.am.map((a) => `<li>${DOTAZIONI[a]}</li>`).join('');
+  el('d-ok').hidden = true;
+  dlg.showModal();
+}
+
+el('chiudi').addEventListener('click', () => dlg.close());
+el('d-lead').addEventListener('submit', (e) => {
+  e.preventDefault();
+  el('d-ok').hidden = false;
+});
+
+/* ------------------------------------------------------------- controlli */
+
+function costruisciControlli() {
+  const comuni = [...new Set(DATI.map((l) => l.ci))].sort();
+  el('comune').innerHTML = '<option value="">Tutta l’isola</option>' + comuni.map((c) => `<option>${c}</option>`).join('');
+
+  const tipiPresenti = [...new Set(DATI.map((l) => l.ty))];
+  el('tipi').innerHTML = tipiPresenti
+    .map((t) => `<label class="check"><input type="checkbox" value="${t}"> ${TIPI[t]}</label>`)
+    .join('');
+  el('dotazioni').innerHTML = Object.entries(DOTAZIONI)
+    .map(([k, v]) => `<label class="check"><input type="checkbox" value="${k}"> ${v}</label>`)
+    .join('');
+  el('classe').innerHTML = '<option value="">Indifferente</option>' + CLASSI.map((c) => `<option>${c}</option>`).join('');
+
+  el('comune').addEventListener('change', (e) => { S.comune = e.target.value; aggiorna(); });
+  el('ordina').addEventListener('change', (e) => { S.ordina = e.target.value; aggiorna(); });
+
+  for (const [id, chiave] of [['pmin', 'pmin'], ['pmax', 'pmax'], ['smin', 'smin'], ['smax', 'smax']]) {
+    el(id).addEventListener('input', (e) => {
+      const v = e.target.value.trim();
+      S[chiave] = v === '' ? null : Number(v);
+      aggiorna();
+    });
+  }
+  for (const id of ['lmin', 'bmin', 'stato', 'classe']) {
+    el(id).addEventListener('change', (e) => { S[id] = e.target.value; aggiorna(); });
+  }
+  for (const [id, chiave] of [['f-nuova', 'nuova'], ['f-asta', 'asta'], ['f-evidenza', 'evidenza']]) {
+    el(id).addEventListener('change', (e) => { S[chiave] = e.target.checked; aggiorna(); });
+  }
+  el('tipi').addEventListener('change', (e) => {
+    e.target.checked ? S.tipi.add(e.target.value) : S.tipi.delete(e.target.value);
+    aggiorna();
+  });
+  el('dotazioni').addEventListener('change', (e) => {
+    e.target.checked ? S.dotazioni.add(e.target.value) : S.dotazioni.delete(e.target.value);
+    aggiorna();
+  });
+  el('azzera').addEventListener('click', azzera);
+
+  const filtri = el('filtri');
+  el('apri-filtri').addEventListener('click', () => {
+    const aperto = filtri.classList.toggle('open');
+    el('apri-filtri').setAttribute('aria-expanded', String(aperto));
+    el('apri-filtri').textContent = aperto ? 'Chiudi i filtri' : 'Tutti i filtri';
+  });
+  filtri.addEventListener('submit', (e) => e.preventDefault());
+
+  for (const [id, valore] of [['c-v', 'v'], ['c-a', 'a']]) {
+    el(id).addEventListener('click', () => {
+      S.contratto = valore;
+      el('c-v').setAttribute('aria-pressed', String(valore === 'v'));
+      el('c-a').setAttribute('aria-pressed', String(valore === 'a'));
+      aggiorna();
+    });
+  }
+
+  for (const [id, vista] of [['t-lista', 'lista'], ['t-mappa', 'mappa']]) {
+    el(id).addEventListener('click', () => {
+      el('cols').className = 'cols ' + vista;
+      el('t-lista').setAttribute('aria-pressed', String(vista === 'lista'));
+      el('t-mappa').setAttribute('aria-pressed', String(vista === 'mappa'));
+      if (vista === 'mappa') { misura(); disegnaMappa(); }
+    });
+  }
+}
+
+/* ------------------------------------------------------- disegno sull'area */
+
+let modo = 'nessuno';
+
+function modoDisegno(attivo) {
+  modo = attivo ? 'disegno' : 'nessuno';
+  el('disegna').classList.toggle('on', attivo);
+  el('disegna').textContent = attivo ? 'Sto disegnando…' : S.area?.kind === 'poly' ? 'Ridisegna la zona' : 'Disegna la zona';
+  el('hint').hidden = !attivo;
+  canvas.style.cursor = attivo ? 'crosshair' : 'default';
+}
+
+el('disegna').addEventListener('click', () => modoDisegno(modo !== 'disegno'));
+
+el('raggio').addEventListener('click', () => {
+  modo = modo === 'centro' ? 'nessuno' : 'centro';
+  el('raggio').classList.toggle('on', modo === 'centro');
+  el('raggio').textContent = modo === 'centro' ? 'Tocca la mappa…' : 'Scegli il centro';
+  canvas.style.cursor = modo === 'centro' ? 'crosshair' : 'default';
+  if (modo !== 'centro') return;
+  modoDisegno(false);
+});
+
+el('km').addEventListener('change', () => {
+  if (S.area?.kind === 'cerchio') {
+    S.area.r = Number(el('km').value);
+    aggiorna();
+  }
+});
+
+el('pulisci').addEventListener('click', () => {
+  S.area = null;
+  modoDisegno(false);
+  sincronizzaControlli();
+  aggiorna();
+});
+
+let disegnando = false;
+
+canvas.addEventListener('pointerdown', (e) => {
+  const r = canvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+
+  if (modo === 'centro') {
+    S.area = { kind: 'cerchio', c: riproietta(x, y), r: Number(el('km').value) };
+    modo = 'nessuno';
+    el('raggio').classList.remove('on');
+    el('raggio').textContent = 'Scegli il centro';
+    canvas.style.cursor = 'default';
+    sincronizzaControlli();
+    aggiorna();
+    return;
+  }
+
+  if (modo !== 'disegno') return;
+  disegnando = true;
+  tratto = [[x, y]];
+  canvas.setPointerCapture(e.pointerId);
+  e.preventDefault();
+});
+
+canvas.addEventListener('pointermove', (e) => {
+  const r = canvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+
+  if (disegnando) {
+    tratto.push([x, y]);
+    disegnaMappa();
+    return;
+  }
+
+  // Fuori dal disegno il puntatore serve a leggere la mappa.
+  let vicino = null, minima = 14;
+  for (const l of risultati) {
+    const [px, py] = proietta(l.la, l.ln);
+    const d = Math.hypot(px - x, py - y);
+    if (d < minima) { minima = d; vicino = l; }
+  }
+  const tip = el('tip');
+  if (vicino) {
+    tip.hidden = false;
+    tip.textContent = vicino.ty === 'LAND'
+      ? `${prezzoBreve(vicino)} · terreno · ${numero.format(vicino.s)} m²`
+      : `${prezzoBreve(vicino)} · ${vicino.ro} ${vicino.ro === 1 ? 'locale' : 'locali'} · ${vicino.s} m²`;
+    const [px, py] = proietta(vicino.la, vicino.ln);
+    tip.style.left = px + 'px';
+    tip.style.top = py + 'px';
+    canvas.style.cursor = 'pointer';
+  } else {
+    tip.hidden = true;
+    if (modo === 'nessuno') canvas.style.cursor = 'default';
+  }
+  if (S.hover !== (vicino?.i ?? null)) {
+    S.hover = vicino?.i ?? null;
+    disegnaMappa();
+  }
+});
+
+canvas.addEventListener('pointerup', (e) => {
+  if (!disegnando) {
+    if (S.hover != null) apri(DATI[S.hover]);
+    return;
+  }
+  disegnando = false;
+  const punti = tratto.map(([x, y]) => riproietta(x, y));
+  tratto = null;
+  if (punti.length >= 3) S.area = { kind: 'poly', pts: semplifica(punti) };
+  modoDisegno(false);
+  sincronizzaControlli();
+  aggiorna();
+});
+
+canvas.addEventListener('pointerleave', () => {
+  el('tip').hidden = true;
+  if (S.hover != null) { S.hover = null; disegnaMappa(); }
+});
+
+/* ------------------------------------------------------------------ avvio */
+
+leggiColori();
+costruisciControlli();
+misura();
+aggiorna();
+
+new ResizeObserver(() => { misura(); disegnaMappa(); }).observe(canvas);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  leggiColori();
+  disegnaMappa();
+});
+
+</script>

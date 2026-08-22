@@ -1,8 +1,13 @@
 # Domakinita · Δομακίνητα
 
-Portale di annunci immobiliari sul modello dei grandi portali italiani: ricerca
-per comune, zona e **area disegnata a mano sulla mappa**, scheda immobile con
-galleria e richiesta di visita, pannello per le agenzie che pubblicano.
+Portale di annunci immobiliari **per Cefalonia**: case, ville e terreni
+edificabili dell'isola, con la ricerca dei grandi portali — filtri, mappa e
+**area disegnata a mano** — e il pannello per le agenzie che pubblicano.
+
+Il pubblico sono gli italiani che comprano nelle Ionie e le agenzie che stanno
+sull'isola: l'interfaccia è in italiano, i luoghi e i prezzi sono quelli di
+Cefalonia. Niente nel codice è legato all'isola: per estendersi a Itaca, Zante
+o al resto della Grecia bastano nuovi dati.
 
 Il nome tiene insieme le due lingue del portale: **domo**, la casa, che un
 italiano legge senza pensarci, e **ακίνητα** (*akinita*), che in Grecia è la
@@ -43,9 +48,9 @@ Accessi creati dal seed (password `password123` per tutti):
 
 | Email | Ruolo | Cosa vede |
 |---|---|---|
-| `agente1@example.it` | agenzia | pannello annunci e richieste di Studio Casa Roma |
-| `utente@example.it` | privato | preferiti e ricerche salvate |
-| `admin@example.it` | amministratore | tutti gli annunci |
+| `agente1@example.gr` | agenzia | pannello annunci e richieste di Ionian Home Argostoli |
+| `utente@example.gr` | privato | preferiti e ricerche salvate |
+| `admin@example.gr` | amministratore | tutti gli annunci |
 
 ## Comandi
 
@@ -57,7 +62,7 @@ Accessi creati dal seed (password `password123` per tutti):
 | `pnpm lint` | ESLint (regole Next) |
 | `pnpm db:push` | allinea il database allo schema, senza migrazioni |
 | `pnpm db:migrate` | crea una migrazione versionata |
-| `pnpm db:seed` | svuota e ripopola con dati di esempio |
+| `pnpm db:seed` | svuota e ripopola con 60 annunci di esempio a Cefalonia |
 | `pnpm db:studio` | interfaccia grafica sul database |
 
 ---
@@ -80,6 +85,26 @@ Accessi creati dal seed (password `password123` per tutti):
 Tutte le API stanno sotto `/api`, con nomi in italiano coerenti con le pagine:
 `/api/annunci`, `/api/richieste`, `/api/preferiti`, `/api/ricerche-salvate`,
 `/api/luoghi`, `/api/upload`, `/api/auth/*`.
+
+---
+
+## La demo statica
+
+`docs/index.html` è una versione della pagina di ricerca che gira **senza
+server**: gli stessi sessanta annunci, gli stessi filtri, lo stesso disegno
+dell'area, con i dati incorporati nella pagina e un profilo schematico
+dell'isola al posto delle mappe di OpenStreetMap.
+
+Serve a due cose: far provare la ricerca a chi non ha voglia di installare
+niente, e stare su **GitHub Pages**, che ospita solo file statici e non
+potrebbe mai far girare l'applicazione vera.
+
+Per pubblicarla: *Settings → Pages → Source: Deploy from a branch → `main` /
+`docs`*. Da lì in avanti l'indirizzo è
+`https://<utente>.github.io/domakinita/`, e si aggiorna a ogni push.
+
+Va rigenerata quando cambiano i dati di esempio: la demo li porta dentro di sé,
+non li legge dal database.
 
 ---
 
@@ -111,7 +136,7 @@ indice GiST) senza cambiare la firma della funzione.
 
 ### Tutti i filtri
 
-- **dove**: comune (anche più d'uno), zona, provincia, regione, testo libero
+- **dove**: paese (anche più d'uno), zona, testo libero
 - **cosa**: vendita o affitto, dodici tipologie selezionabili insieme
 - **prezzo**: minimo, massimo, trattativa riservata, spese incluse, cauzione massima
 - **consistenza**: superficie, locali da/a, camere, bagni, piano da/a, solo piano terra, solo ultimo piano, anno di costruzione

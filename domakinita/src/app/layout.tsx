@@ -5,11 +5,11 @@ import { SITE_NAME, SITE_URL } from '@/lib/seo'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Case in vendita e in affitto`,
+    default: `${SITE_NAME} — Case e terreni a Cefalonia`,
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    'Annunci immobiliari di agenzie e privati: case in vendita e in affitto, ricerca per zona, mappa, richieste di visita.',
+    'Case, ville e terreni a Cefalonia: annunci delle agenzie dell’isola, ricerca per paese e per area disegnata sulla mappa, richieste di visita.',
   openGraph: {
     type: 'website',
     locale: 'it_IT',

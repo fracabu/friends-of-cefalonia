@@ -66,7 +66,7 @@ const TYPE_FROM_SLUG: Record<string, PropertyType> = {
   appartamento: 'APARTMENT',
   attico: 'ATTIC',
   villa: 'VILLA',
-  villetta: 'TOWNHOUSE',
+  casa: 'TOWNHOUSE',
   loft: 'LOFT',
   stanza: 'ROOM',
   box: 'GARAGE',

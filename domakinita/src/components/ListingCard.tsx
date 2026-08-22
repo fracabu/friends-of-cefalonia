@@ -84,10 +84,14 @@ export function ListingCard({
             <dt className="sr-only">Tipologia</dt>
             <dd>{PROPERTY_TYPE_LABELS[listing.type]}</dd>
           </div>
-          <div>
-            <dt className="sr-only">Locali</dt>
-            <dd>{listing.rooms} locali</dd>
-          </div>
+          {listing.type === 'LAND' ? null : (
+            <div>
+              <dt className="sr-only">Locali</dt>
+              <dd>
+                {listing.rooms} {listing.rooms === 1 ? 'locale' : 'locali'}
+              </dd>
+            </div>
+          )}
           <div>
             <dt className="sr-only">Superficie</dt>
             <dd>{formatSurface(listing.surface)}</dd>

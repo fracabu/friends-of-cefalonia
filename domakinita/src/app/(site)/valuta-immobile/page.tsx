@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 const STEPS = [
   {
     title: 'Descrivi l’immobile',
-    body: 'Comune, zona, superficie, piano e stato di conservazione: sono i dati che pesano di più sul valore.',
+    body: 'Paese, zona, superficie, vista e stato di conservazione: a Cefalonia la distanza dal mare pesa quanto i metri quadri.',
   },
   {
     title: 'Confronto con il mercato',
-    body: 'La stima parte dagli immobili simili venduti in zona e dai prezzi degli annunci attivi sul portale.',
+    body: 'La stima parte dagli immobili simili venduti sull’isola e dai prezzi degli annunci attivi sul portale.',
   },
   {
     title: 'Pubblica quando vuoi',

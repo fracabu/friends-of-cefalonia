@@ -8,8 +8,8 @@ const COLUMNS = [
     links: [
       { href: '/cerca?contratto=vendita', label: 'Case in vendita' },
       { href: '/cerca?contratto=affitto', label: 'Case in affitto' },
-      { href: '/cerca?contratto=vendita&tipo=terreno', label: 'Terreni' },
-      { href: '/cerca?contratto=affitto&tipo=stanza', label: 'Stanze' },
+      { href: '/cerca?contratto=vendita&tipo=terreno', label: 'Terreni edificabili' },
+      { href: '/cerca?contratto=vendita&tipo=villa', label: 'Ville' },
     ],
   },
   {
@@ -38,8 +38,8 @@ export function Footer() {
         <div>
           <Logo name={SITE_NAME} subtitle="αγγελίες ακινήτων" markClassName="h-7 w-7 text-brand-600" />
           <p className="mt-2 max-w-xs text-sm text-ink-500">
-            Annunci immobiliari di agenzie e privati, con ricerca per zona, mappa e richieste di
-            visita.
+            Case, ville e terreni a Cefalonia. Annunci delle agenzie dell&apos;isola, con ricerca
+            sulla mappa e richieste di visita.
           </p>
         </div>
 

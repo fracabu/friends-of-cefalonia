@@ -3,28 +3,90 @@ import bcrypt from 'bcryptjs'
 
 const db = new PrismaClient()
 
-// Comuni con coordinate del centro: le posizioni degli annunci si sparpagliano
-// intorno a queste, così la mappa non mostra tutti i segnaposti sovrapposti.
-const CITIES = [
-  { city: 'Roma', province: 'RM', region: 'Lazio', lat: 41.9028, lng: 12.4964, zones: ['Trastevere', 'Prati', 'Monteverde', 'San Giovanni', 'EUR'] },
-  { city: 'Milano', province: 'MI', region: 'Lombardia', lat: 45.4642, lng: 9.19, zones: ['Navigli', 'Isola', 'Città Studi', 'Porta Romana'] },
-  { city: 'Torino', province: 'TO', region: 'Piemonte', lat: 45.0703, lng: 7.6869, zones: ['Crocetta', 'San Salvario', 'Vanchiglia'] },
-  { city: 'Bologna', province: 'BO', region: 'Emilia-Romagna', lat: 44.4949, lng: 11.3426, zones: ['Santo Stefano', 'Bolognina', 'Saragozza'] },
-  { city: 'Firenze', province: 'FI', region: 'Toscana', lat: 43.7696, lng: 11.2558, zones: ['Oltrarno', 'Campo di Marte', 'Novoli'] },
-  { city: 'Napoli', province: 'NA', region: 'Campania', lat: 40.8518, lng: 14.2681, zones: ['Vomero', 'Chiaia', 'Posillipo'] },
-  { city: 'Bari', province: 'BA', region: 'Puglia', lat: 41.1171, lng: 16.8719, zones: ['Murat', 'Poggiofranco', 'Japigia'] },
-  { city: 'Palermo', province: 'PA', region: 'Sicilia', lat: 38.1157, lng: 13.3615, zones: ['Politeama', 'Libertà', 'Mondello'] },
+/*
+ * Dati di esempio per Cefalonia.
+ *
+ * Le localita sono quelle vere, con le coordinate del centro abitato; gli
+ * annunci si sparpagliano attorno, cosi la mappa non mostra tutti i segnaposti
+ * sovrapposti. I prezzi al metro quadro seguono le differenze reali fra
+ * l'isola nord, quella turistica e l'entroterra: Fiskardo e Assos costano piu
+ * del doppio di Peratata.
+ */
+
+type Localita = {
+  nome: string
+  lat: number
+  lng: number
+  cap: string
+  /** Prezzo di riferimento al metro quadro, in vendita. */
+  base: number
+  zone: string[]
+}
+
+const LOCALITA: Localita[] = [
+  { nome: 'Argostoli', lat: 38.1751, lng: 20.4885, cap: '28100', base: 2300, zone: ['Centro', 'Lassi', 'Fanari', 'Drapano'] },
+  { nome: 'Lassi', lat: 38.1652, lng: 20.4652, cap: '28100', base: 2600, zone: ['Makris Gialos', 'Platys Gialos'] },
+  { nome: 'Lixouri', lat: 38.2013, lng: 20.4372, cap: '28200', base: 1800, zone: ['Lungomare', 'Lepeda'] },
+  { nome: 'Sami', lat: 38.2503, lng: 20.6470, cap: '28080', base: 2000, zone: ['Porto', 'Karavomylos', 'Antisamos'] },
+  { nome: 'Agia Efimia', lat: 38.3010, lng: 20.6003, cap: '28081', base: 2600, zone: ['Porto', 'Paradise Beach'] },
+  { nome: 'Fiskardo', lat: 38.4570, lng: 20.5752, cap: '28084', base: 3800, zone: ['Porto', 'Emblisi', 'Foki'] },
+  { nome: 'Assos', lat: 38.3792, lng: 20.5390, cap: '28084', base: 3400, zone: ['Castello', 'Baia'] },
+  { nome: 'Divarata', lat: 38.3203, lng: 20.5600, cap: '28084', base: 3000, zone: ['Myrtos'] },
+  { nome: 'Skala', lat: 38.0620, lng: 20.7940, cap: '28082', base: 2600, zone: ['Spiaggia', 'Centro'] },
+  { nome: 'Poros', lat: 38.1470, lng: 20.7770, cap: '28086', base: 1900, zone: ['Porto', 'Ragia'] },
+  { nome: 'Katelios', lat: 38.0800, lng: 20.7100, cap: '28082', base: 2200, zone: ['Spiaggia'] },
+  { nome: 'Lourdata', lat: 38.1130, lng: 20.6120, cap: '28083', base: 2400, zone: ['Trapezaki', 'Collina'] },
+  { nome: 'Svoronata', lat: 38.1330, lng: 20.4770, cap: '28100', base: 2200, zone: ['Ammes', 'Aeroporto'] },
+  { nome: 'Minies', lat: 38.1470, lng: 20.4790, cap: '28100', base: 2000, zone: [] },
+  { nome: 'Peratata', lat: 38.1450, lng: 20.5400, cap: '28100', base: 1700, zone: ['Castello di San Giorgio'] },
+  { nome: 'Karavados', lat: 38.1150, lng: 20.5330, cap: '28083', base: 1800, zone: [] },
+  { nome: 'Spartia', lat: 38.1030, lng: 20.5170, cap: '28083', base: 2100, zone: ['Avithos'] },
+  { nome: 'Kourkoumelata', lat: 38.1200, lng: 20.5000, cap: '28100', base: 2000, zone: [] },
 ]
 
-const TYPES: PropertyType[] = ['APARTMENT', 'APARTMENT', 'APARTMENT', 'ATTIC', 'VILLA', 'TOWNHOUSE', 'LOFT', 'OFFICE']
+const REGIONE = 'Isole Ionie'
+const SIGLA = 'KE' // la sigla automobilistica greca di Cefalonia
+
+// A Cefalonia si vendono soprattutto ville, case indipendenti e terreni
+// edificabili; gli appartamenti stanno quasi tutti ad Argostoli e Lixouri.
+const TIPI: PropertyType[] = [
+  'VILLA', 'VILLA', 'APARTMENT', 'APARTMENT', 'TOWNHOUSE', 'LAND', 'LAND', 'ATTIC', 'SHOP',
+]
+
+const PROFILI: Record<string, { locali: [number, number]; mq: [number, number] }> = {
+  APARTMENT: { locali: [1, 4], mq: [38, 120] },
+  ATTIC: { locali: [2, 4], mq: [70, 140] },
+  VILLA: { locali: [4, 8], mq: [110, 300] },
+  TOWNHOUSE: { locali: [3, 6], mq: [90, 190] },
+  LOFT: { locali: [1, 3], mq: [55, 120] },
+  OFFICE: { locali: [1, 4], mq: [40, 150] },
+  SHOP: { locali: [1, 3], mq: [35, 140] },
+  ROOM: { locali: [1, 1], mq: [12, 22] },
+  LAND: { locali: [1, 1], mq: [500, 3000] },
+}
+
+const NOMI_TIPO: Partial<Record<PropertyType, string>> = {
+  ATTIC: 'Attico',
+  VILLA: 'Villa',
+  TOWNHOUSE: 'Casa indipendente',
+  LOFT: 'Loft',
+  OFFICE: 'Ufficio',
+  SHOP: 'Negozio',
+  ROOM: 'Stanza',
+  LAND: 'Terreno edificabile',
+  BUILDING: 'Stabile',
+  GARAGE: 'Box',
+  WAREHOUSE: 'Magazzino',
+}
+
 const CONDITIONS = ['NEW', 'RENOVATED', 'GOOD', 'TO_RENOVATE'] as const
 const HEATINGS = ['AUTONOMOUS', 'CENTRALIZED'] as const
 const ENERGIES = ['A2', 'A1', 'B', 'C', 'D', 'E', 'F', 'G'] as const
 
-const AGENCIES = [
-  { name: 'Studio Casa Roma', slug: 'studio-casa-roma', city: 'Roma', province: 'RM', phone: '06 5555 0100' },
-  { name: 'Milano Abitare', slug: 'milano-abitare', city: 'Milano', province: 'MI', phone: '02 5555 0200' },
-  { name: 'Tirreno Immobiliare', slug: 'tirreno-immobiliare', city: 'Firenze', province: 'FI', phone: '055 5555 0300' },
+const AGENZIE = [
+  { name: 'Ionian Home Argostoli', slug: 'ionian-home-argostoli', city: 'Argostoli', province: SIGLA, phone: '+30 26710 25100' },
+  { name: 'Kefalonia Properties', slug: 'kefalonia-properties', city: 'Lixouri', province: SIGLA, phone: '+30 26710 92200' },
+  { name: 'Fiskardo Estates', slug: 'fiskardo-estates', city: 'Fiskardo', province: SIGLA, phone: '+30 26740 41300' },
 ]
 
 // Numeri riproducibili: due seed di fila devono dare lo stesso portale.
@@ -36,12 +98,26 @@ function random() {
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(random() * items.length)]
 const between = (min: number, max: number) => Math.floor(min + random() * (max - min + 1))
 
-function describe(type: PropertyType, rooms: number, surface: number, zone: string, city: string) {
-  return `Proponiamo in ${zone}, a ${city}, un immobile di ${surface} m² composto da ${rooms} locali.
+function titolo(type: PropertyType, rooms: number) {
+  if (NOMI_TIPO[type]) return NOMI_TIPO[type] as string
+  const nomi = ['Monolocale', 'Bilocale', 'Trilocale', 'Quadrilocale', 'Cinque locali']
+  return nomi[rooms - 1] ?? `${rooms} locali`
+}
 
-L'appartamento si presenta luminoso, con doppia esposizione e affacci sulla corte interna. La zona giorno è separata dalla zona notte, la cucina è abitabile e i serramenti sono stati sostituiti di recente.
+function descrizione(type: PropertyType, rooms: number, surface: number, dove: string, mare: boolean) {
+  if (type === 'LAND') {
+    return `Terreno edificabile di ${surface} m² a ${dove}, con accesso da strada asfaltata e allacci disponibili sul confine.
 
-Il quartiere è servito da mezzi pubblici, scuole e negozi di vicinato. Possibilità di visita anche nel fine settimana, su appuntamento.`
+${mare ? 'Il lotto gode di vista aperta sul mare Ionio ed è orientato a sud-ovest, il che significa sole fino al tramonto.' : 'Il lotto è pianeggiante, delimitato da un muretto a secco e piantato a ulivi.'}
+
+La superficie consente l'edificazione di una residenza singola secondo gli indici vigenti. Documentazione catastale disponibile: la pratica greca richiede topografico e certificato di edificabilità, entrambi già predisposti.`
+  }
+
+  return `Proponiamo a ${dove} un immobile di ${surface} m² composto da ${rooms} locali.
+
+${mare ? 'Le finestre principali guardano il mare, con la costa che si apre davanti alla veranda.' : "L'immobile si trova nella parte tranquilla del paese, a pochi minuti dai servizi."} Gli ambienti sono luminosi, la zona giorno è separata dalla zona notte e gli esterni sono già sistemati.
+
+Cefalonia è raggiungibile con voli diretti da diverse città italiane nella stagione estiva, e tutto l'anno via Atene o dal porto di Patrasso. Visite su appuntamento, anche in videochiamata.`
 }
 
 async function main() {
@@ -55,28 +131,41 @@ async function main() {
   await db.agency.deleteMany()
   await db.location.deleteMany()
 
-  console.log('Luoghi…')
-  for (const c of CITIES) {
-    const city = await db.location.create({
+  console.log('Localita dell isola…')
+  const isola = await db.location.create({
+    data: {
+      slug: 'cefalonia',
+      name: 'Cefalonia',
+      type: 'PROVINCE',
+      province: SIGLA,
+      region: REGIONE,
+      latitude: 38.2,
+      longitude: 20.55,
+    },
+  })
+
+  for (const l of LOCALITA) {
+    const paese = await db.location.create({
       data: {
-        slug: c.city.toLowerCase(),
-        name: c.city,
+        slug: l.nome.toLowerCase().replace(/\s+/g, '-'),
+        name: l.nome,
         type: 'CITY',
-        province: c.province,
-        region: c.region,
-        latitude: c.lat,
-        longitude: c.lng,
+        province: SIGLA,
+        region: REGIONE,
+        latitude: l.lat,
+        longitude: l.lng,
+        parentId: isola.id,
       },
     })
-    for (const zone of c.zones) {
+    for (const zona of l.zone) {
       await db.location.create({
         data: {
-          slug: `${c.city}-${zone}`.toLowerCase().replace(/\s+/g, '-'),
-          name: zone,
+          slug: `${l.nome}-${zona}`.toLowerCase().replace(/\s+/g, '-'),
+          name: zona,
           type: 'ZONE',
-          province: c.province,
-          region: c.region,
-          parentId: city.id,
+          province: SIGLA,
+          region: REGIONE,
+          parentId: paese.id,
         },
       })
     }
@@ -85,121 +174,126 @@ async function main() {
   console.log('Agenzie e utenti…')
   const passwordHash = await bcrypt.hash('password123', 12)
 
-  const agencies = []
-  for (const a of AGENCIES) {
-    agencies.push(
+  const agenzie = []
+  for (const a of AGENZIE) {
+    agenzie.push(
       await db.agency.create({
         data: {
           ...a,
-          email: `info@${a.slug}.it`,
+          email: `info@${a.slug}.gr`,
           verified: true,
-          description: `${a.name} opera da oltre vent'anni sul mercato di ${a.city}, con un portafoglio di immobili residenziali selezionati.`,
+          description: `${a.name} segue la compravendita e l'affitto di case e terreni a Cefalonia, con assistenza in italiano, greco e inglese per l'intera pratica.`,
         },
       }),
     )
   }
 
-  const agents = []
-  for (const [index, agency] of agencies.entries()) {
-    agents.push(
+  const agenti = []
+  for (const [index, agenzia] of agenzie.entries()) {
+    agenti.push(
       await db.user.create({
         data: {
-          name: ['Giulia Ferri', 'Marco Bianchi', 'Sara Conti'][index],
-          email: `agente${index + 1}@example.it`,
+          name: ['Eleni Rossolatou', 'Spiros Metaxas', 'Marina Vandorou'][index],
+          email: `agente${index + 1}@example.gr`,
           passwordHash,
           role: 'AGENT',
-          phone: agency.phone,
-          agencyId: agency.id,
+          phone: agenzia.phone,
+          agencyId: agenzia.id,
         },
       }),
     )
   }
 
-  const buyer = await db.user.create({
-    data: {
-      name: 'Luca Rossi',
-      email: 'utente@example.it',
-      passwordHash,
-      role: 'USER',
-    },
+  const acquirente = await db.user.create({
+    data: { name: 'Luca Rossi', email: 'utente@example.gr', passwordHash, role: 'USER' },
   })
 
   await db.user.create({
-    data: { name: 'Amministratore', email: 'admin@example.it', passwordHash, role: 'ADMIN' },
+    data: { name: 'Amministratore', email: 'admin@example.gr', passwordHash, role: 'ADMIN' },
   })
 
   console.log('Annunci…')
-  const listings = []
+  const annunci = []
   for (let i = 0; i < 60; i++) {
-    const place = pick(CITIES)
-    const zone = pick(place.zones)
-    const type = pick(TYPES)
-    const contract: ContractType = random() < 0.72 ? 'SALE' : 'RENT'
-    const rooms = between(1, 6)
-    const surface = rooms * between(22, 38)
+    const posto = pick(LOCALITA)
+    const zona = posto.zone.length ? pick(posto.zone) : null
+    const type = pick(TIPI)
+    // I terreni non si affittano, e sull'isola l'affitto annuale è una nicchia
+    // accanto alla vendita.
+    const contract: ContractType = type === 'LAND' ? 'SALE' : random() < 0.78 ? 'SALE' : 'RENT'
 
-    // Prezzi verosimili: base al metro quadro per città, poi lo sconto o il
-    // sovrapprezzo dello stato di conservazione.
-    const base = { Roma: 3900, Milano: 5200, Firenze: 4200, Bologna: 3400, Torino: 2200, Napoli: 2800, Bari: 2400, Palermo: 1800 }[place.city] ?? 2500
-    const salePrice = Math.round((surface * base * (0.85 + random() * 0.4)) / 1000) * 1000
-    const rentPrice = Math.round((surface * (base / 220) * (0.85 + random() * 0.4)) / 10) * 10
+    const profilo = PROFILI[type] ?? PROFILI.APARTMENT
+    const rooms = between(profilo.locali[0], profilo.locali[1])
+    const surface = between(profilo.mq[0], profilo.mq[1])
+    const mare = random() < 0.55
 
-    const agent = agents[i % agents.length]
-    const owner = agent
-    const created = await db.listing.create({
+    // Un terreno costa una frazione del costruito; la vista mare pesa.
+    const fattore = (type === 'LAND' ? 0.035 : 1) * (mare ? 1.25 : 1) * (0.85 + random() * 0.35)
+    const vendita = Math.round((surface * posto.base * fattore) / 1000) * 1000
+    const affitto = Math.round((surface * (posto.base / 320) * fattore) / 10) * 10
+
+    const agente = agenti[i % agenti.length]
+    const dove = zona ? `${zona}, ${posto.nome}` : posto.nome
+
+    const creato = await db.listing.create({
       data: {
-        slug: `annuncio-${i + 1}-${place.city.toLowerCase()}`,
-        reference: `RIF-${1000 + i}`,
-        title: `${['Trilocale', 'Bilocale', 'Quadrilocale', 'Attico', 'Villa', 'Loft'][Math.min(rooms - 1, 5)]} in ${zone}, ${place.city}`,
-        description: describe(type, rooms, surface, zone, place.city),
+        slug: `${titolo(type, rooms).toLowerCase().replace(/\s+/g, '-')}-${posto.nome.toLowerCase()}-${i + 1}`,
+        reference: `KE-${1000 + i}`,
+        title: `${titolo(type, rooms)} a ${dove}`,
+        description: descrizione(type, rooms, surface, dove, mare),
         contract,
         type,
         status: 'PUBLISHED',
-        price: contract === 'SALE' ? salePrice : rentPrice,
-        condoFees: random() < 0.7 ? between(40, 220) : null,
-        deposit: contract === 'RENT' ? rentPrice * 3 : null,
+        price: contract === 'SALE' ? Math.max(28000, vendita) : Math.max(320, affitto),
+        condoFees: type === 'LAND' ? null : random() < 0.35 ? between(20, 90) : null,
+        deposit: contract === 'RENT' ? Math.max(320, affitto) * 2 : null,
         surface,
         rooms,
-        bedrooms: Math.max(1, rooms - 2),
-        bathrooms: rooms > 3 ? 2 : 1,
-        floor: between(0, 7),
-        totalFloors: between(3, 9),
-        yearBuilt: between(1930, 2022),
-        elevator: random() < 0.6,
-        garden: random() < 0.2,
-        terrace: random() < 0.35,
-        balcony: random() < 0.7,
-        parking: random() < 0.4,
-        cellar: random() < 0.5,
-        pool: random() < 0.05,
-        airCon: random() < 0.45,
+        bedrooms: type === 'LAND' ? null : Math.max(1, rooms - 2),
+        bathrooms: type === 'LAND' ? null : rooms > 5 ? 3 : rooms > 3 ? 2 : 1,
+        floor: type === 'LAND' || type === 'VILLA' ? null : between(0, 2),
+        totalFloors: type === 'LAND' ? null : between(1, 3),
+        yearBuilt: type === 'LAND' ? null : between(1975, 2024),
+        elevator: type === 'APARTMENT' && random() < 0.3,
+        garden: type !== 'APARTMENT' && random() < 0.75,
+        terrace: type !== 'LAND' && random() < 0.6,
+        balcony: type !== 'LAND' && random() < 0.7,
+        parking: random() < 0.7,
+        cellar: type !== 'LAND' && random() < 0.35,
+        pool: (type === 'VILLA' || type === 'TOWNHOUSE') && random() < 0.45,
+        airCon: type !== 'LAND' && random() < 0.8,
         furnished: contract === 'RENT' ? pick(['FURNISHED', 'PARTIALLY', 'UNFURNISHED'] as const) : null,
-        condition: pick(CONDITIONS),
-        heating: pick(HEATINGS),
-        energy: pick(ENERGIES),
-        features: random() < 0.3 ? ['Doppia esposizione', 'Portineria'] : [],
-        addressLine: `Via ${['Giulia', 'Verdi', 'Manzoni', 'Dante', 'Garibaldi'][between(0, 4)]} ${between(1, 90)}`,
-        hideAddress: random() < 0.3,
-        city: place.city,
-        province: place.province,
-        region: place.region,
-        postalCode: String(between(10, 90)).padStart(2, '0') + '100',
-        zone,
-        latitude: place.lat + (random() - 0.5) * 0.08,
-        longitude: place.lng + (random() - 0.5) * 0.1,
-        isNewBuild: random() < 0.15,
-        isAuction: random() < 0.06,
-        hasFloorPlan: random() < 0.55,
+        condition: type === 'LAND' ? null : pick(CONDITIONS),
+        heating: type === 'LAND' ? null : pick(HEATINGS),
+        energy: type === 'LAND' ? null : pick(ENERGIES),
+        features: [
+          mare && 'Vista mare',
+          random() < 0.3 && 'Uliveto',
+          random() < 0.2 && 'Pozzo',
+          random() < 0.25 && 'A piedi dalla spiaggia',
+        ].filter(Boolean) as string[],
+        isNewBuild: random() < 0.18,
+        isAuction: random() < 0.05,
+        hasFloorPlan: random() < 0.5,
         virtualTourUrl: random() < 0.2 ? 'https://example.com/tour-virtuale' : null,
-        utilitiesIncluded: contract === 'RENT' && random() < 0.25,
+        utilitiesIncluded: contract === 'RENT' && random() < 0.3,
         availability: pick(['FREE', 'FREE', 'OCCUPIED', 'RENTED'] as const),
         ownership: random() < 0.94 ? 'FULL' : pick(['BARE', 'SHARED'] as const),
-        petsAllowed: contract === 'RENT' ? random() < 0.4 : null,
+        petsAllowed: contract === 'RENT' ? random() < 0.5 : null,
+        addressLine: `${posto.nome}, Cefalonia`,
+        hideAddress: random() < 0.4,
+        city: posto.nome,
+        province: SIGLA,
+        region: REGIONE,
+        postalCode: posto.cap,
+        zone: zona,
+        latitude: posto.lat + (random() - 0.5) * 0.02,
+        longitude: posto.lng + (random() - 0.5) * 0.025,
         publishedAt: new Date(Date.now() - between(0, 60) * 86_400_000),
         featured: i % 11 === 0,
         views: between(20, 900),
-        ownerId: owner.id,
-        agencyId: agent.agencyId,
+        ownerId: agente.id,
+        agencyId: agente.agencyId,
       },
     })
 
@@ -208,10 +302,10 @@ async function main() {
     for (let p = 0; p < 5; p++) {
       await db.listingImage.create({
         data: {
-          listingId: created.id,
-          url: `https://picsum.photos/seed/${created.id}-${p}/1200/900`,
-          thumbUrl: `https://picsum.photos/seed/${created.id}-${p}/640/480`,
-          alt: `${created.title}, fotografia ${p + 1}`,
+          listingId: creato.id,
+          url: `https://picsum.photos/seed/${creato.id}-${p}/1200/900`,
+          thumbUrl: `https://picsum.photos/seed/${creato.id}-${p}/640/480`,
+          alt: `${creato.title}, fotografia ${p + 1}`,
           width: 1200,
           height: 900,
           position: p,
@@ -220,37 +314,37 @@ async function main() {
       })
     }
 
-    listings.push(created)
+    annunci.push(creato)
   }
 
   console.log('Preferiti, ricerche salvate e richieste…')
-  for (const listing of listings.slice(0, 5)) {
-    await db.favorite.create({ data: { userId: buyer.id, listingId: listing.id } })
+  for (const annuncio of annunci.slice(0, 5)) {
+    await db.favorite.create({ data: { userId: acquirente.id, listingId: annuncio.id } })
   }
 
   await db.savedSearch.create({
     data: {
-      userId: buyer.id,
-      name: 'Trilocali a Roma fino a 400.000 euro',
-      query: 'contratto=vendita&comune=Roma&localiMin=3&prezzoMax=400000',
+      userId: acquirente.id,
+      name: 'Ville con vista mare fino a 400.000 euro',
+      query: 'contratto=vendita&tipo=villa&prezzoMax=400000',
       frequency: 'DAILY',
     },
   })
 
-  for (const listing of listings.slice(0, 8)) {
+  for (const annuncio of annunci.slice(0, 8)) {
     await db.lead.create({
       data: {
-        listingId: listing.id,
+        listingId: annuncio.id,
         name: pick(['Anna Verdi', 'Paolo Neri', 'Chiara Gallo', 'Davide Riva']),
         email: 'richiesta@example.it',
-        phone: '333 1234567',
-        message: 'Buongiorno, sono interessato a questo immobile e vorrei fissare una visita.',
+        phone: '+39 333 1234567',
+        message: 'Buongiorno, sono interessato a questo immobile e vorrei organizzare una visita durante il prossimo viaggio sull’isola.',
       },
     })
   }
 
-  console.log(`Fatto: ${listings.length} annunci, ${agencies.length} agenzie.`)
-  console.log('Accessi di prova: agente1@example.it / utente@example.it — password: password123')
+  console.log(`Fatto: ${annunci.length} annunci a Cefalonia, ${agenzie.length} agenzie.`)
+  console.log('Accessi di prova: agente1@example.gr / utente@example.gr — password: password123')
 }
 
 main()

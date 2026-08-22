@@ -18,11 +18,11 @@ export default async function HomePage() {
       <section className="border-b border-ink-100 bg-gradient-to-b from-brand-50 to-ink-50">
         <div className="mx-auto max-w-5xl px-4 py-16 text-center sm:py-24">
           <h1 className="text-3xl font-semibold tracking-tight text-ink-900 sm:text-5xl">
-            La casa che stai cercando
+            La tua casa a Cefalonia
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-ink-600">
-            Migliaia di annunci di agenzie e privati. Cerca per comune o quartiere, confronta sulla
-            mappa, richiedi una visita.
+            Case, ville e terreni sull&apos;isola, da agenzie del posto. Cerca per paese, disegna la
+            zona che ti interessa sulla mappa, richiedi una visita.
           </p>
           <SearchBar className="mx-auto mt-8 max-w-3xl text-left" />
         </div>
@@ -33,7 +33,7 @@ export default async function HomePage() {
           <div className="mb-6 flex items-end justify-between">
             <div>
               <h2 className="text-2xl font-semibold text-ink-900">In evidenza</h2>
-              <p className="mt-1 text-sm text-ink-500">Selezionati dalle agenzie del portale</p>
+              <p className="mt-1 text-sm text-ink-500">Selezionati dalle agenzie dell&apos;isola</p>
             </div>
             <ButtonLink href="/cerca" variant="secondary" size="sm">
               Vedi tutti
@@ -49,7 +49,7 @@ export default async function HomePage() {
 
       {cities.length > 0 ? (
         <section className="mx-auto max-w-7xl px-4 py-6">
-          <h2 className="text-2xl font-semibold text-ink-900">Cerca per città</h2>
+          <h2 className="text-2xl font-semibold text-ink-900">Cerca per località</h2>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {cities.map((city) => (
               <Link
