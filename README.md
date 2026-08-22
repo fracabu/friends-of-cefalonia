@@ -56,7 +56,13 @@ Nel DNS del registrar servono, per il dominio `friendsofcefalonia.it`:
 | `@` | A | `185.199.109.153` |
 | `@` | A | `185.199.110.153` |
 | `@` | A | `185.199.111.153` |
-| `www` | CNAME | `<utente>.github.io.` |
+| `www` | CNAME | `<utente>.github.io` |
+
+Il valore del record `www` va scritto senza punto finale: i pannelli web dei
+registrar lo trattano già come nome assoluto e il punto lo aggiungono da sé.
+Serve scriverlo solo modificando a mano un file di zona in formato BIND. Il
+file `public/CNAME`, invece, non porta mai il punto: contiene il dominio e
+nient'altro.
 
 Vanno tolti gli A record di parcheggio del registrar, altrimenti restano
 insieme a quelli di GitHub e il certificato non viene emesso. Il record `www`
