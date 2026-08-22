@@ -1,0 +1,8 @@
+Metti qui la fotografia di apertura, chiamata hero.jpg: la pagina la mostra
+da sola, senza modifiche al codice.
+
+Orizzontale, almeno 1600 px di larghezza, e vostra: le immagini prese dal web
+sono quasi sempre protette da copyright.
+
+Finché il file non c'è, al suo posto resta il riquadro grafico. Per usare un
+altro nome, cambiare HERO_PHOTO in src/data/site.ts.
