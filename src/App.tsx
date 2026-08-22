@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { SECTIONS } from "@/data/links";
 import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, GROUP_MEMBERS_PREFIX, FOUNDER_YEARS, FOUNDER_NAME,
-         HERO_PHOTO, HERO_PHOTO_CREDIT, FOTO_TARTARUGHE, FOTO_TARTARUGHE_CREDITO } from "@/data/site";
+         HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
 import Quiz from "@/components/Quiz";
 import Fauna from "@/components/Fauna";
 import Gallery from "@/components/Gallery";
-import VideoTartarughe from "@/components/VideoTartarughe";
 import Cucina from "@/components/Cucina";
-import FotoSezione from "@/components/FotoSezione";
+import FaunaLocale from "@/components/FaunaLocale";
+import { GALLERY } from "@/data/gallery";
 
 /* ================= LOGO ================= */
 /* Caretta caretta stilizzata: le tartarughe del porto di Argostoli sono il
@@ -70,11 +70,14 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
 }
 
 /* ================= TESTATA ================= */
+/* La galleria compare solo quando esistono fotografie, quindi la sua voce va
+   tolta insieme a lei: un menu che porta a un'ancora inesistente non fa
+   niente quando lo si tocca, e sembra rotto. */
 const NAV = [
   { href: "#risorse", label: "Risorse" },
-  { href: "#tartarughe", label: "Tartarughe" },
+  { href: "#fauna", label: "Fauna" },
   { href: "#cucina", label: "A tavola" },
-  { href: "#galleria", label: "Foto" },
+  ...(GALLERY.length > 0 ? [{ href: "#galleria", label: "Foto" }] : []),
   { href: "#quiz", label: "Quiz" },
   { href: "#terreni", label: "Terreni" },
 ];
@@ -326,20 +329,15 @@ export default function App() {
                   {/* Il video sta dentro la sezione a cui appartiene, sotto ai
                       link: chi arriva qui dal menu «Tartarughe» ci finisce
                       sopra senza doverlo cercare. */}
-                  {s.id === "tartarughe" && (
-                    <>
-                      <FotoSezione src={FOTO_TARTARUGHE} credito={FOTO_TARTARUGHE_CREDITO}
-                        alt="Una Caretta caretta nel porto di Argostoli"
-                        altezza="h-[220px] sm:h-[320px]" className="mt-7" />
-                      <VideoTartarughe />
-                    </>
-                  )}
                 </div>
               </div>
             </Reveal>
           ))}
         </div>
       </section>
+
+      {/* ===== FAUNA ===== */}
+      <FaunaLocale />
 
       {/* ===== A TAVOLA ===== */}
       <Cucina />
