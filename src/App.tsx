@@ -3,6 +3,9 @@ import { SECTIONS } from "@/data/links";
 import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, GROUP_MEMBERS_PREFIX, FOUNDER_YEARS, FOUNDER_NAME,
          HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
 import Quiz from "@/components/Quiz";
+import Fauna from "@/components/Fauna";
+import Gallery from "@/components/Gallery";
+import VideoTartarughe from "@/components/VideoTartarughe";
 
 /* ================= LOGO ================= */
 /* Caretta caretta stilizzata: le tartarughe del porto di Argostoli sono il
@@ -68,12 +71,40 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
 const NAV = [
   { href: "#risorse", label: "Risorse" },
   { href: "#tartarughe", label: "Tartarughe" },
+  { href: "#galleria", label: "Foto" },
   { href: "#quiz", label: "Quiz" },
   { href: "#terreni", label: "Terreni" },
 ];
 
+/* Quanto manca alla fine della pagina. È una riga di due pixel: dice al
+   lettore che sta scorrendo qualcosa di finito, il che su una pagina lunga
+   cambia la disposizione d'animo con cui la si legge. */
+function useAvanzamento() {
+  const [quota, setQuota] = useState(0);
+  useEffect(() => {
+    let atteso = false;
+    const misura = () => {
+      atteso = false;
+      const percorribile = document.documentElement.scrollHeight - window.innerHeight;
+      setQuota(percorribile > 0 ? Math.min(1, window.scrollY / percorribile) : 0);
+    };
+    /* Le misure costano: una per fotogramma basta, e il gestore dello scroll
+       deve limitarsi a chiederla. */
+    const onScroll = () => { if (!atteso) { atteso = true; requestAnimationFrame(misura); } };
+    misura();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+  return quota;
+}
+
 function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const quota = useAvanzamento();
 
   return (
     <header className="sticky top-0 z-40 bg-[#FDFDFB]/90 backdrop-blur border-b border-[#E4EDEC]">
@@ -129,6 +160,11 @@ function SiteHeader() {
           <span className={`block h-[2px] w-5 bg-[#0F3440] transition-opacity duration-200 ${open ? "opacity-0" : ""}`} />
           <span className={`block h-[2px] w-5 bg-[#0F3440] transition-transform duration-200 ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
         </button>
+      </div>
+
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[2px] bg-transparent overflow-hidden">
+        <div className="progress h-full w-full bg-gradient-to-r from-[#2E93A6] to-[#D9A441]"
+          style={{ transform: `scaleX(${quota})` }} />
       </div>
 
       {open && (
@@ -202,12 +238,13 @@ export default function App() {
       <SiteHeader />
 
       {/* ===== APERTURA ===== */}
-      <section className="max-w-6xl mx-auto px-5 pt-12 sm:pt-16 pb-12">
+      <section className="relative overflow-hidden max-w-6xl mx-auto px-5 pt-12 sm:pt-16 pb-12">
+        <Fauna kind="tartarughe" />
         {/* Su schermo largo la fotografia sta a destra del testo, alta quanto
             tutta la colonna. Sotto il punto di rottura non scende in fondo,
             dove nessuno arriverebbe scorrendo: si infila fra il titolo e il
             testo, cioè resta dentro l'apertura. */}
-        <div className="grid gap-7 lg:grid-cols-[1.05fr_.95fr] lg:gap-x-12 lg:gap-y-6 lg:items-center">
+        <div className="relative grid gap-7 lg:grid-cols-[1.05fr_.95fr] lg:gap-x-12 lg:gap-y-6 lg:items-center">
           <div className="lg:col-start-1 lg:row-start-1">
             <p className="mono text-xs tracking-[.3em] text-[#2E93A6] uppercase">Isole Ionie · Grecia</p>
             <h1 className="display text-[clamp(34px,4.4vw,56px)] leading-[1.06] mt-3">
@@ -283,6 +320,10 @@ export default function App() {
                       </li>
                     ))}
                   </ul>
+                  {/* Il video sta dentro la sezione a cui appartiene, sotto ai
+                      link: chi arriva qui dal menu «Tartarughe» ci finisce
+                      sopra senza doverlo cercare. */}
+                  {s.id === "tartarughe" && <VideoTartarughe />}
                 </div>
               </div>
             </Reveal>
@@ -290,10 +331,18 @@ export default function App() {
         </div>
       </section>
 
+      {/* ===== GALLERIA ===== */}
+      {/* Si toglie di mezzo da sola finché nessuno ha caricato fotografie. */}
+      <Gallery />
+
       {/* ===== PONTE: DALLA VACANZA ALL'IDEA DI RESTARE ===== */}
       <section className="max-w-4xl mx-auto px-5 pb-4">
         <Reveal>
-          <div className="rounded-3xl border-2 border-[#D9A441]/40 bg-[#FDF8EE] p-8 md:p-10">
+          <div className="relative overflow-hidden rounded-3xl border-2 border-[#D9A441]/40 bg-[#FDF8EE] p-8 md:p-10">
+            {/* Qui le capre, non le tartarughe: è la sezione che porta alla
+                terra, e Capra Ionia prende il nome da loro. */}
+            <Fauna kind="capre" tone="#B8892C" />
+            <div className="relative">
             <p className="mono text-xs tracking-[.3em] text-[#B8892C] uppercase">Succede spesso</p>
             <h3 className="display text-2xl md:text-3xl mt-2 text-[#0F3440]">
               Vieni una settimana, e cominci a guardare i cartelli «πωλείται»
@@ -313,13 +362,15 @@ export default function App() {
               className="inline-flex items-center h-12 px-7 mt-6 rounded-full bg-[#0F3440] text-white hover:bg-[#14495a] transition-colors">
               Guarda i terreni a Cefalonia →
             </a>
+            </div>
           </div>
         </Reveal>
       </section>
 
       {/* ===== QUIZ ===== */}
-      <section id="quiz" className="bg-[#0F3440] py-16 scroll-mt-16">
-        <div className="max-w-xl mx-auto px-5">
+      <section id="quiz" className="relative overflow-hidden bg-[#0F3440] py-16 scroll-mt-16">
+        <Fauna kind="tartarughe" tone="#7FC3C9" />
+        <div className="relative max-w-xl mx-auto px-5">
           <p className="mono text-xs tracking-[.3em] text-[#D9A441] uppercase">Quiz</p>
           <h2 className="display text-3xl md:text-4xl mt-2 text-white">Quanto conosci Cefalonia?</h2>
           <p className="text-[#A9CDCF] mt-2 text-sm">
@@ -334,7 +385,11 @@ export default function App() {
       {/* ===== GRUPPO ===== */}
       <section className="max-w-4xl mx-auto px-5 py-16">
         <Reveal>
-          <div className="rounded-3xl bg-gradient-to-r from-[#135E73] to-[#2E93A6] text-white p-8 md:p-10 flex flex-col md:flex-row items-center gap-6">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#135E73] to-[#2E93A6] text-white p-8 md:p-10">
+            <Fauna kind="tartarughe" tone="#FFFFFF" />
+            {/* Il contenuto va posizionato a sua volta, altrimenti lo strato
+                della fauna — che è posizionato — gli finisce sopra. */}
+            <div className="relative flex flex-col md:flex-row items-center gap-6">
             <Mark size={64} stroke="#FFFFFF" />
             <div className="flex-1 text-center md:text-left">
               <h3 className="display text-2xl">Il gruppo è fatto di fotografie</h3>
@@ -348,6 +403,7 @@ export default function App() {
               <FacebookMark size={20} />
               Entra nel gruppo
             </a>
+            </div>
           </div>
         </Reveal>
       </section>
@@ -355,7 +411,9 @@ export default function App() {
       {/* ===== CAPRA IONIA ===== */}
       <section id="terreni" className="max-w-4xl mx-auto px-5 pb-16 scroll-mt-24">
         <Reveal>
-          <div className="rounded-3xl bg-[#0F3440] text-white p-8 md:p-10">
+          <div className="relative overflow-hidden rounded-3xl bg-[#0F3440] text-white p-8 md:p-10">
+            <Fauna kind="capre" tone="#D9A441" />
+            <div className="relative">
             <p className="mono text-xs tracking-[.3em] text-[#D9A441] uppercase">Il nostro portale</p>
             <h3 className="display text-2xl md:text-3xl mt-2">Terreni edificabili a Cefalonia</h3>
             <p className="text-[#A9CDCF] mt-3 max-w-2xl">
@@ -373,6 +431,7 @@ export default function App() {
                 className="inline-flex items-center h-12 px-7 rounded-full border border-[#2E93A6] text-[#A9CDCF] hover:text-white hover:border-white transition-colors">
                 Le guide gratuite
               </a>
+            </div>
             </div>
           </div>
         </Reveal>

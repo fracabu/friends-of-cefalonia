@@ -23,6 +23,43 @@ Tutto il testo modificabile sta in tre file, senza toccare i componenti:
 Aggiungere un link significa aggiungere una riga a `links.ts`. Aggiungere una
 domanda, un blocco a `quiz.ts`.
 
+## Fotografie e video
+
+| Dove metti il file | Cosa succede |
+|---|---|
+| `public/foto/hero.jpg` | Diventa la fotografia d'apertura |
+| `foto/galleria/*.jpg` | Entrano nella galleria, ridotte e firmate |
+| `public/video/tartarughe.mp4` | Compare nella sezione delle tartarughe |
+
+Le foto della galleria vanno messe **negli originali**, in `foto/galleria/`,
+con qualsiasi nome e alla dimensione che hanno: quelle appena scaricate dal
+telefono vanno bene. A ogni pubblicazione `scripts/build-gallery.mjs` le
+raddrizza secondo l'EXIF, le porta al lato lungo di 1600 px, ne ricava una
+miniatura e stampa su entrambe il marchio in basso a destra. Il risultato
+finisce in `public/foto/galleria/`, che è generato e non va versionato:
+togliendo una foto dagli originali sparisce anche dal sito.
+
+Serve perché le foto dei telefoni pesano 2-5 MB l'una: pubblicate così com'erano
+farebbero una pagina da decine di megabyte, letta quasi sempre da un telefono in
+vacanza. Una foto tipica esce a 70-130 kB.
+
+Le didascalie stanno in `foto/galleria/didascalie.json`, che associa il nome del
+file al testo; servono anche a chi naviga con un lettore di schermo.
+
+Finché una cartella è vuota la pagina non mostra buchi: la galleria sparisce, e
+al posto del video resta una scena animata.
+
+## Animazioni
+
+Tartarughe e capre attraversano lo sfondo di alcune sezioni: tartarughe dove si
+parla di mare, capre dove si parla di terra. Sono in `src/components/Fauna.tsx`,
+disegnate a mano, e si muovono solo con `transform` e `opacity` — le due
+proprietà che il browser affida alla scheda grafica.
+
+Ogni strato si ferma quando esce dallo schermo, e tutto sparisce per chi ha
+chiesto meno movimento nelle impostazioni del sistema. Sono decorazione: nessun
+contenuto dipende da loro.
+
 ## Sviluppo
 
 ```bash

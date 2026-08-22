@@ -1,0 +1,11 @@
+Metti qui il video della sezione tartarughe, chiamato tartarughe.mp4: la
+pagina lo mostra da sola, senza modifiche al codice.
+
+Formato MP4 (H.264), orizzontale, e tenuto corto: dieci o quindici secondi in
+ciclo bastano, e pesano poco. Un video lungo va scaricato per intero da chi
+apre la pagina col telefono in vacanza.
+
+Il filmato parte muto e in ciclo, quindi non serve l'audio.
+
+Finché il file non c'è, al suo posto resta una scena animata. Per usare un
+altro nome, cambiare VIDEO_TARTARUGHE in src/data/site.ts.

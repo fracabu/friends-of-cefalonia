@@ -2,3 +2,8 @@ node_modules/
 dist/
 .parcel-cache/
 *.log
+
+# Generati da scripts/build-gallery.mjs a ogni build: gli originali stanno in
+# foto/galleria/, questi si rifanno da soli e non vanno versionati.
+public/foto/galleria/
+src/data/gallery.ts

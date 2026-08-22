@@ -1,0 +1,18 @@
+Metti qui le fotografie della galleria, con qualsiasi nome e alla dimensione
+che hanno: quelle appena scaricate dal telefono vanno benissimo.
+
+A ogni pubblicazione vengono ridotte, ricompresse e firmate col marchio da
+sole. Gli originali restano qui intatti, e non finiscono online: sul sito va
+solo la versione preparata.
+
+Togliendo un file da questa cartella la foto sparisce anche dal sito.
+
+Per scrivere una didascalia, crea in questa cartella un file didascalie.json:
+
+  {
+    "IMG_20260822_123047.jpg": "Il porto di Argostoli all'alba",
+    "myrtos.jpg": "Myrtos vista dalla strada per Assos"
+  }
+
+La didascalia serve anche a chi naviga con un lettore di schermo: senza, la
+foto resta muta.

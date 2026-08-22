@@ -34,3 +34,16 @@ export const FOUNDER_NAME = "";
  */
 export const HERO_PHOTO = "foto/hero.jpg";
 export const HERO_PHOTO_CREDIT = "";
+
+/**
+ * Video della sezione tartarughe: il file `public/video/tartarughe.mp4`.
+ *
+ * Come per la fotografia, il percorso può stare qui prima che il file
+ * esista: finché manca, la pagina mostra al suo posto una scena animata
+ * invece di un riquadro rotto. Tenerlo corto — dieci, quindici secondi in
+ * ciclo — perché parte da solo e chi guarda spesso è in vacanza, con la
+ * connessione di un'isola.
+ */
+export const VIDEO_TARTARUGHE = "video/tartarughe.mp4";
+export const VIDEO_TARTARUGHE_POSTER = "";
+export const VIDEO_TARTARUGHE_CREDIT = "";
