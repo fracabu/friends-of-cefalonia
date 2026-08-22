@@ -65,11 +65,21 @@ export function ListingForm({
     const saved = await res.json()
 
     // Le fotografie viaggiano dopo: prima deve esistere l'annuncio a cui legarle.
+    // Se il caricamento non riesce l'annuncio resta salvato, ma va detto.
     if (files?.length) {
       const upload = new FormData()
       upload.set('listingId', saved.id)
       for (const file of Array.from(files)) upload.append('file', file)
-      await fetch('/api/upload', { method: 'POST', body: upload })
+      const esito = await fetch('/api/upload', { method: 'POST', body: upload })
+
+      if (!esito.ok) {
+        const body = await esito.json().catch(() => ({}))
+        setErrors({
+          form: `Annuncio salvato, ma le fotografie non sono state caricate. ${body.error ?? ''}`.trim(),
+        })
+        setPending(false)
+        return
+      }
     }
 
     router.push('/dashboard/annunci')

@@ -21,6 +21,18 @@ export async function POST(request: Request) {
   const session = await getSession()
   if (!session) return NextResponse.json({ error: 'Non autenticato' }, { status: 401 })
 
+  // Su Vercel il disco è di sola lettura e sparisce a ogni richiesta: meglio
+  // dirlo chiaro che scrivere file che nessuno ritroverà.
+  if (process.env.VERCEL || process.env.UPLOAD_DRIVER !== 'local') {
+    return NextResponse.json(
+      {
+        error:
+          'Il caricamento delle fotografie su disco funziona solo in sviluppo. In produzione va collegato uno spazio esterno (S3, Cloudflare R2, UploadThing): vedi il README.',
+      },
+      { status: 501 },
+    )
+  }
+
   const form = await request.formData()
   const listingId = String(form.get('listingId') ?? '')
   const files = form.getAll('file').filter((f): f is File => f instanceof File)

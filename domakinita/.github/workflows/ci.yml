@@ -25,6 +25,8 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://immobiliare:immobiliare@localhost:5432/immobiliare?schema=public
+      # In locale e in CI le due connessioni coincidono; su Neon no.
+      DIRECT_URL: postgresql://immobiliare:immobiliare@localhost:5432/immobiliare?schema=public
       AUTH_SECRET: chiave-di-test-lunga-almeno-trentadue-caratteri
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
 
@@ -42,7 +44,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec prisma generate
-      - run: pnpm exec prisma db push
+      # Le migrazioni le applica il build, come in produzione: se una e'
+      # rotta si vede qui e non alla prima pubblicazione.
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm build

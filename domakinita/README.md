@@ -99,9 +99,13 @@ Serve a due cose: far provare la ricerca a chi non ha voglia di installare
 niente, e stare su **GitHub Pages**, che ospita solo file statici e non
 potrebbe mai far girare l'applicazione vera.
 
-Per pubblicarla: *Settings → Pages → Source: Deploy from a branch → `main` /
-`docs`*. Da lì in avanti l'indirizzo è
-`https://<utente>.github.io/domakinita/`, e si aggiorna a ogni push.
+Si pubblica da sé: il workflow `.github/workflows/pages.yml` accende Pages alla
+prima esecuzione (`configure-pages` con `enablement: true`) e ripubblica a ogni
+push che tocchi `docs/`. L'indirizzo è `https://<utente>.github.io/domakinita/`.
+
+Se l'esecuzione fallisce con un errore di permessi, il repository ha le Actions
+limitate: in quel caso vale la strada manuale, *Settings → Pages → Source:
+Deploy from a branch → `main` / `docs`*.
 
 Va rigenerata quando cambiano i dati di esempio: la demo li porta dentro di sé,
 non li legge dal database.
@@ -238,9 +242,63 @@ vanno affrontate prima di mettere online un portale vero.
 8. **Test.** Non ce ne sono. I primi da scrivere sono su `lib/search.ts` e
    `lib/geo.ts`: sono i punti dove un errore si vede meno e costa di più.
 
-## Distribuzione
+## Metterlo online: Neon e Vercel
 
-Il progetto gira su qualunque piattaforma che supporti Next.js in modalità
-server (Vercel, Railway, Fly.io, un container). Servono `DATABASE_URL`,
-`AUTH_SECRET` e `NEXT_PUBLIC_SITE_URL`; `pnpm build` lancia già
-`prisma generate`. Le migrazioni si applicano con `prisma migrate deploy`.
+Il progetto gira su qualunque piattaforma che esegua Next.js in modalità server.
+Quella che segue è la strada più corta — database su **Neon**, applicazione su
+**Vercel** — e sono una decina di minuti in tutto. Entrambi hanno un piano
+gratuito che regge un portale agli inizi.
+
+### 1. Il database
+
+Su [neon.tech](https://neon.tech) crea un progetto (regione **Frankfurt**, la
+più vicina alle Ionie). Nella pagina *Connection Details* trovi due stringhe:
+quella con `-pooler` nel nome e quella senza. Servono entrambe.
+
+### 2. L'applicazione
+
+Su [vercel.com](https://vercel.com) fai *Add New → Project* e scegli questo
+repository. Vercel riconosce Next.js da solo; prima di premere *Deploy*
+aggiungi le variabili d'ambiente:
+
+| Variabile | Valore |
+|---|---|
+| `DATABASE_URL` | la stringa Neon **con** `-pooler` |
+| `DIRECT_URL` | la stringa Neon **senza** `-pooler` |
+| `AUTH_SECRET` | `openssl rand -base64 32` — una chiave nuova, non quella di sviluppo |
+| `NEXT_PUBLIC_SITE_URL` | l'indirizzo del sito, per esempio `https://domakinita.vercel.app` |
+| `NEXT_PUBLIC_SITE_NAME` | `Domakinita` |
+
+Il comando di build è già quello giusto: `prisma generate && prisma migrate
+deploy && next build`. Le tabelle nascono quindi da sole alla prima
+pubblicazione, e `migrate deploy` non fa danni se le trova già.
+
+### 3. I primi annunci
+
+Il database esce vuoto. Per riempirlo con i sessanta annunci di esempio, da
+locale, con le stringhe di Neon al posto di quelle di sviluppo:
+
+```bash
+DATABASE_URL="…-pooler…" DIRECT_URL="…" pnpm db:seed
+```
+
+Poi entra con `agente1@example.gr` e password `password123` — **e cambiala
+subito**, o cancella gli utenti di prova prima di dare l'indirizzo a qualcuno.
+
+### 4. Il dominio
+
+In *Settings → Domains* di Vercel aggiungi il dominio quando ce l'hai, e
+aggiorna `NEXT_PUBLIC_SITE_URL`: da quella variabile dipendono i link canonici,
+la sitemap e i dati strutturati degli annunci.
+
+### Quello che non funziona finché non lo colleghi
+
+**Il caricamento delle fotografie.** Su Vercel il disco è di sola lettura e
+sparisce a ogni richiesta, quindi `/api/upload` risponde 501 con un messaggio
+esplicito invece di fingere. Serve uno spazio esterno — S3, Cloudflare R2,
+UploadThing — e la route va riscritta per firmare l'upload verso quello. Gli
+annunci del seed non ne risentono: le loro immagini sono già remote.
+
+**L'invio delle email.** Le richieste di contatto finiscono nel database e si
+leggono dal pannello, ma nessuno riceve una notifica finché non colleghi un
+servizio transazionale nel punto segnato in `src/app/api/richieste/route.ts`.
