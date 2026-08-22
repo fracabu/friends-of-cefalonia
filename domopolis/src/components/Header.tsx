@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getSession } from '@/lib/auth'
 import { ButtonLink } from '@/components/ui/Button'
+import { Logo } from '@/components/Logo'
 import { SITE_NAME } from '@/lib/seo'
 
 export async function Header() {
@@ -9,9 +10,8 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-ink-100 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-ink-900">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-600 text-white">C</span>
-          {SITE_NAME}
+        <Link href="/" aria-label={`${SITE_NAME}, torna alla home`}>
+          <Logo name={SITE_NAME} />
         </Link>
 
         <nav className="hidden items-center gap-5 text-sm text-ink-600 md:flex">

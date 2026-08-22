@@ -1,8 +1,13 @@
-# Portale immobiliare
+# Domopolis
 
 Portale di annunci immobiliari sul modello dei grandi portali italiani: ricerca
-per comune e zona con filtri e mappa, scheda immobile con galleria e richiesta
-di visita, pannello per le agenzie che pubblicano.
+per comune, zona e **area disegnata a mano sulla mappa**, scheda immobile con
+galleria e richiesta di visita, pannello per le agenzie che pubblicano.
+
+Il nome unisce δόμος, la casa, e πόλις, la città; il marchio è una casa ridotta
+a tre tratti, con la porta a forma di Π. Il nome sta in una sola variabile
+(`NEXT_PUBLIC_SITE_NAME`) e il marchio in `src/components/Logo.tsx`,
+`src/app/icon.svg` e `public/logo.svg`: cambiarlo è questione di minuti.
 
 **Stack**: Next.js 15 (App Router) · TypeScript · PostgreSQL con Prisma ·
 Tailwind CSS · Leaflet · Zod.
@@ -50,7 +55,7 @@ Accessi creati dal seed (password `password123` per tutti):
 | Percorso | Cosa fa |
 |---|---|
 | `/` | barra di ricerca, annunci in evidenza, città, ultimi inserimenti |
-| `/cerca` | risultati con filtri, ordinamento, paginazione e mappa affiancata |
+| `/cerca` | risultati con tutti i filtri, ordinamento, paginazione e mappa con ricerca per area |
 | `/annuncio/[slug]` | scheda: galleria, caratteristiche, mappa, modulo di contatto, simili |
 | `/agenzie`, `/agenzie/[slug]` | elenco agenzie e vetrina con il portafoglio |
 | `/preferiti`, `/ricerche-salvate` | area di chi cerca casa |
@@ -63,6 +68,53 @@ Accessi creati dal seed (password `password123` per tutti):
 Tutte le API stanno sotto `/api`, con nomi in italiano coerenti con le pagine:
 `/api/annunci`, `/api/richieste`, `/api/preferiti`, `/api/ricerche-salvate`,
 `/api/luoghi`, `/api/upload`, `/api/auth/*`.
+
+---
+
+## La ricerca
+
+È la parte che un portale deve fare meglio di tutte, quindi ha la sua sezione.
+
+### Cercare per posizione
+
+Tre modi, tutti scritti nell'URL e quindi condivisibili, salvabili fra le
+ricerche e ricaricabili:
+
+| Come | Parametro | Che cosa fa |
+|---|---|---|
+| **Zona disegnata a mano** | `area=` | si tiene premuto sulla mappa e si traccia il contorno: dentro quella forma, e solo lì |
+| **Raggio da un punto** | `centro=` + `raggio=` | tutti gli immobili entro N km dal centro della vista |
+| **Riquadro visibile** | `bbox=` | «cerca mentre sposto la mappa»: i risultati seguono la vista |
+
+Il tracciato a mano libera produce centinaia di punti quasi uguali:
+`simplifyPolygon` (Ramer-Douglas-Peucker) li riduce a qualche decina, e
+`encodePolyline` li comprime nella codifica polyline di Google. Un poligono da
+quaranta vertici sta in una sessantina di caratteri: l'URL resta un URL.
+
+Il filtro si applica in due passaggi (`src/lib/listings.ts`): prima il
+rettangolo che contiene la forma, che l'indice su `(latitude, longitude)` copre
+bene, poi il punto-dentro-poligono esatto in memoria. Sopra il milione di
+annunci questo secondo passaggio va spostato in PostGIS (`ST_Contains` con
+indice GiST) senza cambiare la firma della funzione.
+
+### Tutti i filtri
+
+- **dove**: comune (anche più d'uno), zona, provincia, regione, testo libero
+- **cosa**: vendita o affitto, dodici tipologie selezionabili insieme
+- **prezzo**: minimo, massimo, trattativa riservata, spese incluse, cauzione massima
+- **consistenza**: superficie, locali da/a, camere, bagni, piano da/a, solo piano terra, solo ultimo piano, anno di costruzione
+- **caratteristiche**: stato, arredamento, riscaldamento, classe energetica minima, tipo di proprietà (intera, nuda, multi), disponibilità
+- **dotazioni**: ascensore, giardino, terrazzo, balcone, box, cantina, piscina, aria condizionata, animali ammessi
+- **annuncio**: solo con fotografie, con planimetria, con tour virtuale, nuova costruzione, aste, pubblicati negli ultimi N giorni, agenzia o privato, codice di riferimento
+- **ordinamento**: rilevanza, più recenti, prezzo crescente e decrescente, superficie
+
+I filtri attivi compaiono come chip richiudibili sopra i risultati. Le aste
+restano fuori dai risultati normali finché non si spuntano: chi cerca casa non
+vuole trovarsi in mezzo una procedura giudiziaria.
+
+«Solo ultimo piano» confronta due colonne fra loro (`floor` con `totalFloors`):
+lo fa `completeWhere` in `lib/listings.ts` con il riferimento di campo di
+Prisma, perché quella condizione ha bisogno del client.
 
 ---
 
@@ -79,6 +131,7 @@ src/
   lib/
     db.ts            client Prisma (singleton)
     search.ts        filtri: URL -> tipi -> query Prisma
+    geo.ts           poligoni, raggi, riquadri: codifica e geometria
     listings.ts      accesso ai dati degli annunci
     auth.ts          sessione, hash password, permessi
     validation.ts    schemi Zod condivisi fra moduli e API
@@ -93,10 +146,10 @@ prisma/
 Tre scelte spiegano quasi tutto il resto.
 
 **I filtri vivono nell'URL.** `src/lib/search.ts` è l'unico posto dove un
-parametro come `prezzoMax` diventa una condizione Prisma. La pagina di ricerca,
-la route `/api/annunci` e le ricerche salvate passano tutte da lì, quindi un
-filtro nuovo si aggiunge in un file solo. Il risultato è anche un URL
-condivisibile e indicizzabile.
+parametro come `prezzoMax` — o un poligono disegnato a mano — diventa una
+condizione Prisma. La pagina di ricerca, la route `/api/annunci` e le ricerche
+salvate passano tutte da lì, quindi un filtro nuovo si aggiunge in un file solo.
+Il risultato è anche un URL condivisibile e indicizzabile.
 
 **Il dominio parla italiano in un posto solo.** Gli enum del database restano in
 inglese, `src/lib/labels.ts` tiene le etichette. Nessun componente scrive
@@ -131,18 +184,22 @@ vanno affrontate prima di mettere online un portale vero.
 2. **Invio email.** In `/api/richieste` c'è il punto segnato dove notificare
    l'agenzia (Resend, Postmark, SES). Servono anche gli avvisi delle ricerche
    salvate, con un job schedulato.
-3. **Geocodifica degli indirizzi.** Oggi latitudine e longitudine si inseriscono
+3. **PostGIS per l'area disegnata.** Il filtro per poligono oggi rifinisce in
+   memoria fino a cinquemila candidati per pagina di risultati. Regge un
+   portale regionale; per uno nazionale serve una colonna `geography` con
+   indice GiST.
+4. **Geocodifica degli indirizzi.** Oggi latitudine e longitudine si inseriscono
    a mano nel modulo. Un servizio di geocoding (Nominatim, Mapbox) le ricava
    dall'indirizzo al salvataggio.
-4. **Antispam sui moduli di contatto.** Un portale senza protezione raccoglie
+5. **Antispam sui moduli di contatto.** Un portale senza protezione raccoglie
    più spam che clienti: rate limit per IP e un captcha invisibile.
-5. **Moderazione.** Il ruolo `ADMIN` esiste nel modello ma non ha ancora le sue
+6. **Moderazione.** Il ruolo `ADMIN` esiste nel modello ma non ha ancora le sue
    pagine: coda di approvazione, segnalazioni, sospensione degli annunci.
-6. **Privacy e termini.** I testi in `/privacy` e `/termini` sono segnaposto. Un
+7. **Privacy e termini.** I testi in `/privacy` e `/termini` sono segnaposto. Un
    sito che raccoglie recapiti ha bisogno di un'informativa scritta sul
    trattamento reale.
-7. **Test.** Non ce ne sono. I primi da scrivere sono su `lib/search.ts`, che è
-   il punto dove un errore si vede meno e costa di più.
+8. **Test.** Non ce ne sono. I primi da scrivere sono su `lib/search.ts` e
+   `lib/geo.ts`: sono i punti dove un errore si vede meno e costa di più.
 
 ## Distribuzione
 

@@ -39,11 +39,26 @@ export function ListingCard({
           </div>
         )}
 
-        {listing.featured ? (
-          <Badge tone="brand" className="absolute left-3 top-3 bg-white/95 backdrop-blur">
-            In evidenza
-          </Badge>
-        ) : null}
+        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+          {listing.featured ? (
+            <Badge tone="brand" className="bg-white/95 backdrop-blur">
+              In evidenza
+            </Badge>
+          ) : null}
+          {listing.isNewBuild ? (
+            <Badge tone="success" className="bg-white/95 backdrop-blur">
+              Nuova costruzione
+            </Badge>
+          ) : null}
+          {listing.isAuction ? (
+            <Badge tone="warning" className="bg-white/95 backdrop-blur">
+              Asta
+            </Badge>
+          ) : null}
+          {listing.virtualTourUrl ? (
+            <Badge className="bg-white/95 backdrop-blur">Tour virtuale</Badge>
+          ) : null}
+        </div>
 
         <div className="absolute right-3 top-3">
           <FavoriteButton listingId={listing.id} initial={isFavorite} />

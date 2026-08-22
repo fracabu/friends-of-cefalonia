@@ -1,10 +1,12 @@
 import type {
+  Availability,
   ContractType,
   EnergyClass,
   FurnishedState,
   HeatingType,
   LeadStatus,
   ListingStatus,
+  OwnershipType,
   PropertyCondition,
   PropertyType,
 } from '@prisma/client'
@@ -95,6 +97,18 @@ export const ENERGY_LABELS: Record<EnergyClass, string> = {
   G: 'G',
   EXEMPT: 'Esente',
   PENDING: 'In attesa',
+}
+
+export const AVAILABILITY_LABELS: Record<Availability, string> = {
+  FREE: 'Libero',
+  OCCUPIED: 'Occupato',
+  RENTED: 'Affittato, a reddito',
+}
+
+export const OWNERSHIP_LABELS: Record<OwnershipType, string> = {
+  FULL: 'Intera proprietà',
+  BARE: 'Nuda proprietà',
+  SHARED: 'Multiproprietà',
 }
 
 export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {

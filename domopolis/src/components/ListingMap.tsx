@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import type { Area, Bounds, LatLng } from '@/lib/geo'
 
 /**
  * Leaflet tocca `window` all'import: va caricato solo nel browser.
@@ -24,16 +25,32 @@ export function ListingMap({
   points,
   center,
   zoom = 12,
+  area = null,
+  drawing = false,
+  onAreaDrawn,
+  onBoundsChange,
   className = 'h-[520px] w-full overflow-hidden rounded-2xl',
 }: {
   points: MapPoint[]
-  center?: [number, number]
+  center?: LatLng
   zoom?: number
+  area?: Area | null
+  drawing?: boolean
+  onAreaDrawn?: (points: LatLng[]) => void
+  onBoundsChange?: (bounds: Bounds) => void
   className?: string
 }) {
   return (
     <div className={className}>
-      <MapCanvas points={points} center={center} zoom={zoom} />
+      <MapCanvas
+        points={points}
+        center={center}
+        zoom={zoom}
+        area={area}
+        drawing={drawing}
+        onAreaDrawn={onAreaDrawn}
+        onBoundsChange={onBoundsChange}
+      />
     </div>
   )
 }

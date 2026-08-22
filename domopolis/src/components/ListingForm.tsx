@@ -6,10 +6,12 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
 import { Checkbox, Field, Input, Select, Textarea } from '@/components/ui/Field'
 import {
+  AVAILABILITY_LABELS,
   CONDITION_LABELS,
   ENERGY_LABELS,
   FURNISHED_LABELS,
   HEATING_LABELS,
+  OWNERSHIP_LABELS,
   PROPERTY_TYPE_LABELS,
 } from '@/lib/labels'
 
@@ -221,6 +223,49 @@ export function ListingForm({
             defaultValue={Array.isArray(listing?.features) ? (listing.features as string[]).join(', ') : ''}
           />
         </Field>
+      </section>
+
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+        <h2 className="font-semibold text-ink-900">Come si presenta sul portale</h2>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field label="Disponibilità" htmlFor="availability">
+            <Select id="availability" name="availability" defaultValue={value('availability')}>
+              <option value="">Non indicata</option>
+              {Object.entries(AVAILABILITY_LABELS).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Tipo di proprietà" htmlFor="ownership">
+            <Select id="ownership" name="ownership" defaultValue={value('ownership') || 'FULL'}>
+              {Object.entries(OWNERSHIP_LABELS).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Tour virtuale o video" htmlFor="virtualTourUrl" hint="Indirizzo del filmato">
+            <Input id="virtualTourUrl" name="virtualTourUrl" defaultValue={value('virtualTourUrl')} />
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          {(
+            [
+              ['isNewBuild', 'Nuova costruzione'],
+              ['isAuction', 'Immobile all’asta'],
+              ['hasFloorPlan', 'Planimetria disponibile'],
+              ['utilitiesIncluded', 'Spese incluse nel canone'],
+              ['petsAllowed', 'Animali ammessi'],
+            ] as const
+          ).map(([name, label]) => (
+            <Checkbox key={name} name={name} label={label} defaultChecked={Boolean(listing?.[name])} />
+          ))}
+        </div>
       </section>
 
       <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">

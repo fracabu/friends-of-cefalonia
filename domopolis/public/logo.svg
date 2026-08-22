@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" width="240" height="48">
+  <title>Domopolis</title>
+  <g fill="none" stroke="#1d63f0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5.6 22.2 18 12.6l12.4 9.6"/>
+    <path d="M8.6 21v14.4h18.8V21"/>
+    <path d="M14.4 35.4v-8h7.2v8"/>
+  </g>
+  <text x="44" y="32" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+        font-size="22" font-weight="600" letter-spacing="-0.4" fill="#0f1421">Domopolis</text>
+</svg>

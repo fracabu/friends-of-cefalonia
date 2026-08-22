@@ -120,6 +120,18 @@ enum HeatingType {
   ABSENT // assente
 }
 
+enum Availability {
+  FREE // libero
+  OCCUPIED // occupato dal proprietario
+  RENTED // gia affittato, a reddito
+}
+
+enum OwnershipType {
+  FULL // intera proprieta
+  BARE // nuda proprieta
+  SHARED // multiproprieta
+}
+
 enum FurnishedState {
   FURNISHED // arredato
   PARTIALLY // parzialmente arredato
@@ -167,6 +179,15 @@ model Listing {
   petsAllowed Boolean?
   features   String[] // etichette libere: "vista mare", "portineria", ...
 
+  // Filtri che sui portali stanno in cima ai risultati.
+  isAuction         Boolean        @default(false) // immobile all'asta
+  isNewBuild        Boolean        @default(false) // nuova costruzione
+  hasFloorPlan      Boolean        @default(false) // planimetria allegata
+  virtualTourUrl    String? // tour virtuale o video
+  utilitiesIncluded Boolean        @default(false) // spese incluse, negli affitti
+  availability      Availability?
+  ownership         OwnershipType  @default(FULL)
+
   // Posizione
   addressLine String?
   hideAddress Boolean @default(false) // mostra solo la zona in scheda
@@ -200,6 +221,7 @@ model Listing {
   @@index([status, city, contract])
   @@index([status, price])
   @@index([status, publishedAt])
+  @@index([status, contract, isAuction])
   @@index([latitude, longitude])
   @@index([ownerId])
   @@index([agencyId])

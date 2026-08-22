@@ -1,5 +1,5 @@
 {
-  "name": "portale-immobiliare",
+  "name": "domopolis",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -38,11 +38,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
+    "@next/eslint-plugin-next": "^15.5.23",
     "@types/bcryptjs": "^2.4.6",
     "@types/leaflet": "^1.9.16",
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.67.0",
+    "@typescript-eslint/parser": "^8.67.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.18.0",
     "eslint-config-next": "^15.5.0",

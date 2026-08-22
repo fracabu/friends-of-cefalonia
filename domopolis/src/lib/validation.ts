@@ -114,6 +114,17 @@ export const listingSchema = z.object({
     'PENDING',
   ] as const),
 
+  isAuction: checkbox,
+  isNewBuild: checkbox,
+  hasFloorPlan: checkbox,
+  utilitiesIncluded: checkbox,
+  virtualTourUrl: text(400),
+  availability: optEnum(['FREE', 'OCCUPIED', 'RENTED'] as const),
+  ownership: z
+    .preprocess((v) => (v === '' || v === undefined ? 'FULL' : v), z.enum(['FULL', 'BARE', 'SHARED']))
+    .default('FULL'),
+  petsAllowed: checkbox,
+
   addressLine: text(160),
   hideAddress: checkbox,
   city: z.string().trim().min(2, 'Indica il comune').max(80),
