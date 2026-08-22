@@ -22,6 +22,7 @@ import sharp from "sharp";
 const ORIGINALI = "foto/galleria";
 const ORIGINALE_PAGINA = "foto";            // hero.jpg, cucina.jpg, ... accanto a galleria/
 const USCITA_PAGINA = "public/foto";
+const CARTA_SOCIALE = "public/social.jpg";   // l'anteprima su Facebook e WhatsApp
 const USCITA = "public/foto/galleria";
 const MANIFESTO = "src/data/gallery.ts";
 const DIDASCALIE = path.join(ORIGINALI, "didascalie.json");
@@ -124,8 +125,41 @@ async function fotoDiPagina() {
   }
 }
 
+/**
+ * La carta da incollare: l'immagine che Facebook, WhatsApp e Telegram mostrano
+ * quando qualcuno condivide il link.
+ *
+ * Questa pagina vive di condivisioni in un gruppo Facebook, quindi l'anteprima
+ * non è un dettaglio: è la prima cosa che si vede, e senza un'immagine esce
+ * un rettangolo vuoto col dominio scritto sopra.
+ *
+ * Le proporzioni sono quelle che le piattaforme ritagliano senza tagliare,
+ * 1200×630, e il marchio ci va stampato perché l'anteprima gira fuori dal sito
+ * proprio come le foto della galleria.
+ */
+async function cartaSociale() {
+  const sorgente = path.join(ORIGINALE_PAGINA, "hero.jpg");
+  if (!existsSync(sorgente)) return;
+  try {
+    const base = await sharp(sorgente)
+      .rotate()
+      .resize({ width: 1200, height: 630, fit: "cover", position: "attention" })
+      .toBuffer();
+    const marchio = await marchioPer(1200);
+    const dim = await sharp(marchio).metadata();
+    await sharp(base)
+      .composite([{ input: marchio, top: 630 - dim.height - 34, left: 1200 - dim.width - 34 }])
+      .jpeg({ quality: 84, progressive: true, mozjpeg: true })
+      .toFile(CARTA_SOCIALE);
+    console.log("  carta sociale: social.jpg (1200×630)");
+  } catch (e) {
+    console.warn(`  carta sociale non generata: ${e.message}`);
+  }
+}
+
 async function main() {
   await fotoDiPagina();
+  await cartaSociale();
 
   if (!existsSync(ORIGINALI)) {
     await scriviManifesto([]);

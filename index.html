@@ -4,8 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Friends of Cefalonia · Guida e risorse per chi viene sull'isola</title>
-    <meta name="description" content="Informazioni pratiche, link utili e risorse per chi visita Cefalonia: come arrivare, le tartarughe di Argostoli, numeri utili e un quiz sull'isola." />
+    <meta name="description" content="Informazioni pratiche, link utili e risorse per chi visita Cefalonia: come arrivare, le tartarughe di Argostoli, cosa mangiare e bere, numeri utili e un quiz sull'isola." />
+    <link rel="canonical" href="https://friendsofcefalonia.it/" />
+    <meta name="theme-color" content="#0F3440" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <!-- Anteprima nelle condivisioni. Sta qui e non nel React perché il crawler
+         di Facebook non esegue JavaScript: legge l'HTML come arriva dal server,
+         e quello che la pagina disegna dopo, per lui, non esiste.
+         Gli indirizzi vanno assoluti: un percorso relativo qui non viene
+         risolto da nessuna delle piattaforme. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Friends of Cefalonia" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:url" content="https://friendsofcefalonia.it/" />
+    <meta property="og:title" content="Friends of Cefalonia · Guida e risorse per chi viene sull'isola" />
+    <meta property="og:description" content="Come arrivare, le tartarughe di Argostoli, cosa mangiare e bere, i numeri utili. Curata dagli amministratori del gruppo, senza link sponsorizzati." />
+    <meta property="og:image" content="https://friendsofcefalonia.it/social.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="La spiaggia di Myrtos vista dall'alto, Cefalonia" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Friends of Cefalonia · Guida e risorse per chi viene sull'isola" />
+    <meta name="twitter:description" content="Come arrivare, le tartarughe di Argostoli, cosa mangiare e bere, i numeri utili." />
+    <meta name="twitter:image" content="https://friendsofcefalonia.it/social.jpg" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://friendsofcefalonia.it/#sito",
+          "url": "https://friendsofcefalonia.it/",
+          "name": "Friends of Cefalonia",
+          "inLanguage": "it",
+          "description": "Informazioni pratiche, link utili e risorse per chi visita Cefalonia."
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://friendsofcefalonia.it/#gruppo",
+          "name": "Friends of Cefalonia",
+          "url": "https://friendsofcefalonia.it/",
+          "logo": "https://friendsofcefalonia.it/favicon.svg",
+          "description": "Gruppo Facebook dedicato all'isola di Cefalonia, curato dai suoi amministratori.",
+          "sameAs": ["https://www.facebook.com/share/g/1T2jFjmEmb/"]
+        },
+        {
+          "@type": "Place",
+          "name": "Cefalonia",
+          "alternateName": ["Kefalonia", "Κεφαλονιά"],
+          "description": "La più grande delle isole Ionie, in Grecia.",
+          "geo": { "@type": "GeoCoordinates", "latitude": 38.2, "longitude": 20.55 }
+        }
+      ]
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>

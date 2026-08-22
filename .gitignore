@@ -7,4 +7,5 @@ dist/
 # foto/galleria/, questi si rifanno da soli e non vanno versionati.
 public/foto/galleria/
 public/foto/*.jpg
+public/social.jpg
 src/data/gallery.ts

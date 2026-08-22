@@ -199,7 +199,7 @@ function HeroVisual() {
     return (
       <figure>
         <div className="relative">
-          <img src={HERO_PHOTO} alt="Cefalonia" loading="eager"
+          <img src={HERO_PHOTO} alt="La spiaggia di Myrtos vista dall'alto, Cefalonia" loading="eager"
             onError={() => setMancante(true)}
             className="w-full h-[240px] sm:h-[340px] lg:h-[460px] object-cover rounded-3xl" />
           {/* Il marchio firma la fotografia dall'angolo in basso. La velatura
