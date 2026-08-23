@@ -89,7 +89,7 @@ export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
               type="button"
               aria-label={d.annuncio.fotoPrecedente}
               onClick={() => setIndex((i) => (i === null ? null : (i - 1 + photos.length) % photos.length))}
-              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-2 text-lg"
+              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-surface/90 px-3 py-2 text-lg"
             >
               &#8249;
             </button>
@@ -97,7 +97,7 @@ export function Gallery({ photos, title }: { photos: Photo[]; title: string }) {
               type="button"
               aria-label={d.annuncio.fotoSuccessiva}
               onClick={() => setIndex((i) => (i === null ? null : (i + 1) % photos.length))}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-2 text-lg"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-surface/90 px-3 py-2 text-lg"
             >
               &#8250;
             </button>

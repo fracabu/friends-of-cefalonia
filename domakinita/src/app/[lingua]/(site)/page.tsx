@@ -56,7 +56,7 @@ export default async function HomePage({ params }: { params: Promise<{ lingua: s
               <Link
                 key={posto.city}
                 href={p(`/cerca?comune=${encodeURIComponent(posto.city)}`)}
-                className="rounded-2xl border border-ink-100 bg-white px-4 py-5 shadow-card transition hover:border-brand-200"
+                className="rounded-2xl border border-ink-100 bg-surface px-4 py-5 shadow-card transition hover:border-brand-200"
               >
                 <p className="font-medium text-ink-900">{posto.city}</p>
                 <p className="mt-1 text-sm text-ink-500">
@@ -76,7 +76,7 @@ export default async function HomePage({ params }: { params: Promise<{ lingua: s
           ))}
         </div>
         {latest.length === 0 ? (
-          <p className="mt-6 rounded-2xl border border-dashed border-ink-200 bg-white px-6 py-12 text-center text-sm text-ink-500">
+          <p className="mt-6 rounded-2xl border border-dashed border-ink-200 bg-surface px-6 py-12 text-center text-sm text-ink-500">
             {d.home.vuoto}
           </p>
         ) : null}

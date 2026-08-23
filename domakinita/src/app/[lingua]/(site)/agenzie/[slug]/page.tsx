@@ -36,7 +36,7 @@ export default async function AgencyPage({ params }: PageProps) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
-      <header className="rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <header className="rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-ink-900">{agency.name}</h1>

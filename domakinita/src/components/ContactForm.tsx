@@ -45,7 +45,7 @@ export function ContactForm({ listingId, agencyName }: { listingId: string; agen
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-ink-100 bg-white p-5 shadow-card">
+    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-5 shadow-card">
       <div>
         <h3 className="font-semibold text-ink-900">{d.contatto.titolo}</h3>
         <p className="mt-1 text-sm text-ink-500">

@@ -24,7 +24,7 @@ export default async function LoginPage({ params }: { params: Promise<{ lingua: 
       <p className="mt-2 text-sm text-ink-500">{d.auth.accediSotto}</p>
 
       <div className="mt-8">
-        <Suspense fallback={<div className="h-96 animate-pulse rounded-2xl bg-white" />}>
+        <Suspense fallback={<div className="h-96 animate-pulse rounded-2xl bg-surface" />}>
           <AuthForm mode="login" />
         </Suspense>
       </div>

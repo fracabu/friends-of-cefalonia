@@ -81,7 +81,7 @@ export function FilterBar({
   const localiAttivi = current.get('localiMin')
 
   return (
-    <div ref={barra} className="relative z-30 border-b border-ink-100 bg-white">
+    <div ref={barra} className="relative z-30 border-b border-ink-100 bg-surface">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-2 px-4 py-3">
         <div className="inline-flex rounded-lg bg-ink-100 p-1">
           {(['vendita', 'affitto'] as const).map((valore) => (
@@ -92,7 +92,7 @@ export function FilterBar({
               aria-pressed={contratto === valore}
               className={cn(
                 'rounded-md px-3.5 py-1.5 text-sm font-medium transition',
-                contratto === valore ? 'bg-white text-ink-900 shadow-sm' : 'text-ink-600',
+                contratto === valore ? 'bg-surface text-ink-900 shadow-sm' : 'text-ink-600',
               )}
             >
               {valore === 'vendita' ? d.nav.vendita : d.nav.affitto}
@@ -273,7 +273,7 @@ function Pillola({
       </button>
 
       {aperta ? (
-        <div className="absolute left-0 top-[calc(100%+6px)] z-40 w-72 rounded-xl border border-ink-100 bg-white p-4 shadow-xl">
+        <div className="absolute left-0 top-[calc(100%+6px)] z-40 w-72 rounded-xl border border-ink-100 bg-surface p-4 shadow-xl">
           {children}
         </div>
       ) : null}

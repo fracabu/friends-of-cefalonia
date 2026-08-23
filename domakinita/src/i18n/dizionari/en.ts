@@ -22,6 +22,12 @@ export const en: Dizionario = {
     home: 'back to home',
     homeBreve: 'Home',
     lingua: 'Language',
+    tema: 'Theme',
+    temaChiaro: 'Light',
+    temaScuro: 'Dark',
+    temaSistema: 'System',
+    menu: 'Menu',
+    chiudiMenu: 'Close menu',
   },
 
   home: {

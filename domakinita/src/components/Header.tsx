@@ -3,6 +3,8 @@ import { getSession } from '@/lib/auth'
 import { ButtonLink } from '@/components/ui/Button'
 import { LogoMark } from '@/components/Logo'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { MobileMenu } from '@/components/MobileMenu'
 import { SITE_NAME } from '@/lib/seo'
 import { getDizionario } from '@/i18n'
 import { percorso, type Lingua } from '@/i18n/config'
@@ -17,6 +19,23 @@ export async function Header({ lingua }: { lingua: Lingua }) {
   const session = await getSession()
   const d = getDizionario(lingua)
   const p = (path: string) => percorso(lingua, path)
+
+  const voci = [
+    { href: p('/cerca?contratto=vendita'), label: d.nav.vendita },
+    { href: p('/cerca?contratto=affitto'), label: d.nav.affitto },
+    { href: p('/agenzie'), label: d.nav.agenzie },
+    { href: p('/valuta-immobile'), label: d.nav.valuta },
+  ]
+
+  const azioni = session
+    ? [
+        { href: p('/preferiti'), label: d.nav.preferiti },
+        { href: p('/dashboard'), label: session.role === 'USER' ? d.nav.areaPersonale : d.nav.pannello },
+      ]
+    : [
+        { href: p('/accedi'), label: d.nav.accedi },
+        { href: p('/registrati?ruolo=agente'), label: d.nav.pubblica },
+      ]
 
   return (
     <header className="sticky top-0 z-40 bg-brand-700 text-white shadow-[0_1px_0_rgba(255,255,255,.12)]">
@@ -34,12 +53,7 @@ export async function Header({ lingua }: { lingua: Lingua }) {
         </Link>
 
         <nav className="hidden items-center gap-1 text-sm md:flex">
-          {[
-            { href: p('/cerca?contratto=vendita'), label: d.nav.vendita },
-            { href: p('/cerca?contratto=affitto'), label: d.nav.affitto },
-            { href: p('/agenzie'), label: d.nav.agenzie },
-            { href: p('/valuta-immobile'), label: d.nav.valuta },
-          ].map((voce) => (
+          {voci.map((voce) => (
             <Link
               key={voce.href}
               href={voce.href}
@@ -51,7 +65,10 @@ export async function Header({ lingua }: { lingua: Lingua }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          <div className="text-brand-50">
+          <div className="hidden text-brand-50 sm:block">
+            <ThemeToggle />
+          </div>
+          <div className="hidden text-brand-50 sm:block">
             <LanguageSwitcher />
           </div>
 
@@ -59,15 +76,15 @@ export async function Header({ lingua }: { lingua: Lingua }) {
             <>
               <Link
                 href={p('/preferiti')}
-                className="hidden rounded-lg px-3 py-2 text-sm font-medium text-brand-50 hover:bg-white/10 sm:block"
+                className="hidden rounded-lg px-3 py-2 text-sm font-medium text-brand-50 hover:bg-white/10 md:block"
               >
                 {d.nav.preferiti}
               </Link>
               <ButtonLink
                 href={p('/dashboard')}
                 size="sm"
-                className="border-white/30 bg-white/10 text-white hover:bg-white/20"
                 variant="secondary"
+                className="hidden border-white/30 bg-white/10 text-white hover:bg-white/20 md:inline-flex"
               >
                 {session.role === 'USER' ? d.nav.areaPersonale : d.nav.pannello}
               </ButtonLink>
@@ -76,19 +93,21 @@ export async function Header({ lingua }: { lingua: Lingua }) {
             <>
               <Link
                 href={p('/accedi')}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-brand-50 hover:bg-white/10"
+                className="hidden rounded-lg px-3 py-2 text-sm font-medium text-brand-50 hover:bg-white/10 md:block"
               >
                 {d.nav.accedi}
               </Link>
               <ButtonLink
                 href={p('/registrati?ruolo=agente')}
                 size="sm"
-                className="bg-white text-brand-800 hover:bg-brand-50"
+                className="hidden border-white bg-white text-brand-800 hover:bg-brand-50 md:inline-flex"
               >
                 {d.nav.pubblica}
               </ButtonLink>
             </>
           )}
+
+          <MobileMenu voci={voci} azioni={azioni} />
         </div>
       </div>
     </header>

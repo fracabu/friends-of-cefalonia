@@ -47,7 +47,7 @@ export function ListingCard({
   ].filter(Boolean) as Array<{ testo: string; classe: string }>
 
   return (
-    <article className="group relative overflow-hidden rounded-xl border border-ink-100 bg-white transition-shadow hover:shadow-lg">
+    <article className="group relative overflow-hidden rounded-xl border border-ink-100 bg-surface transition-shadow hover:shadow-lg">
       <div className="relative aspect-[16/11] bg-ink-100">
         {cover ? (
           <Image

@@ -22,6 +22,12 @@ export const el: Dizionario = {
     home: 'επιστροφή στην αρχική',
     homeBreve: 'Αρχική',
     lingua: 'Γλώσσα',
+    tema: 'Θέμα',
+    temaChiaro: 'Φωτεινό',
+    temaScuro: 'Σκοτεινό',
+    temaSistema: 'Συστήματος',
+    menu: 'Μενού',
+    chiudiMenu: 'Κλείσιμο μενού',
   },
 
   home: {

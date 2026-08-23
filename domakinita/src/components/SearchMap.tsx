@@ -100,7 +100,7 @@ export function SearchMap({
           {drawing ? d.mappa.disegnando : area?.kind === 'polygon' ? d.mappa.ridisegna : d.mappa.disegna}
         </Button>
 
-        <div className="flex items-center gap-1 rounded-xl border border-ink-200 bg-white px-2 py-1">
+        <div className="flex items-center gap-1 rounded-xl border border-ink-200 bg-surface px-2 py-1">
           <label htmlFor="raggio" className="text-xs text-ink-500">
             {d.mappa.raggio}
           </label>
@@ -121,7 +121,7 @@ export function SearchMap({
           </Button>
         </div>
 
-        <label className="flex items-center gap-2 rounded-xl border border-ink-200 bg-white px-3 py-2 text-sm text-ink-600">
+        <label className="flex items-center gap-2 rounded-xl border border-ink-200 bg-surface px-3 py-2 text-sm text-ink-600">
           <input
             type="checkbox"
             checked={followMap}

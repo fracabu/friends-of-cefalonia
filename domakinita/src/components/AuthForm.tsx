@@ -54,7 +54,7 @@ export function AuthForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
       {mode === 'register' ? (
         <>
           <div className="inline-flex w-full rounded-xl bg-ink-100 p-1">
@@ -71,7 +71,7 @@ export function AuthForm({
                 aria-pressed={role === value}
                 className={
                   role === value
-                    ? 'flex-1 rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-sm'
+                    ? 'flex-1 rounded-lg bg-surface px-3 py-2 text-sm font-medium shadow-sm'
                     : 'flex-1 rounded-lg px-3 py-2 text-sm text-ink-600'
                 }
               >

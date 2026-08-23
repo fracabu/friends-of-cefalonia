@@ -29,7 +29,7 @@ export default async function ValutaPage({ params }: { params: Promise<{ lingua:
 
       <ol className="mt-10 space-y-4">
         {passi.map((passo, indice) => (
-          <li key={passo.titolo} className="flex gap-4 rounded-2xl border border-ink-100 bg-white p-5 shadow-card">
+          <li key={passo.titolo} className="flex gap-4 rounded-2xl border border-ink-100 bg-surface p-5 shadow-card">
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-600 text-sm font-semibold text-white">
               {indice + 1}
             </span>

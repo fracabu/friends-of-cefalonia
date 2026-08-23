@@ -12,11 +12,11 @@ export function SearchControls({ total }: { total: number }) {
   const [aperti, setAperti] = useState(false)
 
   return (
-    <div className="sticky top-16 z-30 bg-white shadow-sm">
+    <div className="sticky top-16 z-30 bg-surface shadow-sm">
       <FilterBar total={total} tuttiAperti={aperti} onApriTutti={() => setAperti((v) => !v)} />
 
       {aperti ? (
-        <div className="border-b border-ink-100 bg-white">
+        <div className="border-b border-ink-100 bg-surface">
           <div className="mx-auto max-w-7xl px-4 py-5">
             <FilterPanel total={total} />
           </div>

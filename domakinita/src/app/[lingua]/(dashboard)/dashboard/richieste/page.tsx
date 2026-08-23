@@ -42,7 +42,7 @@ export default async function LeadsPage({ params }: { params: Promise<{ lingua: 
       ) : (
         <ul className="space-y-3">
           {leads.map((lead) => (
-            <li key={lead.id} className="rounded-2xl border border-ink-100 bg-white p-5 shadow-card">
+            <li key={lead.id} className="rounded-2xl border border-ink-100 bg-surface p-5 shadow-card">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="font-medium text-ink-900">{lead.name}</p>

@@ -38,7 +38,7 @@ export function Footer({ lingua }: { lingua: Lingua }) {
   ]
 
   return (
-    <footer className="mt-20 border-t border-ink-100 bg-white">
+    <footer className="mt-20 border-t border-ink-100 bg-surface">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo name={SITE_NAME} subtitle="αγγελίες ακινήτων" markClassName="h-7 w-7 text-brand-600" />

@@ -43,7 +43,7 @@ export function FavoriteButton({ listingId, initial }: { listingId: string; init
       disabled={pending}
       aria-pressed={active}
       aria-label={active ? d.annuncio.togliPreferiti : d.annuncio.salvaPreferiti}
-      className="relative z-10 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-ink-600 shadow-sm backdrop-blur transition hover:text-red-600 aria-pressed:text-red-600"
+      className="relative z-10 grid h-9 w-9 place-items-center rounded-full bg-surface/95 text-ink-600 shadow-sm backdrop-blur transition hover:text-red-600 aria-pressed:text-red-600"
     >
       <IconaCuore pieno={active} className="h-5 w-5" />
     </button>

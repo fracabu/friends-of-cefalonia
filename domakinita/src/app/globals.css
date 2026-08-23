@@ -3,12 +3,55 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * La scala dei neutri, in chiaro. I nomi restano quelli: ink-50 è il fondo
+   * della pagina, ink-900 il testo più forte. Nel tema scuro gli stessi nomi
+   * puntano a valori ribaltati, e i componenti non se ne accorgono.
+   */
+  :root {
+    --surface: 255 255 255;
+    --surface-2: 246 247 249;
+    --ink-50: 246 247 249;
+    --ink-100: 236 238 242;
+    --ink-200: 213 217 226;
+    --ink-300: 176 184 201;
+    --ink-400: 133 145 169;
+    --ink-500: 102 115 141;
+    --ink-600: 81 92 116;
+    --ink-700: 66 74 94;
+    --ink-800: 58 64 80;
+    --ink-900: 15 20 33;
+    color-scheme: light;
+  }
+
+  .dark {
+    --surface: 20 26 38;
+    --surface-2: 27 35 49;
+    --ink-50: 11 15 23;
+    --ink-100: 35 44 60;
+    --ink-200: 51 64 90;
+    --ink-300: 90 104 130;
+    --ink-400: 137 150 173;
+    --ink-500: 160 172 194;
+    --ink-600: 185 195 214;
+    --ink-700: 205 214 230;
+    --ink-800: 225 231 242;
+    --ink-900: 233 237 246;
+    color-scheme: dark;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
     @apply bg-ink-50 text-ink-900 antialiased;
+  }
+
+  /* Le mappe di OpenStreetMap sono chiare: al buio si smorzano, altrimenti
+     spiccano come una finestra accesa in mezzo alla pagina. */
+  .dark .leaflet-tile-pane {
+    filter: brightness(0.72) contrast(1.05) saturate(0.85);
   }
 
   /* La mappa Leaflet dentro un contenitore arrotondato. */

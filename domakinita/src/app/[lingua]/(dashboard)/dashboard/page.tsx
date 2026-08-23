@@ -47,7 +47,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ ling
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {riquadri.map((riquadro) => (
-          <div key={riquadro.label} className="rounded-2xl border border-ink-100 bg-white p-5 shadow-card">
+          <div key={riquadro.label} className="rounded-2xl border border-ink-100 bg-surface p-5 shadow-card">
             <p className="text-sm text-ink-500">{riquadro.label}</p>
             <p className="mt-2 text-3xl font-semibold text-ink-900">
               {formatNumber(riquadro.value, lingua)}
@@ -56,7 +56,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ ling
         ))}
       </div>
 
-      <section className="rounded-2xl border border-ink-100 bg-white shadow-card">
+      <section className="rounded-2xl border border-ink-100 bg-surface shadow-card">
         <div className="flex items-center justify-between border-b border-ink-100 px-5 py-4">
           <h2 className="font-semibold text-ink-900">{d.dashboard.ultimeRichieste}</h2>
           <Link href={p('/dashboard/richieste')} className="text-sm text-brand-700 hover:underline">

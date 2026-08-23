@@ -72,7 +72,7 @@ export function SearchBar({
   return (
     <form
       onSubmit={submit}
-      className={cn('rounded-2xl bg-white p-3 shadow-card sm:p-4', className)}
+      className={cn('rounded-2xl bg-surface p-3 shadow-card sm:p-4', className)}
     >
       <div className="mb-3 inline-flex rounded-xl bg-ink-100 p-1">
         {(['vendita', 'affitto'] as const).map((value) => (
@@ -83,7 +83,7 @@ export function SearchBar({
             aria-pressed={contract === value}
             className={cn(
               'rounded-lg px-4 py-1.5 text-sm font-medium transition',
-              contract === value ? 'bg-white text-ink-900 shadow-sm' : 'text-ink-600',
+              contract === value ? 'bg-surface text-ink-900 shadow-sm' : 'text-ink-600',
             )}
           >
             {value === 'vendita' ? d.nav.vendita : d.nav.affitto}
@@ -110,7 +110,7 @@ export function SearchBar({
           />
 
           {open && suggestions.length > 0 ? (
-            <ul className="absolute z-30 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-ink-100 bg-white py-1 shadow-lg">
+            <ul className="absolute z-30 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-ink-100 bg-surface py-1 shadow-lg">
               {suggestions.map((s) => (
                 <li key={s.slug}>
                   <button

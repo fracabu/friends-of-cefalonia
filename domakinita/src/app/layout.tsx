@@ -19,7 +19,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const lingua = linguaSicura((await headers()).get('x-lingua'))
 
   return (
-    <html lang={CODICI_HTML[lingua]}>
+    <html lang={CODICI_HTML[lingua]} suppressHydrationWarning>
+      <head>
+        {/*
+          Il tema si applica prima che il browser disegni: leggerlo in un
+          effetto vorrebbe dire mostrare la pagina chiara per un istante e poi
+          scurirla, ed è lo sfarfallio che si nota sempre.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('tema');var s=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='scuro'||(!t&&s))document.documentElement.classList.add('dark')}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-screen">{children}</body>
     </html>
   )

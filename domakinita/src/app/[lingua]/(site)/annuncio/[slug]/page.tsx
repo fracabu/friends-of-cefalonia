@@ -159,7 +159,7 @@ export default async function ListingPage({ params }: PageProps) {
           <p className="mt-5 text-[32px] font-bold leading-none tracking-tight text-ink-900">{price}</p>
 
           {/* La riga che si guarda per prima: metri quadri, locali, bagni. */}
-          <div className="mt-5 flex flex-wrap gap-6 rounded-xl border border-ink-100 bg-white px-5 py-4">
+          <div className="mt-5 flex flex-wrap gap-6 rounded-xl border border-ink-100 bg-surface px-5 py-4">
             <span className="flex items-center gap-2 text-ink-800">
               <IconaSuperficie className="h-5 w-5 text-ink-400" />
               {formatSurface(listing.surface, lingua)}
@@ -254,7 +254,7 @@ export default async function ListingPage({ params }: PageProps) {
 
         <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
           {listing.agency ? (
-            <div className="rounded-2xl border border-ink-100 bg-white p-5 shadow-card">
+            <div className="rounded-2xl border border-ink-100 bg-surface p-5 shadow-card">
               <p className="text-sm text-ink-500">{d.annuncio.annuncioDi}</p>
               <Link
                 href={percorso(lingua, `/agenzie/${listing.agency.slug}`)}

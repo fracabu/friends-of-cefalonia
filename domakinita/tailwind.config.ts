@@ -1,10 +1,21 @@
 import type { Config } from 'tailwindcss'
 
+/**
+ * I colori neutri passano da variabili CSS, non da valori fissi: è così che
+ * il tema scuro può ribaltare la scala senza toccare una sola classe nei
+ * componenti. `ink-50` resta «il fondo della pagina» e `ink-900` «il testo
+ * più forte» in entrambi i temi — cambia solo che cosa vogliono dire.
+ */
+const inchiostro = (numero: number) => `rgb(var(--ink-${numero}) / <alpha-value>)`
+
 const config: Config = {
   content: ['./src/**/*.{ts,tsx,mdx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        surface: 'rgb(var(--surface) / <alpha-value>)',
+        'surface-2': 'rgb(var(--surface-2) / <alpha-value>)',
         brand: {
           50: '#eef6ff',
           100: '#d9ebff',
@@ -19,16 +30,16 @@ const config: Config = {
           950: '#0b2a63',
         },
         ink: {
-          50: '#f6f7f9',
-          100: '#eceef2',
-          200: '#d5d9e2',
-          300: '#b0b8c9',
-          400: '#8591a9',
-          500: '#66738d',
-          600: '#515c74',
-          700: '#424a5e',
-          800: '#3a4050',
-          900: '#0f1421',
+          50: inchiostro(50),
+          100: inchiostro(100),
+          200: inchiostro(200),
+          300: inchiostro(300),
+          400: inchiostro(400),
+          500: inchiostro(500),
+          600: inchiostro(600),
+          700: inchiostro(700),
+          800: inchiostro(800),
+          900: inchiostro(900),
         },
       },
       fontFamily: {

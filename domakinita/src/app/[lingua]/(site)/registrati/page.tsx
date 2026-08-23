@@ -35,7 +35,7 @@ export default async function RegisterPage({
       </p>
 
       <div className="mt-8">
-        <Suspense fallback={<div className="h-96 animate-pulse rounded-2xl bg-white" />}>
+        <Suspense fallback={<div className="h-96 animate-pulse rounded-2xl bg-surface" />}>
           <AuthForm mode="register" defaultRole={agente ? 'AGENT' : 'USER'} />
         </Suspense>
       </div>

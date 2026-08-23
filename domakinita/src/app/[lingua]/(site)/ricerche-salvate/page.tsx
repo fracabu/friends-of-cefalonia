@@ -39,7 +39,7 @@ export default async function SavedSearchesPage({
           />
         </div>
       ) : (
-        <ul className="mt-8 divide-y divide-ink-100 rounded-2xl border border-ink-100 bg-white">
+        <ul className="mt-8 divide-y divide-ink-100 rounded-2xl border border-ink-100 bg-surface">
           {searches.map((search) => (
             <li key={search.id} className="flex flex-wrap items-center justify-between gap-3 p-5">
               <div>

@@ -24,6 +24,12 @@ export const it = {
     home: 'torna alla home',
     homeBreve: 'Home',
     lingua: 'Lingua',
+    tema: 'Tema',
+    temaChiaro: 'Chiaro',
+    temaScuro: 'Scuro',
+    temaSistema: 'Sistema',
+    menu: 'Menù',
+    chiudiMenu: 'Chiudi il menù',
   },
 
   home: {

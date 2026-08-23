@@ -37,7 +37,7 @@ export default async function AgenciesPage({ params }: { params: Promise<{ lingu
             <Link
               key={agency.id}
               href={percorso(lingua, `/agenzie/${agency.slug}`)}
-              className="rounded-2xl border border-ink-100 bg-white p-5 shadow-card transition hover:border-brand-200"
+              className="rounded-2xl border border-ink-100 bg-surface p-5 shadow-card transition hover:border-brand-200"
             >
               <p className="font-medium text-ink-900">{agency.name}</p>
               <p className="mt-1 text-sm text-ink-500">

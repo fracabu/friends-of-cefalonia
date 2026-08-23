@@ -48,7 +48,7 @@ export default async function MyListingsPage({ params }: { params: Promise<{ lin
           action={<ButtonLink href={p('/dashboard/annunci/nuovo')}>{d.dashboard.creaAnnuncio}</ButtonLink>}
         />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-ink-100 bg-white shadow-card">
+        <div className="overflow-x-auto rounded-2xl border border-ink-100 bg-surface shadow-card">
           <table className="w-full min-w-[720px] text-sm">
             <thead className="border-b border-ink-100 text-left text-ink-500">
               <tr>

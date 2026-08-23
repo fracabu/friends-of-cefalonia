@@ -149,7 +149,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
 
   return (
     <>
-      <Suspense fallback={<div className="h-16 bg-white" />}>
+      <Suspense fallback={<div className="h-16 bg-surface" />}>
         <SearchControls total={results.total} />
       </Suspense>
 
@@ -182,7 +182,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
           <SearchLayout
             results={listaRisultati}
             map={
-              <Suspense fallback={<div className="h-[520px] animate-pulse rounded-xl bg-white" />}>
+              <Suspense fallback={<div className="h-[520px] animate-pulse rounded-xl bg-surface" />}>
                 <SearchMap points={mapPoints} area={area} />
               </Suspense>
             }

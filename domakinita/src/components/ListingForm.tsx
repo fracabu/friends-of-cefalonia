@@ -108,7 +108,7 @@ export function ListingForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-8">
-      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <h2 className="font-semibold text-ink-900">{d.form.sezAnnuncio}</h2>
 
         <Field label={d.form.titolo} htmlFor="title" error={errors.title} hint={d.form.titoloNota}>
@@ -150,7 +150,7 @@ export function ListingForm({
         </div>
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <h2 className="font-semibold text-ink-900">{d.form.sezPrezzo}</h2>
 
         <div className="grid gap-4 sm:grid-cols-4">
@@ -183,7 +183,7 @@ export function ListingForm({
         <Checkbox name="priceOnRequest" label={d.form.riservata} defaultChecked={Boolean(listing?.priceOnRequest)} />
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <h2 className="font-semibold text-ink-900">{d.form.sezCaratteristiche}</h2>
 
         <div className="grid gap-4 sm:grid-cols-4">
@@ -255,7 +255,7 @@ export function ListingForm({
         </Field>
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <h2 className="font-semibold text-ink-900">{d.form.sezPortale}</h2>
 
         <div className="grid gap-4 sm:grid-cols-3">
@@ -298,7 +298,7 @@ export function ListingForm({
         </div>
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <h2 className="font-semibold text-ink-900">{d.form.sezDove}</h2>
 
         <div className="grid gap-4 sm:grid-cols-3">
@@ -335,7 +335,7 @@ export function ListingForm({
         />
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <h2 className="font-semibold text-ink-900">{d.form.sezTraduzioni}</h2>
         <p className="text-sm text-ink-500">{d.form.traduzioniNota}</p>
 
@@ -356,7 +356,7 @@ export function ListingForm({
         ))}
       </section>
 
-      <section className="space-y-4 rounded-2xl border border-ink-100 bg-white p-6 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-ink-100 bg-surface p-6 shadow-card">
         <h2 className="font-semibold text-ink-900">{d.form.sezFoto}</h2>
 
         {images.length ? (
