@@ -1,5 +1,10 @@
 /** Riferimenti esterni del progetto, in un posto solo. */
 export const FACEBOOK_URL = "https://www.facebook.com/share/g/1T2jFjmEmb/";
+/**
+ * Portale immobiliare, ancora in costruzione: non è pubblicato e dal sito non
+ * ci sono link che ci portino. L'indirizzo resta qui perché il giorno in cui
+ * apre basta rimetterlo nei pulsanti della sezione «Terreni».
+ */
 export const CAPRA_IONIA_URL = "https://fracabu.github.io/capra-ionia/";
 /**
  * Iscritti al gruppo.

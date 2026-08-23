@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { QUESTIONS } from "@/data/quiz";
-import { CAPRA_IONIA_URL } from "@/data/site";
 
 export default function Quiz() {
   const [i, setI] = useState(0);
@@ -43,16 +42,18 @@ export default function Quiz() {
         </button>
 
         {/* L'ultima domanda parlava di codice fiscale greco: qui il rimando
-            arriva come risposta a una curiosità appena accesa, non come stacco. */}
+            arriva come risposta a una curiosità appena accesa, non come stacco.
+            Finché il portale è in costruzione il rimando resta interno: manda
+            alla sezione che racconta a che punto siamo, non a un sito chiuso. */}
         <div className="mt-8 pt-6 border-t border-[#E4EDEC] text-left">
           <p className="text-sm text-[#4A6B75]">
             L&apos;ultima domanda ti ha incuriosito? L&apos;AFM è il primo passo per comprare
-            in Grecia, e ne abbiamo scritto una guida gratuita insieme ad altre sei —
+            in Grecia: stiamo scrivendo una guida gratuita su questo e su altri sei passaggi —
             permesso edilizio, costi e tasse, procura per comprare da remoto.
           </p>
-          <a href={`${CAPRA_IONIA_URL}#/guide`} target="_blank" rel="noreferrer"
+          <a href="#terreni"
             className="inline-flex items-center mt-3 mono text-sm text-[#135E73] hover:text-[#0F3440]">
-            Le guide gratuite su Capra Ionia →
+            A che punto siamo ↓
           </a>
         </div>
       </div>

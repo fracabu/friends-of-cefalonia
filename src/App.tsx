@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { SECTIONS } from "@/data/links";
-import { FACEBOOK_URL, CAPRA_IONIA_URL, GROUP_MEMBERS, GROUP_MEMBERS_PREFIX, FOUNDER_YEARS, FOUNDER_NAME,
+import { FACEBOOK_URL, GROUP_MEMBERS, GROUP_MEMBERS_PREFIX, FOUNDER_YEARS, FOUNDER_NAME,
          HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
 import Quiz from "@/components/Quiz";
 import Fauna from "@/components/Fauna";
@@ -365,13 +365,13 @@ export default function App() {
               50.000 €. Il difficile non è il prezzo: è la burocrazia greca.
             </p>
             <p className="text-[#4A6B75] mt-3 max-w-2xl">
-              Per quello abbiamo fatto <b>Capra Ionia</b>: annunci ordinati per €/m², una mappa
-              dell&apos;isola, e sette guide gratuite che spiegano in italiano codice fiscale,
-              permesso edilizio, costi e tasse.
+              Per quello stiamo mettendo in piedi un portale dedicato: annunci ordinati per €/m²,
+              una mappa dell&apos;isola e guide in italiano sulla burocrazia greca. Non è ancora
+              online — ci stiamo lavorando.
             </p>
-            <a href={CAPRA_IONIA_URL} target="_blank" rel="noreferrer"
+            <a href="#terreni"
               className="inline-flex items-center h-12 px-7 mt-6 rounded-full bg-[#0F3440] text-white hover:bg-[#14495a] transition-colors">
-              Guarda i terreni a Cefalonia →
+              Che cosa stiamo preparando ↓
             </a>
             </div>
           </div>
@@ -419,29 +419,38 @@ export default function App() {
         </Reveal>
       </section>
 
-      {/* ===== CAPRA IONIA ===== */}
+      {/* ===== IL PORTALE, ANCORA IN CANTIERE ===== */}
+      {/* Finché il portale non è pubblicato non ci sono link che ci portino:
+          chi arriva qui deve capire che si sta lavorando, non trovare una
+          porta chiusa. Quando sarà online, qui tornano i pulsanti. */}
       <section id="terreni" className="max-w-4xl mx-auto px-5 pb-16 scroll-mt-24">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl bg-[#0F3440] text-white p-8 md:p-10">
             <Fauna kind="capre" tone="#D9A441" />
             <div className="relative">
-            <p className="mono text-xs tracking-[.3em] text-[#D9A441] uppercase">Il nostro portale</p>
-            <h3 className="display text-2xl md:text-3xl mt-2">Terreni edificabili a Cefalonia</h3>
+            <p className="mono text-xs tracking-[.3em] text-[#D9A441] uppercase">In costruzione</p>
+            <h3 className="display text-2xl md:text-3xl mt-2">
+              Opportunità immobiliari: stiamo costruendo il portale
+            </h3>
             <p className="text-[#A9CDCF] mt-3 max-w-2xl">
-              Selezioniamo terreni fra i 23.000 e i 45.000 €, li ordiniamo per prezzo al metro
-              quadro — il modo più onesto di confrontarli — e diciamo apertamente quali scartare
-              e perché. Le guide sulla burocrazia sono gratuite e non chiedono nulla in cambio
-              se non un indirizzo email.
+              Terreni edificabili, case e appartamenti a Cefalonia, raccolti in un posto solo e
+              ordinati per prezzo al metro quadro — il modo più onesto di confrontarli. Accanto
+              agli annunci stiamo scrivendo le guide sulla burocrazia greca in italiano: codice
+              fiscale, permesso edilizio, costi, tasse, procura per comprare da remoto.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href={CAPRA_IONIA_URL} target="_blank" rel="noreferrer"
-                className="inline-flex items-center h-12 px-7 rounded-full bg-white text-[#0F3440] hover:bg-[#EFF5F4] font-semibold transition-colors">
-                Vai a Capra Ionia →
-              </a>
-              <a href={`${CAPRA_IONIA_URL}#/guide`} target="_blank" rel="noreferrer"
-                className="inline-flex items-center h-12 px-7 rounded-full border border-[#2E93A6] text-[#A9CDCF] hover:text-white hover:border-white transition-colors">
-                Le guide gratuite
-              </a>
+            <p className="text-[#A9CDCF] mt-3 max-w-2xl">
+              Ci stiamo lavorando anche come applicazione, per seguire le ricerche dal telefono.
+              Al momento è un cantiere: preferiamo aprirlo quando gli annunci saranno verificati
+              uno per uno, piuttosto che pubblicare una vetrina a metà.
+            </p>
+            <div className="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
+              <span className="inline-flex items-center gap-2.5 h-11 px-5 rounded-full border border-dashed border-[#D9A441]/70 text-[#D9A441] mono text-xs tracking-[.2em] uppercase self-start">
+                <span className="w-2 h-2 rounded-full bg-[#D9A441] animate-pulse" aria-hidden="true" />
+                Lavori in corso
+              </span>
+              <p className="text-sm text-[#7FA6B0]">
+                Nessuna data promessa: quando apre lo diciamo qui e nel gruppo.
+              </p>
             </div>
             </div>
           </div>
