@@ -321,8 +321,17 @@ prima pubblicazione, e `migrate deploy` non fa danni se le trova già.
 Le variabili vanno abilitate per **Production, Preview e Development**, e il
 valore si incolla nudo, senza virgolette intorno: una variabile definita ma
 vuota è la causa più comune del primo build fallito. Se ne manca una, il build
-si ferma subito dicendo quale e dove prenderne il valore, invece di lasciare un
-errore di validazione dello schema in mezzo al registro.
+si ferma subito dicendo quale, dove prenderne il valore, **e che cosa gli è
+arrivato davvero** — l'elenco delle variabili viste, con la lunghezza di
+ciascuna — invece di lasciare un errore di validazione dello schema in mezzo al
+registro.
+
+Se il database è stato collegato con l'**integrazione Neon di Vercel** invece
+che incollando le stringhe a mano, i nomi delle variabili sono altri
+(`POSTGRES_PRISMA_URL`, `DATABASE_URL_UNPOOLED` e compagnia). Non serve
+rinominarle: `scripts/build.mjs` le riconosce e le ricopia dove Prisma le
+cerca. E se la connessione diretta manca del tutto, migra attraverso il pooler:
+va più piano, ma il build parte.
 
 ### 3. I primi annunci
 
