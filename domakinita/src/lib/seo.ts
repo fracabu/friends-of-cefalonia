@@ -1,6 +1,32 @@
 
 export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME ?? 'Domakinita'
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+
+/**
+ * L'indirizzo pubblico del sito, da cui dipendono link canonici, sitemap,
+ * hreflang e dati strutturati.
+ *
+ * Non serve configurarlo su Vercel: la piattaforma pubblica già da sé il
+ * dominio di produzione, e nelle anteprime quello del singolo deploy. La
+ * variabile esplicita resta la prima scelta — serve il giorno che ci sarà un
+ * dominio proprio, che Vercel non può indovinare.
+ *
+ * Queste variabili sono lette solo sul server: URL canonici, robots e sitemap
+ * si generano lì, e nel pacchetto del browser non finiscono.
+ */
+function indirizzoPubblico() {
+  const esplicito = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  if (esplicito) return esplicito.replace(/\/$/, '')
+
+  const produzione = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim()
+  if (produzione) return `https://${produzione}`
+
+  const anteprima = process.env.VERCEL_URL?.trim()
+  if (anteprima) return `https://${anteprima}`
+
+  return 'http://localhost:3000'
+}
+
+export const SITE_URL = indirizzoPubblico()
 
 /** Dati strutturati schema.org per la scheda immobile. */
 export function listingJsonLd(listing: {

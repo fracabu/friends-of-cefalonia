@@ -311,8 +311,11 @@ aggiungi le variabili d'ambiente:
 | `DATABASE_URL` | la stringa Neon **con** `-pooler` |
 | `DIRECT_URL` | la stringa Neon **senza** `-pooler` |
 | `AUTH_SECRET` | `openssl rand -base64 32` — una chiave nuova, non quella di sviluppo |
-| `NEXT_PUBLIC_SITE_URL` | l'indirizzo del sito, per esempio `https://domakinita.vercel.app` |
-| `NEXT_PUBLIC_SITE_NAME` | `Domakinita` |
+| `NEXT_PUBLIC_SITE_URL` | *facoltativa*: su Vercel l'indirizzo si ricava da solo, serve solo con un dominio proprio |
+| `NEXT_PUBLIC_SITE_NAME` | *facoltativa*: senza, vale `Domakinita` |
+
+Quelle davvero obbligatorie sono tre, e sono tre segreti che nessuno può
+indovinare al posto tuo: le due stringhe di Neon e `AUTH_SECRET`.
 
 Il comando di build è già quello giusto: controlla le variabili, genera il
 client, applica le migrazioni e compila. Le tabelle nascono quindi da sole alla
