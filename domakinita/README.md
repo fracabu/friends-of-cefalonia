@@ -296,9 +296,17 @@ gratuito che regge un portale agli inizi.
 
 ### 1. Il database
 
-Su [neon.tech](https://neon.tech) crea un progetto (regione **Frankfurt**, la
-più vicina alle Ionie). Nella pagina *Connection Details* trovi due stringhe:
-quella con `-pooler` nel nome e quella senza. Servono entrambe.
+Due strade.
+
+**Con l'integrazione** (consigliata, e l'unica comoda dal telefono): dal
+progetto su Vercel, *Storage → Create Database → Neon*, regione **Frankfurt**,
+la più vicina alle Ionie. Vercel crea il database e **inietta da sé le
+variabili di connessione**: non c'è niente da incollare. I nomi che usa sono
+altri — `DATABASE_URL_UNPOOLED`, `POSTGRES_PRISMA_URL` e simili — ma il codice
+li riconosce, sia durante il build sia a runtime.
+
+**A mano**: su [neon.tech](https://neon.tech) crea un progetto e copia le due
+stringhe da *Connection Details*, quella con `-pooler` e quella senza.
 
 ### 2. L'applicazione
 
