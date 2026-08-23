@@ -1,13 +1,22 @@
 import { useState } from "react";
-import { EMAIL_CONTATTO, WEB3FORMS_KEY } from "@/data/site";
+import { EMAIL_CONTATTO, MODULO } from "@/data/site";
 
 /* ================= SCRIVICI =================
-   Il modulo manda a Web3Forms, che inoltra tutto su EMAIL_CONTATTO. Il campo
-   «email» del visitatore viene passato come mittente di risposta, così a una
+   Il modulo va al servizio scelto in MODULO, che lo inoltra su EMAIL_CONTATTO.
+   Il campo «email» di chi scrive diventa il mittente di risposta, così a una
    richiesta si risponde premendo «Rispondi» invece di ricopiare l'indirizzo.
 
-   Senza chiave configurata la pagina non mostra un modulo che non spedisce:
-   mostra il pulsante che apre la posta di chi legge. Vedi WEB3FORMS_KEY. */
+   Senza servizio configurato la pagina non mostra un modulo che non spedisce:
+   mostra il pulsante che apre la posta di chi legge. Vedi MODULO. */
+
+/* I due servizi si somigliano abbastanza da stare dietro le stesse tre righe:
+   un indirizzo dove mandare, e per Web3Forms un campo in più nel modulo. Il
+   resto — nomi dei campi, esito, errori — è identico. */
+function recapito(modulo: NonNullable<typeof MODULO>) {
+  return modulo.servizio === "formspree"
+    ? `https://formspree.io/f/${modulo.id}`
+    : "https://api.web3forms.com/submit";
+}
 
 type Esito = "fermo" | "invio" | "fatto" | "errore";
 
@@ -40,12 +49,16 @@ export default function Contatti() {
     const modulo = evento.currentTarget;
     setEsito("invio");
     try {
-      const risposta = await fetch("https://api.web3forms.com/submit", {
+      const risposta = await fetch(recapito(MODULO!), {
         method: "POST",
+        headers: { Accept: "application/json" },
         body: new FormData(modulo),
       });
-      const dati = await risposta.json();
-      if (!dati.success) throw new Error(dati.message ?? "invio rifiutato");
+      /* Formspree dice se ha accettato con il codice HTTP, Web3Forms con un
+         campo dentro la risposta: perché sia andata bene devono valere
+         entrambe. */
+      const dati = await risposta.json().catch(() => ({}));
+      if (!risposta.ok || dati.success === false) throw new Error("invio rifiutato");
       setEsito("fatto");
       modulo.reset();
     } catch {
@@ -67,14 +80,17 @@ export default function Contatti() {
       </p>
 
       <div className="mt-8 rounded-3xl border border-[#E4EDEC] bg-white p-6 md:p-8">
-        {WEB3FORMS_KEY ? (
+        {MODULO ? (
           <form onSubmit={invia} className="grid gap-4">
-            <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
-            <input type="hidden" name="subject" value="Richiesta dal sito Friends of Cefalonia" />
-            <input type="hidden" name="from_name" value="Friends of Cefalonia" />
+            <input type="hidden" name="_subject" value="Richiesta dal sito Friends of Cefalonia" />
+            {MODULO.servizio === "web3forms" && (
+              <input type="hidden" name="access_key" value={MODULO.chiave} />
+            )}
             {/* Trappola per i robot: chi compila anche questo campo, che agli
-                occhi non esiste, viene scartato dal servizio. */}
+                occhi non esiste, viene scartato. I due servizi si aspettano
+                nomi diversi, e tenerli tutti e due non costa nulla. */}
             <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
+            <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
 
             <div className="grid sm:grid-cols-2 gap-4">
               <label className="grid gap-1.5">

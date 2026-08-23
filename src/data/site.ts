@@ -70,28 +70,35 @@ export const FOTO_TARTARUGHE_CREDITO = "";
  * Compare nel piè di pagina ed è la destinazione del modulo «Scrivici».
  * Cambiarlo qui basta: non è ripetuto da nessun'altra parte.
  */
-export const EMAIL_CONTATTO = "info@pianzacefalonia.it";
+export const EMAIL_CONTATTO = "info@friendsofcefalonia.it";
 
 /**
- * Chiave del servizio che inoltra il modulo sulla casella qui sopra.
+ * Il servizio che riceve il modulo e lo inoltra su EMAIL_CONTATTO.
  *
  * Il sito è statico — su GitHub Pages non gira codice nostro — quindi da solo
- * non può spedire posta: serve qualcuno che riceva il modulo e lo giri via
- * email. Web3Forms fa questo e basta questo, gratis fino a 250 messaggi al
- * mese, senza account a pagamento e senza mettere pubblicità nelle mail.
+ * non può spedire posta: serve un intermediario. Vanno bene entrambi quelli
+ * qui sotto, cambia solo dove si prende il codice da incollare:
  *
- * Come ottenerla, una volta sola:
- *   1. https://web3forms.com  →  incolla EMAIL_CONTATTO nel campo
- *   2. arriva una mail di conferma con dentro la chiave (access key)
- *   3. incolla la chiave qui sotto e fai il deploy
+ *   Formspree   → formspree.io, «New form». L'indirizzo del modulo finisce in
+ *                 https://formspree.io/f/XXXXXXXX: la parte finale è l'id.
+ *                 Gratis fino a 50 messaggi al mese.
+ *   Web3Forms   → web3forms.com, si incolla la casella e la chiave arriva per
+ *                 email. Gratis fino a 250 messaggi al mese, senza account.
  *
- * La chiave non è un segreto: sta nel codice della pagina, è pensata per
- * stare lì. Serve solo a dire al servizio su quale casella inoltrare, e non
- * dà accesso a nulla. Per questo non ha senso metterla in una variabile
- * d'ambiente.
+ * Con Formspree il primo messaggio va confermato da un link che arriva sulla
+ * casella: finché non lo si apre, gli invii restano in sospeso.
  *
- * Finché resta vuota il modulo non viene mostrato: al suo posto compare il
+ * Né l'id né la chiave sono segreti: stanno nel codice della pagina, è così
+ * per progetto. Dicono soltanto su quale casella inoltrare e non danno
+ * accesso a niente, quindi non ha senso nasconderli in una variabile
+ * d'ambiente — che oltretutto qui non esisterebbe.
+ *
+ * Con `null` il modulo non viene mostrato affatto: al suo posto compare il
  * pulsante che apre la posta del visitatore, così la pagina non pubblica mai
  * un modulo che non spedisce da nessuna parte.
  */
-export const WEB3FORMS_KEY = "";
+export type ServizioModulo =
+  | { servizio: "formspree"; id: string }
+  | { servizio: "web3forms"; chiave: string };
+
+export const MODULO: ServizioModulo | null = null;
