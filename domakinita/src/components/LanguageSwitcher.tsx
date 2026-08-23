@@ -25,7 +25,7 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <label className="flex items-center gap-1.5 text-sm text-ink-600">
+    <label className="flex items-center gap-1.5 text-sm text-current">
       <span className="sr-only">{d.nav.lingua}</span>
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
         <circle cx="12" cy="12" r="9" />
@@ -34,10 +34,11 @@ export function LanguageSwitcher() {
       <select
         value={lingua}
         onChange={(e) => cambia(e.target.value)}
-        className="cursor-pointer rounded-lg border-0 bg-transparent py-1 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-brand-100"
+        className="cursor-pointer rounded-lg border-0 bg-transparent py-1 pr-6 text-sm text-current focus:outline-none focus:ring-2 focus:ring-white/40"
       >
         {LINGUE.map((codice) => (
-          <option key={codice} value={codice}>
+          // Le opzioni le disegna il sistema operativo: vanno scritte scure.
+          <option key={codice} value={codice} className="text-ink-900">
             {NOMI_LINGUA[codice]}
           </option>
         ))}

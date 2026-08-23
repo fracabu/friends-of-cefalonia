@@ -159,7 +159,7 @@ export function SearchMap({
         drawing={drawing}
         onAreaDrawn={onAreaDrawn}
         onBoundsChange={onBoundsChange}
-        className="h-[calc(100vh-14rem)] min-h-[420px] w-full overflow-hidden rounded-2xl"
+        className="h-[calc(100vh-13rem)] min-h-[420px] w-full overflow-hidden rounded-xl border border-ink-100"
       />
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Checkbox, Field, Input, Select } from '@/components/ui/Field'
@@ -73,7 +73,6 @@ export function FilterPanel({ total }: { total: number }) {
   const router = useRouter()
   const params = useSearchParams()
   const { lingua, d } = useI18n()
-  const [open, setOpen] = useState(false)
 
   const current = useMemo(() => new URLSearchParams(params.toString()), [params])
 
@@ -102,49 +101,14 @@ export function FilterPanel({ total }: { total: number }) {
     changes.tipo = tipi.length ? tipi.join(',') : null
 
     apply(changes)
-    setOpen(false)
   }
 
   const selectedTypes = (current.get('tipo') ?? '').split(',').filter(Boolean)
   const contract = current.get('contratto') ?? 'vendita'
-  const activeCount = [...current.keys()].filter(
-    (k) => !['contratto', 'comune', 'ordina', 'pagina'].includes(k),
-  ).length
 
   return (
-    <div className="rounded-2xl border border-ink-100 bg-white shadow-card">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-100 px-4 py-3">
-        <p className="text-sm text-ink-600">
-          <strong className="text-ink-900">{total.toLocaleString(lingua)}</strong> {d.ricerca.corrispondono}
-        </p>
-
-        <div className="flex items-center gap-2">
-          <div className="inline-flex rounded-lg bg-ink-100 p-1">
-            {(['vendita', 'affitto'] as const).map((value) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => apply({ contratto: value })}
-                aria-pressed={contract === value}
-                className={
-                  contract === value
-                    ? 'rounded-md bg-white px-3 py-1 text-sm font-medium capitalize shadow-sm'
-                    : 'rounded-md px-3 py-1 text-sm capitalize text-ink-600'
-                }
-              >
-                {value === 'vendita' ? d.nav.vendita : d.nav.affitto}
-              </button>
-            ))}
-          </div>
-
-          <Button variant="secondary" size="sm" onClick={() => setOpen((v) => !v)}>
-            {open ? d.ricerca.chiudiFiltri : `${d.ricerca.tuttiFiltri}${activeCount ? ` (${activeCount})` : ''}`}
-          </Button>
-        </div>
-      </div>
-
-      {open ? (
-        <form onSubmit={onSubmit} className="space-y-7 px-4 py-5">
+    <div>
+      <form onSubmit={onSubmit} className="space-y-7">
           <fieldset>
             <legend className="mb-2 text-sm font-medium text-ink-700">{d.ricerca.tipologia}</legend>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -377,14 +341,12 @@ export function FilterPanel({ total }: { total: number }) {
                   if (value) keep.set(key, value)
                 }
                 router.push(`/${lingua}/cerca?${keep.toString()}`)
-                setOpen(false)
               }}
             >
               {d.ricerca.azzeraFiltri}
             </Button>
           </div>
-        </form>
-      ) : null}
+      </form>
     </div>
   )
 }

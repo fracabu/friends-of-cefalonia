@@ -1,30 +1,32 @@
-'use client'
-
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { useI18n } from '@/i18n/client'
 
 /** Paginazione con link veri: i motori di ricerca devono poterla percorrere. */
+/**
+ * Componente server: costruisce link veri, che i motori possono percorrere.
+ * Le etichette arrivano dalla pagina, che sa già in che lingua sta.
+ */
 export function Pagination({
   page,
   pageCount,
   buildHref,
+  etichette,
 }: {
   page: number
   pageCount: number
   buildHref: (page: number) => string
+  etichette: { paginazione: string; precedente: string; successiva: string }
 }) {
-  const { d } = useI18n()
   if (pageCount <= 1) return null
 
   const pages = new Set<number>([1, pageCount, page - 1, page, page + 1])
   const visible = [...pages].filter((p) => p >= 1 && p <= pageCount).sort((a, b) => a - b)
 
   return (
-    <nav aria-label={d.ricerca.paginazione} className="flex flex-wrap items-center justify-center gap-1 py-8">
+    <nav aria-label={etichette.paginazione} className="flex flex-wrap items-center justify-center gap-1 py-8">
       {page > 1 ? (
         <Link href={buildHref(page - 1)} rel="prev" className="rounded-lg px-3 py-2 text-sm text-ink-600 hover:bg-ink-100">
-          {d.ricerca.precedente}
+          {etichette.precedente}
         </Link>
       ) : null}
 
@@ -48,7 +50,7 @@ export function Pagination({
 
       {page < pageCount ? (
         <Link href={buildHref(page + 1)} rel="next" className="rounded-lg px-3 py-2 text-sm text-ink-600 hover:bg-ink-100">
-          {d.ricerca.successiva}
+          {etichette.successiva}
         </Link>
       ) : null}
     </nav>

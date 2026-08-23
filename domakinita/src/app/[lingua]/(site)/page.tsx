@@ -19,12 +19,12 @@ export default async function HomePage({ params }: { params: Promise<{ lingua: s
 
   return (
     <>
-      <section className="border-b border-ink-100 bg-gradient-to-b from-brand-50 to-ink-50">
-        <div className="mx-auto max-w-5xl px-4 py-16 text-center sm:py-24">
-          <h1 className="text-3xl font-semibold tracking-tight text-ink-900 sm:text-5xl">
+      <section className="bg-brand-700">
+        <div className="mx-auto max-w-5xl px-4 py-14 text-center sm:py-20">
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
             {d.home.titolo}
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-ink-600">{d.home.sottotitolo}</p>
+          <p className="mx-auto mt-4 max-w-2xl text-brand-100">{d.home.sottotitolo}</p>
           <SearchBar className="mx-auto mt-8 max-w-3xl text-left" />
         </div>
       </section>

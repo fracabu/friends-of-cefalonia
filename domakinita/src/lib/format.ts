@@ -8,6 +8,12 @@ import { CODICI_HTML, LINGUA_PREDEFINITA, type Lingua } from '@/i18n/config'
  * «trattativa riservata», «al mese» — che arrivano dal dizionario.
  */
 
+/*
+ * `useGrouping: 'always'` non è un vezzo tipografico. In italiano i numeri di
+ * quattro cifre si raggruppano o no a seconda della versione di CLDR: Node
+ * scriveva «2590 m²» e il browser «2.590 m²», e React se ne accorgeva a ogni
+ * idratazione. Imponendo il raggruppamento le due parti dicono la stessa cosa.
+ */
 const cacheValuta = new Map<Lingua, Intl.NumberFormat>()
 const cacheNumeri = new Map<Lingua, Intl.NumberFormat>()
 
@@ -18,6 +24,7 @@ function valuta(lingua: Lingua) {
       style: 'currency',
       currency: 'EUR',
       maximumFractionDigits: 0,
+      useGrouping: 'always',
     })
     cacheValuta.set(lingua, f)
   }
@@ -27,7 +34,7 @@ function valuta(lingua: Lingua) {
 function numeri(lingua: Lingua) {
   let f = cacheNumeri.get(lingua)
   if (!f) {
-    f = new Intl.NumberFormat(CODICI_HTML[lingua])
+    f = new Intl.NumberFormat(CODICI_HTML[lingua], { useGrouping: 'always' })
     cacheNumeri.set(lingua, f)
   }
   return f

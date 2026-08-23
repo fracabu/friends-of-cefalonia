@@ -6,6 +6,7 @@ import { Gallery } from '@/components/Gallery'
 import { ListingCard } from '@/components/ListingCard'
 import { ListingMap } from '@/components/ListingMap'
 import { Badge } from '@/components/ui/Badge'
+import { IconaBagni, IconaLocali, IconaPiano, IconaSuperficie } from '@/components/ui/Icons'
 import { FavoriteButton } from '@/components/FavoriteButton'
 import { db } from '@/lib/db'
 import { getSession } from '@/lib/auth'
@@ -116,7 +117,7 @@ export default async function ListingPage({ params }: PageProps) {
 
       <nav aria-label={d.annuncio.percorso} className="mb-4 text-sm text-ink-500">
         <Link href={percorso(lingua, '/')} className="hover:text-ink-900">
-          {d.nav.home}
+          {d.nav.homeBreve}
         </Link>
         <span className="px-1.5">/</span>
         <Link
@@ -145,7 +146,7 @@ export default async function ListingPage({ params }: PageProps) {
                 ) : null}
                 {listing.featured ? <Badge tone="success">{d.annuncio.inEvidenza}</Badge> : null}
               </div>
-              <h1 className="mt-3 text-2xl font-semibold text-ink-900 sm:text-3xl">{testo.title}</h1>
+              <h1 className="mt-3 text-2xl font-semibold text-ink-900 sm:text-[28px]">{testo.title}</h1>
               <p className="mt-2 text-ink-600">
                 {listing.hideAddress || !listing.addressLine
                   ? `${listing.zone ? `${listing.zone}, ` : ''}${listing.city} (${listing.province})`
@@ -155,7 +156,33 @@ export default async function ListingPage({ params }: PageProps) {
             <FavoriteButton listingId={listing.id} initial={isFavorite} />
           </div>
 
-          <p className="mt-6 text-3xl font-semibold text-ink-900">{price}</p>
+          <p className="mt-5 text-[32px] font-bold leading-none tracking-tight text-ink-900">{price}</p>
+
+          {/* La riga che si guarda per prima: metri quadri, locali, bagni. */}
+          <div className="mt-5 flex flex-wrap gap-6 rounded-xl border border-ink-100 bg-white px-5 py-4">
+            <span className="flex items-center gap-2 text-ink-800">
+              <IconaSuperficie className="h-5 w-5 text-ink-400" />
+              {formatSurface(listing.surface, lingua)}
+            </span>
+            {listing.type !== 'LAND' ? (
+              <span className="flex items-center gap-2 text-ink-800">
+                <IconaLocali className="h-5 w-5 text-ink-400" />
+                {listing.rooms} {listing.rooms === 1 ? d.annuncio.locale : d.annuncio.localiPl}
+              </span>
+            ) : null}
+            {listing.bathrooms ? (
+              <span className="flex items-center gap-2 text-ink-800">
+                <IconaBagni className="h-5 w-5 text-ink-400" />
+                {listing.bathrooms} {listing.bathrooms === 1 ? d.annuncio.bagno : d.annuncio.bagniPl}
+              </span>
+            ) : null}
+            {listing.floor != null ? (
+              <span className="flex items-center gap-2 text-ink-800">
+                <IconaPiano className="h-5 w-5 text-ink-400" />
+                {formatFloor(listing.floor, listing.totalFloors, d.annuncio, lingua)}
+              </span>
+            ) : null}
+          </div>
 
           <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-3 border-t border-ink-100 pt-6 sm:grid-cols-3">
             {dettagli

@@ -22,6 +22,7 @@ export const it = {
     areaPersonale: 'Area personale',
     pannello: 'Pannello annunci',
     home: 'torna alla home',
+    homeBreve: 'Home',
     lingua: 'Lingua',
   },
 
@@ -46,6 +47,18 @@ export const it = {
 
   ricerca: {
     cerca: 'Cerca',
+    prezzo: 'Prezzo',
+    superficie: 'Superficie',
+    locali: 'Locali',
+    altriFiltri: 'Altri filtri',
+    applica: 'Applica',
+    da: 'da',
+    a: 'a',
+    qualsiasi: 'Qualsiasi',
+    risultati: 'risultati',
+    vediMappa: 'Mappa',
+    vediElenco: 'Elenco',
+    cercaQui: 'Dove vuoi cercare?',
     placeholder: 'Cerca per località, per esempio Argostoli, Fiskardo',
     localitaEtichetta: 'Località o zona',
     tipologia: 'Tipologia',

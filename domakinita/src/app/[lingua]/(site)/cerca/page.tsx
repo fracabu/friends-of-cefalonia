@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { ActiveFilters } from '@/components/ActiveFilters'
-import { FilterPanel } from '@/components/FilterPanel'
+import { SearchControls } from '@/components/SearchControls'
 import { ListingCard } from '@/components/ListingCard'
 import { Pagination } from '@/components/Pagination'
 import { SaveSearchButton } from '@/components/SaveSearchButton'
@@ -122,7 +122,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
           }
         />
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {results.items.map((listing, i) => (
             <ListingCard
               key={listing.id}
@@ -134,46 +134,61 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
         </div>
       )}
 
-      <Pagination page={results.page} pageCount={results.pageCount} buildHref={hrefFor} />
+      <Pagination
+        page={results.page}
+        pageCount={results.pageCount}
+        buildHref={hrefFor}
+        etichette={{
+          paginazione: d.ricerca.paginazione,
+          precedente: d.ricerca.precedente,
+          successiva: d.ricerca.successiva,
+        }}
+      />
     </div>
   )
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="text-2xl font-semibold text-ink-900">
-        {d.ricerca.titolo} {descrizione || d.ricerca.aCefalonia}
-      </h1>
+    <>
+      <Suspense fallback={<div className="h-16 bg-white" />}>
+        <SearchControls total={results.total} />
+      </Suspense>
 
-      <div className="mt-5 space-y-4">
-        <Suspense fallback={<div className="h-20 animate-pulse rounded-2xl bg-white" />}>
-          <FilterPanel total={results.total} />
-        </Suspense>
-
-        <Suspense fallback={null}>
-          <ActiveFilters chips={activeFilterChips(filters, d, (v) => euro.format(v))} />
-        </Suspense>
-
+      <div className="mx-auto max-w-7xl px-4 py-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-lg font-semibold text-ink-900">
+            {d.ricerca.titolo} {descrizione || d.ricerca.aCefalonia}
+            <span className="ml-2 font-normal text-ink-500">
+              · {results.total.toLocaleString(lingua)} {d.ricerca.risultati}
+            </span>
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Suspense fallback={null}>
+              <SaveSearchButton suggestedName={descrizione || d.ricerca.titolo} />
+            </Suspense>
+            <Suspense fallback={null}>
+              <SortSelect />
+            </Suspense>
+          </div>
+        </div>
+
+        <div className="mt-3">
           <Suspense fallback={null}>
-            <SaveSearchButton suggestedName={descrizione || d.ricerca.titolo} />
-          </Suspense>
-          <Suspense fallback={null}>
-            <SortSelect />
+            <ActiveFilters chips={activeFilterChips(filters, d, (v) => euro.format(v))} />
           </Suspense>
         </div>
 
-        <SearchLayout
-          results={listaRisultati}
-          map={
-            <Suspense fallback={<div className="h-[520px] animate-pulse rounded-2xl bg-white" />}>
-              <div>
-                <h2 className="mb-2 text-base font-semibold text-ink-900">{d.mappa.titolo}</h2>
+        <div className="mt-5">
+          <SearchLayout
+            results={listaRisultati}
+            map={
+              <Suspense fallback={<div className="h-[520px] animate-pulse rounded-xl bg-white" />}>
                 <SearchMap points={mapPoints} area={area} />
-              </div>
-            </Suspense>
-          }
-        />
+              </Suspense>
+            }
+          />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

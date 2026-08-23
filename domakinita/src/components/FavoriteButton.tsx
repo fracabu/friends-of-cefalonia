@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useI18n } from '@/i18n/client'
+import { IconaCuore } from '@/components/ui/Icons'
 
 /**
  * Ottimistico: il cuore cambia subito, la chiamata segue. Se l'utente non è
@@ -42,11 +43,9 @@ export function FavoriteButton({ listingId, initial }: { listingId: string; init
       disabled={pending}
       aria-pressed={active}
       aria-label={active ? d.annuncio.togliPreferiti : d.annuncio.salvaPreferiti}
-      className="relative z-10 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-ink-600 shadow-sm backdrop-blur transition hover:text-red-600"
+      className="relative z-10 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-ink-600 shadow-sm backdrop-blur transition hover:text-red-600 aria-pressed:text-red-600"
     >
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8">
-        <path d="M12 20.5 4.6 13.4a4.6 4.6 0 0 1 6.5-6.5l.9.9.9-.9a4.6 4.6 0 1 1 6.5 6.5Z" strokeLinejoin="round" />
-      </svg>
+      <IconaCuore pieno={active} className="h-5 w-5" />
     </button>
   )
 }

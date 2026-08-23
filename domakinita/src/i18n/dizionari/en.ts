@@ -20,6 +20,7 @@ export const en: Dizionario = {
     areaPersonale: 'My account',
     pannello: 'Listings panel',
     home: 'back to home',
+    homeBreve: 'Home',
     lingua: 'Language',
   },
 
@@ -44,6 +45,18 @@ export const en: Dizionario = {
 
   ricerca: {
     cerca: 'Search',
+    prezzo: 'Price',
+    superficie: 'Size',
+    locali: 'Rooms',
+    altriFiltri: 'More filters',
+    applica: 'Apply',
+    da: 'from',
+    a: 'to',
+    qualsiasi: 'Any',
+    risultati: 'results',
+    vediMappa: 'Map',
+    vediElenco: 'List',
+    cercaQui: 'Where do you want to search?',
     placeholder: 'Search by village, for example Argostoli, Fiskardo',
     localitaEtichetta: 'Village or area',
     tipologia: 'Property type',

@@ -20,6 +20,7 @@ export const el: Dizionario = {
     areaPersonale: 'Ο λογαριασμός μου',
     pannello: 'Πίνακας αγγελιών',
     home: 'επιστροφή στην αρχική',
+    homeBreve: 'Αρχική',
     lingua: 'Γλώσσα',
   },
 
@@ -44,6 +45,18 @@ export const el: Dizionario = {
 
   ricerca: {
     cerca: 'Αναζήτηση',
+    prezzo: 'Τιμή',
+    superficie: 'Εμβαδόν',
+    locali: 'Δωμάτια',
+    altriFiltri: 'Περισσότερα φίλτρα',
+    applica: 'Εφαρμογή',
+    da: 'από',
+    a: 'έως',
+    qualsiasi: 'Οποιοδήποτε',
+    risultati: 'αποτελέσματα',
+    vediMappa: 'Χάρτης',
+    vediElenco: 'Λίστα',
+    cercaQui: 'Πού θέλετε να ψάξετε;',
     placeholder: 'Αναζήτηση ανά χωριό, π.χ. Αργοστόλι, Φισκάρδο',
     localitaEtichetta: 'Χωριό ή περιοχή',
     tipologia: 'Τύπος ακινήτου',
