@@ -63,3 +63,42 @@ export const FOTO_VINI = "foto/vini.jpg";
 export const FOTO_TARTARUGHE = "foto/tartarughe.jpg";
 export const FOTO_VINI_CREDITO = "";
 export const FOTO_TARTARUGHE_CREDITO = "";
+
+/**
+ * Casella su cui arrivano le richieste di chi ci scrive dal sito.
+ *
+ * Compare nel piè di pagina ed è la destinazione del modulo «Scrivici».
+ * Cambiarlo qui basta: non è ripetuto da nessun'altra parte.
+ */
+export const EMAIL_CONTATTO = "info@friendsofcefalonia.it";
+
+/**
+ * Il servizio che riceve il modulo e lo inoltra su EMAIL_CONTATTO.
+ *
+ * Il sito è statico — su GitHub Pages non gira codice nostro — quindi da solo
+ * non può spedire posta: serve un intermediario. Vanno bene entrambi quelli
+ * qui sotto, cambia solo dove si prende il codice da incollare:
+ *
+ *   Formspree   → formspree.io, «New form». L'indirizzo del modulo finisce in
+ *                 https://formspree.io/f/XXXXXXXX: la parte finale è l'id.
+ *                 Gratis fino a 50 messaggi al mese.
+ *   Web3Forms   → web3forms.com, si incolla la casella e la chiave arriva per
+ *                 email. Gratis fino a 250 messaggi al mese, senza account.
+ *
+ * Con Formspree il primo messaggio va confermato da un link che arriva sulla
+ * casella: finché non lo si apre, gli invii restano in sospeso.
+ *
+ * Né l'id né la chiave sono segreti: stanno nel codice della pagina, è così
+ * per progetto. Dicono soltanto su quale casella inoltrare e non danno
+ * accesso a niente, quindi non ha senso nasconderli in una variabile
+ * d'ambiente — che oltretutto qui non esisterebbe.
+ *
+ * Con `null` il modulo non viene mostrato affatto: al suo posto compare il
+ * pulsante che apre la posta del visitatore, così la pagina non pubblica mai
+ * un modulo che non spedisce da nessuna parte.
+ */
+export type ServizioModulo =
+  | { servizio: "formspree"; id: string }
+  | { servizio: "web3forms"; chiave: string };
+
+export const MODULO: ServizioModulo | null = { servizio: "formspree", id: "meajdggo" };
