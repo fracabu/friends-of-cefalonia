@@ -20,13 +20,20 @@ const frammento = await readFile(join(radice, 'demo', 'pagina.html'), 'utf8')
 const titolo = frammento.match(/<title>(.*?)<\/title>/)?.[1] ?? 'Domakinita'
 const corpo = frammento.replace(/<title>.*?<\/title>\s*/, '')
 
-// Il marchio come icona: la casa in tre tratti con la porta a forma di Pi.
-const icona =
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
-  '<rect width="32" height="32" rx="7" fill="%231d63f0"/>' +
-  '<g fill="none" stroke="%23fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
-  '<path d="M6.2 14.6 16 7l9.8 7.6"/><path d="M8.6 13.6v11.6h14.8V13.6"/><path d="M13.4 25.2v-6.4h5.2v6.4"/>' +
-  '</g></svg>'
+/*
+ * Il marchio come icona: la casa in tre tratti con la porta a forma di Pi.
+ * L'SVG usa apici singoli e viene codificato: dentro un attributo HTML
+ * delimitato da virgolette doppie, una virgoletta doppia nel dato chiude
+ * l'attributo in anticipo e il resto finisce stampato in pagina.
+ */
+const svgIcona = [
+  "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>",
+  "<rect width='32' height='32' rx='7' fill='#1d63f0'/>",
+  "<g fill='none' stroke='#fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'>",
+  "<path d='M6.2 14.6 16 7l9.8 7.6'/><path d='M8.6 13.6v11.6h14.8V13.6'/><path d='M13.4 25.2v-6.4h5.2v6.4'/>",
+  '</g></svg>',
+].join('')
+const icona = encodeURIComponent(svgIcona)
 
 const descrizione =
   'Demo del portale immobiliare per Cefalonia: sessanta annunci, filtri completi e ricerca per area disegnata a mano sulla mappa.'
