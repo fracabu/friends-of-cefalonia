@@ -101,4 +101,4 @@ export type ServizioModulo =
   | { servizio: "formspree"; id: string }
   | { servizio: "web3forms"; chiave: string };
 
-export const MODULO: ServizioModulo | null = null;
+export const MODULO: ServizioModulo | null = { servizio: "formspree", id: "meajdggo" };
