@@ -314,9 +314,15 @@ aggiungi le variabili d'ambiente:
 | `NEXT_PUBLIC_SITE_URL` | l'indirizzo del sito, per esempio `https://domakinita.vercel.app` |
 | `NEXT_PUBLIC_SITE_NAME` | `Domakinita` |
 
-Il comando di build è già quello giusto: `prisma generate && prisma migrate
-deploy && next build`. Le tabelle nascono quindi da sole alla prima
-pubblicazione, e `migrate deploy` non fa danni se le trova già.
+Il comando di build è già quello giusto: controlla le variabili, genera il
+client, applica le migrazioni e compila. Le tabelle nascono quindi da sole alla
+prima pubblicazione, e `migrate deploy` non fa danni se le trova già.
+
+Le variabili vanno abilitate per **Production, Preview e Development**, e il
+valore si incolla nudo, senza virgolette intorno: una variabile definita ma
+vuota è la causa più comune del primo build fallito. Se ne manca una, il build
+si ferma subito dicendo quale e dove prenderne il valore, invece di lasciare un
+errore di validazione dello schema in mezzo al registro.
 
 ### 3. I primi annunci
 
