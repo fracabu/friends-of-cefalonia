@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { SECTIONS } from "@/data/links";
 import { FACEBOOK_URL, GROUP_MEMBERS, GROUP_MEMBERS_PREFIX, FOUNDER_YEARS, FOUNDER_NAME,
-         HERO_PHOTO, HERO_PHOTO_CREDIT } from "@/data/site";
+         HERO_PHOTO, HERO_PHOTO_CREDIT, EMAIL_CONTATTO } from "@/data/site";
 import Quiz from "@/components/Quiz";
 import Fauna from "@/components/Fauna";
 import Gallery from "@/components/Gallery";
 import Cucina from "@/components/Cucina";
 import FaunaLocale from "@/components/FaunaLocale";
+import Contatti from "@/components/Contatti";
 import { GALLERY } from "@/data/gallery";
 
 /* ================= LOGO ================= */
@@ -80,6 +81,7 @@ const NAV = [
   ...(GALLERY.length > 0 ? [{ href: "#galleria", label: "Foto" }] : []),
   { href: "#quiz", label: "Quiz" },
   { href: "#terreni", label: "Terreni" },
+  { href: "#contatti", label: "Scrivici" },
 ];
 
 /* Quanto manca alla fine della pagina. È una riga di due pixel: dice al
@@ -457,12 +459,22 @@ export default function App() {
         </Reveal>
       </section>
 
+      {/* ===== SCRIVICI ===== */}
+      <Contatti />
+
       <footer className="bg-[#0F3440] text-[#A9CDCF] py-10">
         <div className="max-w-4xl mx-auto px-5">
           <div className="flex items-center gap-3">
             <Mark size={28} stroke="#FDFDFB" />
             <span className="display text-lg text-white tracking-wide">FRIENDS OF CEFALONIA</span>
           </div>
+          <p className="text-sm mt-4">
+            Scrivici:{" "}
+            <a href={`mailto:${EMAIL_CONTATTO}`}
+              className="text-white underline decoration-[#D9A441] underline-offset-4 hover:text-[#D9A441] transition-colors">
+              {EMAIL_CONTATTO}
+            </a>
+          </p>
           <p className="text-xs mt-4 leading-relaxed max-w-2xl">
             Pagina informativa curata dagli amministratori del gruppo Facebook Friends of
             Cefalonia. I link portano a siti di terzi,

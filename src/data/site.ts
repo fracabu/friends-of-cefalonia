@@ -63,3 +63,35 @@ export const FOTO_VINI = "foto/vini.jpg";
 export const FOTO_TARTARUGHE = "foto/tartarughe.jpg";
 export const FOTO_VINI_CREDITO = "";
 export const FOTO_TARTARUGHE_CREDITO = "";
+
+/**
+ * Casella su cui arrivano le richieste di chi ci scrive dal sito.
+ *
+ * Compare nel piè di pagina ed è la destinazione del modulo «Scrivici».
+ * Cambiarlo qui basta: non è ripetuto da nessun'altra parte.
+ */
+export const EMAIL_CONTATTO = "info@pianzacefalonia.it";
+
+/**
+ * Chiave del servizio che inoltra il modulo sulla casella qui sopra.
+ *
+ * Il sito è statico — su GitHub Pages non gira codice nostro — quindi da solo
+ * non può spedire posta: serve qualcuno che riceva il modulo e lo giri via
+ * email. Web3Forms fa questo e basta questo, gratis fino a 250 messaggi al
+ * mese, senza account a pagamento e senza mettere pubblicità nelle mail.
+ *
+ * Come ottenerla, una volta sola:
+ *   1. https://web3forms.com  →  incolla EMAIL_CONTATTO nel campo
+ *   2. arriva una mail di conferma con dentro la chiave (access key)
+ *   3. incolla la chiave qui sotto e fai il deploy
+ *
+ * La chiave non è un segreto: sta nel codice della pagina, è pensata per
+ * stare lì. Serve solo a dire al servizio su quale casella inoltrare, e non
+ * dà accesso a nulla. Per questo non ha senso metterla in una variabile
+ * d'ambiente.
+ *
+ * Finché resta vuota il modulo non viene mostrato: al suo posto compare il
+ * pulsante che apre la posta del visitatore, così la pagina non pubblica mai
+ * un modulo che non spedisce da nessuna parte.
+ */
+export const WEB3FORMS_KEY = "";
